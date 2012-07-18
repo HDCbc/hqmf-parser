@@ -18,6 +18,13 @@ module HQMF
       VERSION_TITLE = "Code System Version"
       CODE_TITLE = "Code"
       DESCRIPTION_TITLE = "Descriptor"
+      
+      CODE_SYSTEM_NORMALIZER = {
+        'ICD-9'=>'ICD-9-CM',
+        'ICD-10'=>'ICD-10-CM',
+        'HL7 (2.16.840.1.113883.5.1)'=>'HL7'
+      }
+      IGNORED_CODE_SYSTEM_NAMES = ['Grouping','HL7']
   
       def initialize()
       end
@@ -43,7 +50,7 @@ module HQMF
 #            codes << by_oid_ungrouped.delete(child_oid)
             # do not delete the children of a group.  These may be referenced by other groups or directly by the measure
             code = by_oid_ungrouped[child_oid]
-            puts "code could not be found: #{child_oid}" unless code
+            puts "\tcode could not be found: #{child_oid}" unless code
             codes << code
             # for hierarchies we need to probably have codes be a hash that we select from if we don't find the
             # element in by_oid_ungrouped we may need to look for it in final
@@ -118,7 +125,7 @@ module HQMF
           "oid" => row[OID_TITLE].strip.gsub(/[^0-9\.]/i, ''),
           "concept" => normalize_names(row[CONCEPT_TITLE]),
           "category" => normalize_names(row[CATEGORY_TITLE]),
-          "code_set" => row[CODE_SET_TITLE],
+          "code_set" => normalize_code_system(row[CODE_SET_TITLE]),
           "version" => row[VERSION_TITLE],
           "codes" => extract_code(row[CODE_TITLE], row[CODE_SET_TITLE]),
           "description" => row[DESCRIPTION_TITLE]
@@ -135,6 +142,14 @@ module HQMF
           name.concat component.gsub(/\W/,' ').split.collect { |word| word.strip.downcase }
         end
         name.join '_'
+      end
+      
+      def normalize_code_system(code_system_name)
+        code_system_name = CODE_SYSTEM_NORMALIZER[code_system_name] if CODE_SYSTEM_NORMALIZER[code_system_name]
+        return code_system_name if IGNORED_CODE_SYSTEM_NAMES.include? code_system_name
+        oid = HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(code_system_name)
+        puts "\tbad code system name: #{code_system_name}" unless oid
+        code_system_name
       end
   
       def extract_code(code, set)

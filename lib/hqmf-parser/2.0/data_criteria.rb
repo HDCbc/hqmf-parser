@@ -111,7 +111,7 @@ module HQMF2
       mso = subset_operators.collect {|opr| opr.to_model}
       field_values = nil
       
-      HQMF::DataCriteria.new(id, title, nil, nil, code_list_id, children_criteria, derivation_operator, @definition, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso)
+      HQMF::DataCriteria.new(id, title, nil, nil, code_list_id, children_criteria, derivation_operator, @definition, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso, nil)
     end
     
     private

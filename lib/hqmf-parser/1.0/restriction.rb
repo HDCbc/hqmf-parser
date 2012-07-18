@@ -116,7 +116,7 @@ module HQMF1
           value = HQMF::Coded.for_code_list(oid,title)
         end
       when 'ANYNonNull'
-        puts "Ignoring ANYNonNull restriction value type"
+        # puts "\tIgnoring ANYNonNull restriction value type"
       else
         raise "Unknown restriction value type #{type}"
       end if type

@@ -65,7 +65,7 @@ module HQMF
       _negation = false
       
       group_criteria = HQMF::DataCriteria.new(id, title, _display_name, description, _code_list_id, criteria_ids, derivation_operator, definition, _status,
-                                              _value, _field_values, _effective_time, _inline_code_list,_negation,_negation_code_list_id,nil,nil)
+                                              _value, _field_values, _effective_time, _inline_code_list,_negation,_negation_code_list_id,nil,nil,nil)
       
       @v2_data_criteria << group_criteria
       
@@ -173,6 +173,7 @@ module HQMF
       status = criteria[:status]
       negation = criteria[:negation]
       negation_code_list_id = criteria[:negation_code_list_id]
+      specific_occurrence = criteria[:specific_occurrence]
       
       value = nil # value is filled out by backfill_patient_characteristics for things like gender and by REFR restrictions
       effective_time = nil # filled out by temporal reference code
@@ -186,7 +187,7 @@ module HQMF
       display_name=nil
       
       HQMF::DataCriteria.new(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, 
-                             value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
+                             value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators,specific_occurrence)
  
     end
     
@@ -216,7 +217,7 @@ module HQMF
       measure_period_id = HQMF::Document::MEASURE_PERIOD_ID
       value = measure_period
       measure_criteria = HQMF::DataCriteria.new(measure_period_id,measure_period_id,nil,measure_period_id,code_list_id,children_criteria,derivation_operator,measure_period_id,status,
-                                                value,field_values,effective_time,inline_code_list, false, nil, temporal_references,subset_operators)
+                                                value,field_values,effective_time,inline_code_list, false, nil, temporal_references,subset_operators,nil)
       
       # set the measure period data criteria for all measure period keys
       v1_data_criteria_by_id[measure_period_key] = measure_criteria

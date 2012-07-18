@@ -20,7 +20,7 @@ module HQMF
             end
           end
           unless found
-            puts "multiple targets... need to check this" if restriction.multi_target?
+            puts "\tmultiple targets... need to check this" if restriction.multi_target?
           end
         end
         temporal_reference = HQMF::TemporalReference.new(type, HQMF::Reference.new(target),value)

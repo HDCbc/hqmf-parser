@@ -6,7 +6,7 @@ module HQMF
 
     include HQMF::Conversion::Utilities
 
-    attr_reader :id, :title, :description, :measure_period, :attributes, :populations
+    attr_reader :id, :title, :description, :measure_period, :attributes, :populations, :source_data_criteria
   
     # Create a new HQMF::Document which can be converted to JavaScript
     # @param [String] id

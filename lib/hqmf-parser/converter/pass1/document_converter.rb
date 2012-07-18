@@ -64,42 +64,26 @@ module HQMF
     # measure is interested in Males or Females.  This process is awkward, and thus is done as a separate
     # step after the document has been converted.
     def self.backfill_patient_characteristics_with_codes(doc, codes)
-      doc.all_data_criteria.each do |data_criteria|
-        if (data_criteria.type == :characteristic and (data_criteria.property.nil? or data_criteria.property == :unknown))
+      
+      [].concat(doc.all_data_criteria).concat(doc.source_data_criteria).each do |data_criteria|
+        
+        if (data_criteria.type == :characteristic and !data_criteria.property.nil?)
           if (codes)
             value_set = codes[data_criteria.code_list_id]
             raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
           else
-            puts "no code set to back fill: #{data_criteria.title}"
+            puts "\tno code set to back fill: #{data_criteria.title}"
             next
           end
           
-          # looking for Gender: Female
-          if value_set["HL7"] and value_set["HL7"] == ["10174"]
-            data_criteria.definition = 'patient_characteristic_gender'
-            data_criteria.value = HQMF::Coded.new('CD','Gender','F')
+          if (data_criteria.property == :gender)
+            key = value_set.keys[0]
+            data_criteria.value = HQMF::Coded.new('CD','Gender',value_set[key].first)
+          else
+            data_criteria.inline_code_list = value_set
           end
-        
-        elsif (data_criteria.type == :characteristic and data_criteria.property == :birthtime)
           
-          data_criteria.inline_code_list = BIRTHTIME_CODE_LIST
           
-          # if (data_criteria.temporal_references.nil? or data_criteria.temporal_references.empty?)
-          # else
-          #   
-          #   value = HQMF::Value.from_json(JSON.parse(data_criteria.temporal_references.first.offset.to_json.to_json))
-          #   range = HQMF::Range.new('IVL_PQ',nil,nil,nil)
-          #   if (value.value.to_f < 0)
-          #     value.value = value.value.abs
-          #     range.high = value
-          #   else
-          #     range.low = value
-          #   end
-          #   
-          #   data_criteria.value = range
-          # end
-          
-        
         end
       end
     end
@@ -130,15 +114,15 @@ module HQMF
     end
     
     def self.validate(document,codes)
-      puts "!!!!!!!!!!!(#{document.id})document is nil!!!!!!!!!!!" unless document
-      puts "!!!!!!!!!!!(#{document.id})codes are nil!!!!!!!!!!!" unless codes
+      puts "\t(#{document.id})document is nil!!!!!!!!!!!" unless document
+      puts "\t(#{document.id})codes are nil!!!!!!!!!!!" unless codes
       return unless document and codes
       
       referenced_oids = document.all_data_criteria.map(&:code_list_id).compact.uniq
       
       referenced_oids.each do |oid|
         value_set = codes[oid]
-        puts "DC (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+        puts "\tDC (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
       end
       
       oid_values = document.all_data_criteria.select {|dc| dc.value != nil and dc.value.type == 'CD'}
@@ -147,7 +131,7 @@ module HQMF
         referenced_oids = (oid_values.map {|dc| dc.value.code_list_id }).compact.uniq
         referenced_oids.each do |oid|
           value_set = codes[oid]
-          puts "VALUE (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+          puts "\tVALUE (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
         end
       end
       
@@ -157,7 +141,7 @@ module HQMF
         referenced_oids = (oid_negation.map {|dc| dc.negation_code_list_id}).compact.uniq
         referenced_oids.each do |oid|
           value_set = codes[oid]
-          puts "NEGATION (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+          puts "\tNEGATION (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
         end
       end
         
@@ -166,7 +150,7 @@ module HQMF
         referenced_oids = (oid_fields.map{|dc| dc.field_values.map {|key,field| puts "field: #{key} is nil" unless field; field.code_list_id if field != nil and field.type == 'CD'}}).flatten.compact.uniq
         referenced_oids.each do |oid|
           value_set = codes[oid]
-          puts "FIELDS (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
+          puts "\tFIELDS (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set
         end
       end
       

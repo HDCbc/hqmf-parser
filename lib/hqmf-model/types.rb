@@ -27,8 +27,8 @@ module HQMF
       type = json["type"] if json["type"]
       unit = json["unit"] if json["unit"]
       value = json["value"] if json["value"]
-      inclusive = json["inclusive?"] if json["inclusive?"]
-      derived = json["derived?"] if json["derived?"]
+      inclusive = json["inclusive?"] unless json["inclusive?"].nil?
+      derived = json["derived?"] unless json["derived?"].nil?
       expression = json["expression"] if json["expression"]
       
       HQMF::Value.new(type,unit,value,inclusive,derived,expression)

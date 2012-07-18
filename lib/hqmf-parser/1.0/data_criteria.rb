@@ -4,7 +4,7 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_accessor :code_list_id, :derived_from, :definition, :status, :negation
+    attr_accessor :code_list_id, :derived_from, :definition, :status, :negation, :specific_occurrence
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -24,6 +24,7 @@ module HQMF1
         @derived_from = derived.value
         @@occurrences[@derived_from] ||= Counter.new
         @occurrence_key = @@occurrences[@derived_from].next
+        @specific_occurrence = "#{('A'..'ZZ').to_a[@occurrence_key]}"
       end
       
       template = template_map[template_id]
@@ -39,11 +40,11 @@ module HQMF1
       # Get the code list OID of the criteria, used as an index to the code list database
       @code_list_id = attr_val(oid_xpath_map[@key]['oid_xpath'])
       unless @code_list_id
-        puts "code list id not found, getting default" if !@derived_from
+        puts "\tcode list id not found, getting default" if !@derived_from
         @code_list_id = attr_val('cda:act/cda:sourceOf//cda:code/@code')
       end
       
-      puts "no oid defined for data criteria: #{@key}" if !@code_list_id and !@derived_from
+      puts "\tno oid defined for data criteria: #{@key}" if !@code_list_id and !@derived_from
       
     end
     
@@ -57,7 +58,7 @@ module HQMF1
     # @return [String] the title of this data criteria
     def title
       title = description
-      title = "Occurrence #{('A'..'ZZ').to_a[@occurrence_key]}: #{title}" if @derived_from
+      title = "Occurrence #{@specific_occurrence}: #{title}" if @derived_from
       title
     end
     
@@ -83,7 +84,7 @@ module HQMF1
       {
         self.const_name => build_hash(
           self, 
-          [:id,:title,:description,:code_list_id,:derived_from,:definition, :status, :negation])
+          [:id,:title,:description,:code_list_id,:derived_from,:definition, :status, :negation, :specific_occurrence])
       }
     end
     

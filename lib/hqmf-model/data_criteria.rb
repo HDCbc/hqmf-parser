@@ -9,16 +9,12 @@ module HQMF
 
     FIELDS = {'SEVERITY'=>{title:'Severity',coded_entry_method: :severity},
               'ORDINAL'=>{title:'Ordinal',coded_entry_method: :ordinal},
-              'ENVIRONMENT'=>{title:'Environment',coded_entry_method: :environment},
               'REASON'=>{title:'Reason',coded_entry_method: :reason},
-              'RADIATION_DOSAGE'=>{title:'Radiation Dosage',coded_entry_method: :radiation_dosage},
-              'RADIATION_DURATION'=>{title:'Radiation Duration',coded_entry_method: :radiation_duration},
-              'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay},
               'SOURCE'=>{title:'Source',coded_entry_method: :source},
               'CUMULATIVE_MEDICTION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
               'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location}}
 
-    attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator 
+    attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator , :specific_occurrence
     attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :definition, :inline_code_list, :negation_code_list_id, :negation, :display_name
   
     # Create a new data criteria instance
@@ -40,10 +36,11 @@ module HQMF
     # @param [String] negation_code_list_id
     # @param [List<TemporalReference>] temporal_references
     # @param [List<SubsetOperator>] subset_operators
-    def initialize(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
+    # @param [String] specific_occurrence
+    def initialize(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators, specific_occurrence)
 
       status = normalize_status(definition, status)
-      @settings = get_settings_for_definition(definition, status)
+      @settings = HQMF::DataCriteria.get_settings_for_definition(definition, status)
 
       @id = id
       @title = title
@@ -62,6 +59,13 @@ module HQMF
       @negation_code_list_id = negation_code_list_id
       @temporal_references = temporal_references
       @subset_operators = subset_operators
+      @specific_occurrence = specific_occurrence
+    end
+    
+    # create a new data criteria given a category and sub_category.  A sub category can either be a status or a sub category
+    def self.create_from_category(id, title, description, code_list_id, category, sub_category=nil, negation=false, negation_code_list_id=nil)
+      settings = HQMF::DataCriteria.get_settings_for_definition(category, sub_category)
+      HQMF::DataCriteria.new(id, title, nil, description, code_list_id, nil, nil, settings['definition'], settings['status'], nil, nil, nil, nil, negation, negation_code_list_id, nil, nil, nil)
     end
     
     def standard_category
@@ -85,11 +89,11 @@ module HQMF
     
     def definition=(definition)
       @definition = definition
-      @settings = get_settings_for_definition(@definition, @status)
+      @settings = HQMF::DataCriteria.get_settings_for_definition(@definition, @status)
     end
     def status=(status)
       @status = status
-      @settings = get_settings_for_definition(@definition, @status)
+      @settings = HQMF::DataCriteria.get_settings_for_definition(@definition, @status)
     end
 
     # Create a new data criteria instance from a JSON hash keyed with symbols
@@ -110,9 +114,10 @@ module HQMF
       negation_code_list_id = json['negation_code_list_id'] if json['negation_code_list_id']
       temporal_references = json["temporal_references"].map {|reference| HQMF::TemporalReference.from_json(reference)} if json["temporal_references"]
       subset_operators = json["subset_operators"].map {|operator| HQMF::SubsetOperator.from_json(operator)} if json["subset_operators"]
+      specific_occurrence = json['specific_occurrence'] if json['specific_occurrence']
 
       HQMF::DataCriteria.new(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values,
-                             effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators)
+                             effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators,specific_occurrence)
     end
 
     def to_json
@@ -122,7 +127,7 @@ module HQMF
 
     def base_json
       x = nil
-      json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :definition, :status, :hard_status, :negation, :negation_code_list_id])
+      json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :definition, :status, :hard_status, :negation, :negation_code_list_id,:specific_occurrence])
       json[:children_criteria] = @children_criteria unless @children_criteria.nil? || @children_criteria.empty?
       json[:value] = ((@value.is_a? String) ? @value : @value.to_json) if @value
       json[:field_values] = @field_values.inject({}) {|memo,(k,v)| memo[k] = v.to_json; memo} if @field_values
@@ -138,6 +143,30 @@ module HQMF
     end
     def has_subset(subset_operator)
       @subset_operators.reduce(false) {|found, item| found ||= item == subset_operator }
+    end
+    
+    def self.statuses_by_definition
+      settings_file = File.expand_path('../data_criteria.json', __FILE__)
+      settings_map = JSON.parse(File.read(settings_file))
+      all_defs = (settings_map.map {|key, value| {category: value['category'],definition:value['definition'],status:(value['status'].empty? ? nil : value['status']), sub_category: value['sub_category'],title:value['title']} unless value['not_supported']}).compact
+      by_categories = {}
+      all_defs.each do |definition| 
+        by_categories[definition[:category]]||={}
+        status = definition[:status]
+        def_key = definition[:definition]
+        if status.nil? and definition[:sub_category] and !definition[:sub_category].empty?
+          status = definition[:sub_category]
+          def_key = def_key.gsub("_#{status}",'')
+        end
+        by_categories[definition[:category]][def_key]||={category:def_key,statuses:[]}
+        by_categories[definition[:category]][def_key][:statuses] << status unless status.nil?
+      end
+      status_by_category = {}
+      by_categories.each {|key, value| status_by_category[key] = value.values}
+      status_by_category.delete('derived')
+      status_by_category.delete('variable')
+      status_by_category.delete('measurement_period')
+      status_by_category.values.flatten
     end
 
     private
@@ -159,7 +188,7 @@ module HQMF
       end
     end
 
-    def get_settings_for_definition(definition, status)
+    def self.get_settings_for_definition(definition, status)
       settings_file = File.expand_path('../data_criteria.json', __FILE__)
       settings_map = JSON.parse(File.read(settings_file))
       key = definition + ((status.nil? || status.empty?) ? '' : "_#{status}")

@@ -6,7 +6,7 @@ module HQMF
         hash = {}
         elements.each do |element|
           value = source.send(element)
-          hash[element] = value if value
+          hash[element] = value unless value.nil?
         end
         hash
       end
