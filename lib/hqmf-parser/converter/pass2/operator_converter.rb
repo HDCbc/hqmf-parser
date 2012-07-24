@@ -81,6 +81,38 @@ module HQMF
           unless subset_operator.value
             # scalar comparisons are used for MIN>90 etc.  The value is on a REFR restriction.  We need to store it on the data criteria since the value is processed before the operator is created.
             scalar_comparison = nil
+            
+            # check to see if we have different values referenced accross the children
+            # this happens on things like most recent blood pressure reading
+            multiple_differing_values = false
+            children_criteria.each do |criteria|
+              if scalar_comparison.nil?
+                scalar_comparison = criteria.value
+              else
+                if scalar_comparison != criteria.value
+                  multiple_differing_values = true
+                end
+              end
+            end 
+            
+            # if we have multiple differing values, we want to keep the preconditions from the restriction, and attach them to the precondition
+            # we can then apply the subset operator to all of the children individually
+            if (multiple_differing_values)
+              precondition.preconditions.delete(restriction)
+              precondition.preconditions.concat(restriction.preconditions)
+              children_criteria.each do |criteria|
+                subset_operator = HQMF::SubsetOperator.new(type, value)
+                subset_operator.value = criteria.value
+                criteria.value = nil
+                criteria.subset_operators ||= []
+                criteria.subset_operators << subset_operator unless criteria.has_subset(subset_operator)
+              end
+              restriction.converted=true
+              # we want to return since we have applied the subset to the children.  We no longer want to create a grouping data critiera
+              return;
+            end
+            
+            # all the children have the same value, apply the value to the subset operator
             children_criteria.each do |criteria|
               if scalar_comparison.nil?
                 scalar_comparison = criteria.value

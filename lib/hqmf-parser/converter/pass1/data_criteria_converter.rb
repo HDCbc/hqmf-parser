@@ -15,7 +15,7 @@ module HQMF
     end
 
     def final_v2_data_criteria
-      v2_data_criteria.delete_if {|criteria| @v2_data_criteria_to_delete[criteria.id] }
+      @v2_data_criteria.delete_if {|criteria| @v2_data_criteria_to_delete[criteria.id] }
     end
 
     # duplicates a data criteria.  This is important because we may be modifying source data criteria like patient characteristic birthdate to add restrictions
@@ -24,7 +24,7 @@ module HQMF
       
       # if this is a specific occurrence, then we do not want to duplicate it.
       # we may need to duplicate it for a population however.
-      return data_criteria if (specific_occurrences[data_criteria.id]) 
+      # return data_criteria if (specific_occurrences[data_criteria.id]) 
       
       if (data_criteria.is_a? HQMF::Converter::SimpleDataCriteria and data_criteria.precondition_id == parent_id)
         new_data_criteria = data_criteria
