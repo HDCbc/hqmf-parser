@@ -46,6 +46,7 @@ module HQMF
         
         comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil,[restriction],reference,conjunction_code, false)
         comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
+        comparison_precondition.subset_comparison = true
         preconditions << comparison_precondition
       end
       
@@ -85,7 +86,7 @@ module HQMF
     def self.get_comparison_preconditions(preconditions)
       comparisons = []
       preconditions.each do |precondition|
-        if (precondition.comparison?)
+        if (precondition.comparison? and !precondition.subset_comparison)
           comparisons << precondition
         elsif(precondition.has_preconditions?)
           comparisons.concat(get_comparison_preconditions(precondition.preconditions))

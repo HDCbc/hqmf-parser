@@ -42,6 +42,7 @@ require_relative 'hqmf-parser/converter/pass1/simple_restriction'
 require_relative 'hqmf-parser/converter/pass1/simple_operator'
 require_relative 'hqmf-parser/converter/pass1/simple_precondition'
 require_relative 'hqmf-parser/converter/pass1/simple_data_criteria'
+require_relative 'hqmf-parser/converter/pass1/simple_population_criteria'
 
 require_relative 'hqmf-parser/converter/pass2/comparison_converter'
 require_relative 'hqmf-parser/converter/pass2/operator_converter'

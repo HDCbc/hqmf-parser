@@ -65,7 +65,7 @@ module HQMFModel
          
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test", :negation=>false,
          :standard_category=>"laboratory_test",:qds_data_type=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:type=>:laboratory_tests, :patient_api_function=>:laboratoryTests,:status=>"performed",
-         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
+         :temporal_references=>[{:type=>"EBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
           
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics", :negation=>false,
          :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:medications,:patient_api_function=>:allMedications,:status=>"dispensed"}
@@ -274,7 +274,6 @@ module HQMFModel
     def data_criteria_matches(expected, actual)
       matches = true
       
-#      matches &&= actual[:title].start_with? expected[:title] 
       matches &&= actual[:description] == expected[:description]
       matches &&= expected[:standard_category] == actual[:standard_category]
       matches &&= expected[:qds_data_type] == actual[:qds_data_type]
@@ -286,13 +285,14 @@ module HQMFModel
       matches &&= expected[:effective_time] == actual[:effective_time]
       matches &&= expected[:inline_code_list] == actual[:inline_code_list]
       matches &&= expected[:negation] == actual[:negation]
-
+      
       return false if actual[:children_criteria].nil? != expected[:children_criteria].nil?
        
       actual[:children_criteria].each do |criteria_key|
         key = criteria_key.to_s.gsub(/_precondition_\d+.*/, '')
         matches &&= expected[:children_criteria].include? key
       end unless (actual[:children_criteria] == expected[:children_criteria])
+
       
       return false if actual[:temporal_references].nil? != expected[:temporal_references].nil?
       
@@ -309,6 +309,7 @@ module HQMFModel
         end
         matches &&= found
       end unless (actual[:temporal_references] == expected[:temporal_references])
+
       
       return false if actual[:subset_operators].nil? != expected[:subset_operators].nil?
       
@@ -322,6 +323,7 @@ module HQMFModel
         end
         matches &&= found
       end unless (actual[:subset_operators] == expected[:subset_operators])
+
       
       matches
     end

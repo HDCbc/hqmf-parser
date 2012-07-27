@@ -57,7 +57,6 @@ module HQMF
     
     
     def self.apply_summary(data_criteria, precondition, restriction, data_criteria_converter)
-
       value = restriction.operator.value
       type = restriction.operator.type
       subset_operator = HQMF::SubsetOperator.new(type, value)

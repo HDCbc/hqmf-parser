@@ -4,13 +4,15 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_reader :preconditions
+    attr_reader :preconditions, :entry, :doc
+    attr_accessor :id, :is_stratification
     
     # Create a new population criteria from the supplied HQMF entry
     # @param [Nokogiri::XML::Element] the HQMF entry
     def initialize(entry, doc)
       @doc = doc
       @entry = entry
+      @id = attr_val('cda:observation/cda:id/@root').upcase
       @preconditions = @entry.xpath('./*/cda:sourceOf[@typeCode="PRCN"]').collect do |entry|
         pc = Precondition.new(entry, nil, @doc)
         if pc.preconditions.length==0 && !pc.comparison && pc.restrictions.length==0
@@ -37,7 +39,7 @@ module HQMF1
     # refer to this criteria
     # @return [String] the id
     def id
-      attr_val('cda:observation/cda:id/@root').upcase
+      @id
     end
     
     def title
@@ -61,6 +63,7 @@ module HQMF1
       json[:id] = id
       json[:title] = title
       json[:code] = code
+      json[:is_stratification] = is_stratification if is_stratification
       json[:reference] = reference
       
       {self.code => json}

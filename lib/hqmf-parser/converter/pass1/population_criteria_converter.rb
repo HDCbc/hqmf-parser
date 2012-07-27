@@ -31,17 +31,6 @@ module HQMF
       if (ipps.size<=1 and denoms.size<=1 and nums.size<=1 and excls.size<=1 and denexcs.size<=1 )
         @sub_measures << {'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'EXCL'=>'EXCL', 'DENEXCEP'=>'DENEXCEP'}
       else
-        # nums = @population_criteria_by_id.select {|key, value| value.type == 'NUMER'}
-        # nums.keys.each do |num_id|
-        #   num = @population_criteria_by_id[num_id]
-        #   denom_id = @population_reference[num_id]
-        #   denom = @population_criteria_by_id[denom_id]
-        #   ipp_id = @population_reference[denom_id]
-        #   ipp = @population_criteria_by_id[ipp_id]
-        #   
-        #   @sub_measures << {IPP: ipp.id, DENOM: denom.id, NUMER: num.id}
-        # end
-
 
         nums.each do |num_id, num|
           @sub_measures << {'NUMER' => num.id}
@@ -50,22 +39,6 @@ module HQMF
         apply_to_submeasures(@sub_measures, 'IPP', ipps.values)
         apply_to_submeasures(@sub_measures, 'EXCL', excls.values)
         apply_to_submeasures(@sub_measures, 'DENEXCEP', denexcs.values)
-        
-        # nums.each do |num_id, num|
-        #   @sub_measures << {NUMER: num.id}
-        #   denoms.each do |denom_id, denom|
-        #     apply_to_submeasures(@sub_measures, :DENOM, denom)
-        #     ipps.each do |ipp_id, ipp|
-        #       apply_to_submeasures(@sub_measures, :IPP, ipp)
-        #       excls.each do |excl_id, excl|
-        #         apply_to_submeasures(@sub_measures, :EXCL, excl)
-        #         denexcs.each do |denexc_id, denexc|
-        #           apply_to_submeasures(@sub_measures, :DENEXCEP, denexc)
-        #         end
-        #       end
-        #     end
-        #   end
-        # end
         
         keep = []
         @sub_measures.each do |sub|
@@ -77,7 +50,7 @@ module HQMF
               reference_id = @population_reference[key]
               reference = @population_criteria_by_id[reference_id] if reference_id
               if (reference)
-                value = nil if sub[reference.type] != reference.id
+                value = nil if (sub[reference.type] != reference.id and !@population_criteria_by_key[sub[reference.type]].is_stratification)
               end
             end
           end
@@ -135,7 +108,9 @@ module HQMF
       reference = population_criteria[:reference]
       title = population_criteria[:title]
       
-      criteria = HQMF::PopulationCriteria.new(key, type, preconditions, title)
+      criteria = HQMF::Converter::SimplePopulationCriteria.new(key, type, preconditions, title)
+      # mark the 2.0 simple population criteria as a stratification... this allows us to create the cartesian product for this in the populations
+      criteria.is_stratification = population_criteria[:is_stratification]
       
       @population_criteria_by_id[id] = criteria
       @population_reference[key] = reference

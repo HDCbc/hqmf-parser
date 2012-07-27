@@ -20,6 +20,31 @@ module HQMF1
       @population_criteria = @doc.xpath('//cda:section[cda:code/@code="57026-7"]/cda:entry').collect do |attr|
         PopulationCriteria.new(attr, self)
       end
+
+      @stratification = @doc.xpath('//cda:section[cda:code/@code="69669-0"]/cda:entry').collect do |attr|
+        PopulationCriteria.new(attr, self)
+      end
+      
+      if (@stratification and !@stratification.empty?)
+        initial_populations = @population_criteria.select {|pc| pc.code.starts_with? 'IPP'}
+        initial_populations.each do |population|
+          
+          @stratification.each do |stratification|
+            new_population = HQMF1::PopulationCriteria.new(population.entry, population.doc)
+            new_population.id = "#{new_population.id}_#{@@ids.next}"
+            new_population.is_stratification = true
+            ids = stratification.preconditions.map(&:id)
+            new_population.preconditions.delete_if {|precondition| ids.include? precondition.id}
+            new_population.preconditions.concat(stratification.preconditions)
+            new_population.preconditions.rotate!(-1*stratification.preconditions.size)
+            @population_criteria << new_population
+          end
+          
+        end
+        
+      end
+      
+      
     end
     
     # Get the title of the measure
@@ -58,6 +83,10 @@ module HQMF1
     # @return [Array] an array of HQMF1::PopulationCriteria
     def all_population_criteria
       @population_criteria
+    end
+    
+    def stratification
+      @stratification
     end
     
     # Get a specific population criteria by id.
@@ -152,6 +181,18 @@ module HQMF1
     def find(collection, attribute, value)
       collection.find {|e| e.send(attribute)==value}
     end
+    
+    # Simple class to issue monotonically increasing integer identifiers
+    class Counter
+      def initialize
+        @count = 0
+      end
+
+      def next
+        @count+=1
+      end
+    end
+    @@ids = Counter.new
     
   end
 end

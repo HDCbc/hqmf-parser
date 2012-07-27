@@ -20,7 +20,7 @@ namespace :hqmf do
     raise "You must specify the HQMF XML file path to convert" unless args.path
 
     
-    FileUtils.mkdir_p File.join(".","tmp",'json','measures')
+    FileUtils.mkdir_p File.join(".","tmp",'json','all')
     path = File.expand_path(args.path)
     version = args.version || HQMF::Parser::HQMF_VERSION_1
 
@@ -31,7 +31,7 @@ namespace :hqmf do
       doc = HQMF::Parser.parse(File.open(measure_def).read, version)
       filename = Pathname.new(measure_def).basename
       
-      File.open(File.join(".","tmp",'json',"#{filename}.json"), 'w') {|f| f.write(doc.to_json.to_json) }
+      File.open(File.join(".","tmp",'json','all',"#{filename}.json"), 'w') {|f| f.write(doc.to_json.to_json(max_nesting: 100).gsub(/",/,"\",\n")) }
       puts "\n"
     end
     
