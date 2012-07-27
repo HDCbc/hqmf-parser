@@ -189,6 +189,47 @@ STATUSES BY CATEGORY
     ordered
     recommended
 
+STAGE 2 Data Criteria
+  communication_from_patient_to_provider
+  communication_from_provider_to_provider
+  device_applied
+  diagnosis_active
+  diagnosis_family_history
+  diagnosis_inactive
+  diagnosis_resolved
+  diagnostic_study_ordered
+  diagnostic_study_performed
+  diagnostic_study_result
+  encounter_active
+  encounter_ordered
+  encounter_performed
+  functional_status_result
+  intervention_ordered
+  intervention_performed
+  intervention_result
+  laboratory_test
+  laboratory_test_ordered
+  laboratory_test_performed
+  MeasurePeriod
+  medication_active
+  medication_administered
+  medication_allergy
+  medication_dispensed
+  medication_intolerance
+  medication_ordered
+  patient_characteristic
+  patient_characteristic_birthdate
+  patient_characteristic_clinical_trial_participant
+  patient_characteristic_expired
+  patient_characteristic_gender
+  physical_exam
+  physical_exam_performed
+  procedure_intolerance
+  procedure_ordered
+  procedure_performed
+  procedure_result
+  risk_category_assessment
+
 
 CHARACTERISTIC
 -------
