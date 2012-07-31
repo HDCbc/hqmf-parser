@@ -99,7 +99,7 @@
       "sub_category":"clinical_trial_participant",
       "hard_status":false,
       "patient_api_function":"",
-      "property":"clinical_trial_participant",
+      "property":"clinicalTrialParticipant",
       "standard_category":"individual_characteristic",
       "qds_data_type":"individual_characteristic",
       "not_supported":false},
