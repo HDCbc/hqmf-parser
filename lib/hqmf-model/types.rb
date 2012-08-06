@@ -232,7 +232,7 @@ module HQMF
   class SubsetOperator
     include HQMF::Conversion::Utilities
     
-    TYPES = ['COUNT', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH', 'RECENT', 'LAST', 'MIN', 'MAX']
+    TYPES = ['COUNT', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH', 'RECENT', 'LAST', 'MIN', 'MAX', 'DATEDIFF']
     
     attr_accessor :type, :value
     # @param [String] type

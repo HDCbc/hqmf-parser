@@ -4,7 +4,7 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_accessor :code_list_id, :derived_from, :definition, :status, :negation, :specific_occurrence
+    attr_accessor :code_list_id, :derived_from, :definition, :status, :negation, :specific_occurrence, :specific_occurrence_const
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -76,7 +76,13 @@ module HQMF1
       components = title.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }
       if @derived_from
         components << @@id.next
+        @specific_occurrence_const = (description.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }).join '_'
       end
+      components.join '_'
+    end
+
+    def specific_occurrence_const
+      components = description.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }
       components.join '_'
     end
     
@@ -84,7 +90,7 @@ module HQMF1
       {
         self.const_name => build_hash(
           self, 
-          [:id,:title,:description,:code_list_id,:derived_from,:definition, :status, :negation, :specific_occurrence])
+          [:id,:title,:description,:code_list_id,:derived_from,:definition, :status, :negation, :specific_occurrence,:specific_occurrence_const])
       }
     end
     

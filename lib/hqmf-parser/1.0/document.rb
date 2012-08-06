@@ -144,7 +144,12 @@ module HQMF1
       
       json[:data_criteria] = {}
       @data_criteria.each do |criteria|
-        json[:data_criteria].merge! criteria.to_json
+        criteria_json = criteria.to_json
+        # check if the key already exists... if it does redefine the key
+        if (json[:data_criteria][criteria_json.keys.first])
+          criteria_json = {"#{criteria_json.keys.first}_#{@@ids.next}" => criteria_json.values.first}
+        end
+        json[:data_criteria].merge! criteria_json
       end
       
       json[:metadata] = {}

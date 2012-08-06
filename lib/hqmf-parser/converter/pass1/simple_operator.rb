@@ -8,7 +8,25 @@ module HQMF
       SUMMARY = 'SUMMARY'
       UNKNOWN = 'UNKNOWN'
       
-      VALUE_FIELDS = {'SEV'=>'SEVERITY','117363000'=>'ORDINAL','410666004'=>'REASON','260753009'=>'SOURCE','363819003'=>'CUMULATIVE_MEDICTION_DURATION', 'SDLOC'=>'FACILITY_LOCATION'}
+      VALUE_FIELDS = {'SEV'      => 'SEVERITY',
+                     '117363000' => 'ORDINAL',
+                     '410666004' => 'REASON',
+                     '260753009' => 'SOURCE',
+                     '363819003' => 'CUMULATIVE_MEDICTION_DURATION',
+                     'SDLOC'     => 'FACILITY_LOCATION',
+                     '442864001' => 'DISCHARGE_DATETIME',
+                     '309039003' => 'DISCHARGE_STATUS',
+                     '399423000' => 'ADMISSION_DATETIME',
+                     '183797002' => 'LENGTH_OF_STAY',
+                     '398232005' => 'DOSE',
+                     '263513008' => 'ROUTE',
+                     '398201009' => 'START_DATETIME',
+                     '260864003' =>'FREQUENCY',
+                     '91723000'  => 'ANATOMICAL_STRUCTURE',
+                     '397898000' => 'STOP_DATETIME',
+                     '34896006'  => 'INCISION_DATETIME',
+                     '118292001 (qualified by 118575009)' =>'REMOVAL_DATETIME'
+                     }
       
 
       attr_accessor :type, :value, :category, :field, :field_code

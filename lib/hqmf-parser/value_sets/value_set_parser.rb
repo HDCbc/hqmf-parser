@@ -51,7 +51,7 @@ module HQMF
             # do not delete the children of a group.  These may be referenced by other groups or directly by the measure
             code = by_oid_ungrouped[child_oid]
             puts "\tcode could not be found: #{child_oid}" unless code
-            codes << code
+            codes << code if code
             # for hierarchies we need to probably have codes be a hash that we select from if we don't find the
             # element in by_oid_ungrouped we may need to look for it in final
           end
@@ -65,7 +65,12 @@ module HQMF
         by_oid_ungrouped.each do |key, orphan|
           final << adopt_orphan(orphan)
         end
-    
+        
+        deleted = []
+        final.delete_if {|x| to_delete = x['code_sets'].nil? || x['code_sets'].empty?; deleted << x if to_delete; to_delete }
+        deleted.each do |value|
+          puts "\tDeleted value set with no code sets: #{value['oid']}"
+        end
         final
     
       end

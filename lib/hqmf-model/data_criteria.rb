@@ -8,13 +8,26 @@ module HQMF
     UNION = 'UNION'
 
     FIELDS = {'SEVERITY'=>{title:'Severity',coded_entry_method: :severity},
-              'ORDINAL'=>{title:'Ordinal',coded_entry_method: :ordinal},
-              'REASON'=>{title:'Reason',coded_entry_method: :reason},
-              'SOURCE'=>{title:'Source',coded_entry_method: :source},
-              'CUMULATIVE_MEDICTION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
-              'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location}}
+             'ORDINAL'=>{title:'Ordinal',coded_entry_method: :ordinal},
+             'REASON'=>{title:'Reason',coded_entry_method: :reason},
+             'SOURCE'=>{title:'Source',coded_entry_method: :source},
+             'CUMULATIVE_MEDICTION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
+             'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location},
+             'DISCHARGE_DATETIME'=>{title:'Discharge Date/Time',coded_entry_method: :discharge_datetime},
+             'DISCHARGE_STATUS'=>{title:'Discharge Status',coded_entry_method: :discharge_status},
+             'ADMISSION_DATETIME'=>{title:'Admission Date/Time',coded_entry_method: :admission_datetime},
+             'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay},
+             'DOSE'=>{title:'Dose',coded_entry_method: :dose},
+             'ROUTE'=>{title:'Route',coded_entry_method: :route},
+             'START_DATETIME'=>{title:'Start Date/Time',coded_entry_method: :start_datetime},
+             'FREQUENCY'=>{title:'Frequency',coded_entry_method: :frequency},
+             'ANATOMICAL_STRUCTURE'=>{title:'Anatomical Structure',coded_entry_method: :anatomical_structure},
+             'STOP_DATETIME'=>{title:'Stop Date/Time',coded_entry_method: :stop_datetime},
+             'INCISION_DATETIME'=>{title:'Incision Date/Time',coded_entry_method: :incision_datetime},
+             'REMOVAL_DATETIME'=>{title:'Removal Date/Time',coded_entry_method: :removal_datetime}
+             }
 
-    attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator , :specific_occurrence, :source_data_criteria
+    attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator , :specific_occurrence, :specific_occurrence_const, :source_data_criteria
     attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :definition, :inline_code_list, :negation_code_list_id, :negation, :display_name
   
     # Create a new data criteria instance
@@ -37,8 +50,9 @@ module HQMF
     # @param [List<TemporalReference>] temporal_references
     # @param [List<SubsetOperator>] subset_operators
     # @param [String] specific_occurrence
+    # @param [String] specific_occurrence_const
     # @param [String] source_data_criteria (id for the source data criteria, important for specific occurrences)
-    def initialize(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators, specific_occurrence, source_data_criteria=nil)
+    def initialize(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators, specific_occurrence, specific_occurrence_const, source_data_criteria=nil)
 
       status = normalize_status(definition, status)
       @settings = HQMF::DataCriteria.get_settings_for_definition(definition, status)
@@ -61,13 +75,14 @@ module HQMF
       @temporal_references = temporal_references
       @subset_operators = subset_operators
       @specific_occurrence = specific_occurrence
+      @specific_occurrence_const = specific_occurrence_const
       @source_data_criteria = source_data_criteria || id
     end
     
     # create a new data criteria given a category and sub_category.  A sub category can either be a status or a sub category
     def self.create_from_category(id, title, description, code_list_id, category, sub_category=nil, negation=false, negation_code_list_id=nil)
       settings = HQMF::DataCriteria.get_settings_for_definition(category, sub_category)
-      HQMF::DataCriteria.new(id, title, nil, description, code_list_id, nil, nil, settings['definition'], settings['status'], nil, nil, nil, nil, negation, negation_code_list_id, nil, nil, nil)
+      HQMF::DataCriteria.new(id, title, nil, description, code_list_id, nil, nil, settings['definition'], settings['status'], nil, nil, nil, nil, negation, negation_code_list_id, nil, nil, nil,nil)
     end
     
     def standard_category
@@ -117,10 +132,11 @@ module HQMF
       temporal_references = json["temporal_references"].map {|reference| HQMF::TemporalReference.from_json(reference)} if json["temporal_references"]
       subset_operators = json["subset_operators"].map {|operator| HQMF::SubsetOperator.from_json(operator)} if json["subset_operators"]
       specific_occurrence = json['specific_occurrence'] if json['specific_occurrence']
+      specific_occurrence_const = json['specific_occurrence_const'] if json['specific_occurrence_const']
       source_data_criteria = json['source_data_criteria'] if json['source_data_criteria']
 
       HQMF::DataCriteria.new(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, value, field_values,
-                             effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators,specific_occurrence,source_data_criteria)
+                             effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators,specific_occurrence,specific_occurrence_const,source_data_criteria)
     end
 
     def to_json
@@ -130,7 +146,7 @@ module HQMF
 
     def base_json
       x = nil
-      json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :definition, :status, :hard_status, :negation, :negation_code_list_id,:specific_occurrence,:source_data_criteria])
+      json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :definition, :status, :hard_status, :negation, :negation_code_list_id,:specific_occurrence,:specific_occurrence_const,:source_data_criteria])
       json[:children_criteria] = @children_criteria unless @children_criteria.nil? || @children_criteria.empty?
       json[:value] = ((@value.is_a? String) ? @value : @value.to_json) if @value
       json[:field_values] = @field_values.inject({}) {|memo,(k,v)| memo[k] = v.to_json; memo} if @field_values

@@ -32,6 +32,8 @@ module HQMF1
       if attr_val('cda:observation/@actionNegationInd')=='true'
         value = 'EXCL'
       end
+      # replace measure population with NUMER.  MSRPOPL is used in continuous variable calculations.
+      value = 'NUMER' if value == 'MSRPOPL'
       value.upcase
     end
     
