@@ -30,6 +30,10 @@ module HQMF
       comparison_converter = HQMF::ComparisonConverter.new(@data_criteria_converter)
       comparison_converter.convert_comparisons(population_criteria)
 
+      # PASS 3
+      # specific_occurrence_converter = HQMF::SpecificOccurrenceConverter.new(@data_criteria_converter)
+      # specific_occurrence_converter.convert_specific_occurrences(population_criteria)
+
       data_criteria = @data_criteria_converter.final_v2_data_criteria
       
       populations = @population_criteria_converter.sub_measures
@@ -70,7 +74,7 @@ module HQMF
         if (data_criteria.type == :characteristic and !data_criteria.property.nil?)
           if (codes)
             value_set = codes[data_criteria.code_list_id]
-            raise "no value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
+            puts "\tno value set for unknown patient characteristic: #{data_criteria.id}" unless value_set
           else
             puts "\tno code set to back fill: #{data_criteria.title}"
             next
@@ -105,7 +109,7 @@ module HQMF
       # @param [String] expression
       
       low = HQMF::Value.new('TS',nil,'20100101',nil, nil, nil)
-      high = HQMF::Value.new('TS',nil,'20101231',nil, nil, nil)
+      high = HQMF::Value.new('TS',nil,'20110101',nil, nil, nil)
       width = HQMF::Value.new('PQ','a','1',nil, nil, nil)
       
 #      puts ('need to figure out a way to make dates dynamic')
