@@ -67,61 +67,65 @@ module HQMF
         data_criteria = nil
         if (children_criteria.length == 1)
           data_criteria = children_criteria[0]
-          if data_criteria and !data_criteria.value.nil?
-            subset_operator.value ||= data_criteria.value 
-            data_criteria.value = nil
-          end
+          # this block used to set the order of operations of values after subset operators.
+          # if data_criteria and !data_criteria.value.nil?
+          #   subset_operator.value ||= data_criteria.value 
+          #   data_criteria.value = nil
+          # end
           data_criteria.subset_operators ||= []
           # add subset operator to data criteria
           data_criteria.subset_operators << subset_operator unless data_criteria.has_subset(subset_operator)
         else
           parent_id = "GROUP"
           
-          unless subset_operator.value
-            # scalar comparisons are used for MIN>90 etc.  The value is on a REFR restriction.  We need to store it on the data criteria since the value is processed before the operator is created.
-            scalar_comparison = nil
-            
-            # check to see if we have different values referenced accross the children
-            # this happens on things like most recent blood pressure reading
-            multiple_differing_values = false
-            children_criteria.each do |criteria|
-              if scalar_comparison.nil?
-                scalar_comparison = criteria.value
-              else
-                if scalar_comparison != criteria.value
-                  multiple_differing_values = true
-                end
-              end
-            end 
-            
-            # if we have multiple differing values, we want to keep the preconditions from the restriction, and attach them to the precondition
-            # we can then apply the subset operator to all of the children individually
-            if (multiple_differing_values)
-              precondition.preconditions.delete(restriction)
-              precondition.preconditions.concat(restriction.preconditions)
-              children_criteria.each do |criteria|
-                subset_operator = HQMF::SubsetOperator.new(type, value)
-                subset_operator.value = criteria.value
-                criteria.value = nil
-                criteria.subset_operators ||= []
-                criteria.subset_operators << subset_operator unless criteria.has_subset(subset_operator)
-              end
-              restriction.converted=true
-              # we want to return since we have applied the subset to the children.  We no longer want to create a grouping data critiera
-              return;
-            end
-            
-            # all the children have the same value, apply the value to the subset operator
-            children_criteria.each do |criteria|
-              if scalar_comparison.nil?
-                scalar_comparison = criteria.value
-              else
-                raise "multiple different scalar comparisons for a grouping data criteria" if scalar_comparison != criteria.value
-              end
-              criteria.value = nil
-            end 
-            subset_operator.value ||= scalar_comparison
-          end
+          # this block of code used to be used to pull the value off of a data criteria and shove it onto a subset operator to evaluate MIN: lab result(result > 10) as MIN > 10: lab result
+          # the decision was made by NQF to not support this order of operations based on previous guidance to the measure developers
+          #
+          # unless subset_operator.value
+          #   # scalar comparisons are used for MIN>90 etc.  The value is on a REFR restriction.  We need to store it on the data criteria since the value is processed before the operator is created.
+          #   scalar_comparison = nil
+          #   
+          #   # check to see if we have different values referenced accross the children
+          #   # this happens on things like most recent blood pressure reading
+          #   multiple_differing_values = false
+          #   children_criteria.each do |criteria|
+          #     if scalar_comparison.nil?
+          #       scalar_comparison = criteria.value
+          #     else
+          #       if scalar_comparison != criteria.value
+          #         multiple_differing_values = true
+          #       end
+          #     end
+          #   end 
+          #   
+          #   # if we have multiple differing values, we want to keep the preconditions from the restriction, and attach them to the precondition
+          #   # we can then apply the subset operator to all of the children individually
+          #   if (multiple_differing_values)
+          #     precondition.preconditions.delete(restriction)
+          #     precondition.preconditions.concat(restriction.preconditions)
+          #     children_criteria.each do |criteria|
+          #       subset_operator = HQMF::SubsetOperator.new(type, value)
+          #       subset_operator.value = criteria.value
+          #       criteria.value = nil
+          #       criteria.subset_operators ||= []
+          #       criteria.subset_operators << subset_operator unless criteria.has_subset(subset_operator)
+          #     end
+          #     restriction.converted=true
+          #     # we want to return since we have applied the subset to the children.  We no longer want to create a grouping data critiera
+          #     return;
+          #   end
+          #   
+          #   # all the children have the same value, apply the value to the subset operator
+          #   children_criteria.each do |criteria|
+          #     if scalar_comparison.nil?
+          #       scalar_comparison = criteria.value
+          #     else
+          #       raise "multiple different scalar comparisons for a grouping data criteria" if scalar_comparison != criteria.value
+          #     end
+          #     criteria.value = nil
+          #   end 
+          #   subset_operator.value ||= scalar_comparison
+          # end
           
           if restriction.generated_data_criteria.nil?
             # we pass in restriction.preconditions here rather than children_criteria because we need to be able to create grouping data criteria for and and or preconditions in a tree
