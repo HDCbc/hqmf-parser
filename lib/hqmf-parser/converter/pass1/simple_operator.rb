@@ -27,16 +27,21 @@ module HQMF
                      '34896006'  => 'INCISION_DATETIME',
                      '118292001 (qualified by 118575009)' =>'REMOVAL_DATETIME'
                      }
+      VALUE_FIELD_TIMES = {
+        'FACILITY_LOCATION_START' => 'FACILITY_LOCATION_ARRIVAL_DATETIME',
+        'FACILITY_LOCATION_END' => 'FACILITY_LOCATION_DEPARTURE_DATETIME'
+      }
       
 
-      attr_accessor :type, :value, :category, :field, :field_code
+      attr_accessor :type, :value, :category, :field, :field_code, :field_time
 
-      def initialize(category, type, value, field = nil, field_code=nil)
+      def initialize(category, type, value, field = nil, field_code=nil, field_time=nil)
         @category = category
         @type = type
         @value = value
         @field = field
         @field_code = field_code
+        @field_time = field_time
       end
       
       def temporal?
@@ -58,6 +63,7 @@ module HQMF
       
       def field_value_key
         key = VALUE_FIELDS[field_code]
+        key = VALUE_FIELD_TIMES["#{key}_#{field_time.to_s.upcase}"] if (field_time) 
         raise "unsupported field value: #{field_code}, #{field}" unless key
         key
       end

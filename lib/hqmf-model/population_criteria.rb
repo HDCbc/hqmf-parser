@@ -60,6 +60,14 @@ module HQMF
       conjunction_code
     end
     
+    def referenced_data_criteria
+      data_criteria_ids = []
+      @preconditions.each do |precondition|
+        data_criteria_ids.concat(precondition.referenced_data_criteria)
+      end
+      data_criteria_ids
+    end
+    
   end
   
 end

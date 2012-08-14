@@ -66,7 +66,8 @@ module HQMF
       end
       field = restriction[:field]
       field_code = restriction[:field_code]
-      operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, value, field, field_code)
+      field_time = restriction[:field_time]
+      operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, value, field, field_code, field_time)
       
       # get the precondtions off of the restriction
       children = HQMF::PreconditionConverter.parse_and_merge_preconditions(restriction[:preconditions],data_criteria_converter) if restriction[:preconditions]
@@ -89,7 +90,7 @@ module HQMF
         # the reason for this is that we want the order of operations to be SBS the FIRST of a data criteria, rather than FIRST of SBS of a data criteria
         
         subset_type = restriction[:subset]
-        subset_operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(subset_type), subset_type, nil, nil)
+        subset_operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(subset_type), subset_type, nil)
         
         reference = nil
         conjunction_code = "operator"

@@ -13,6 +13,8 @@ module HQMF
              'SOURCE'=>{title:'Source',coded_entry_method: :source},
              'CUMULATIVE_MEDICTION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
              'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location},
+             'FACILITY_LOCATION_ARRIVAL_DATETIME'=>{title:'Facility Location Arrival Date/Time',coded_entry_method: :facility_location},
+             'FACILITY_LOCATION_DEPARTURE_DATETIME'=>{title:'Facility Location Departure Date/Time',coded_entry_method: :facility_location},
              'DISCHARGE_DATETIME'=>{title:'Discharge Date/Time',coded_entry_method: :discharge_datetime},
              'DISCHARGE_STATUS'=>{title:'Discharge Status',coded_entry_method: :discharge_status},
              'ADMISSION_DATETIME'=>{title:'Admission Date/Time',coded_entry_method: :admission_datetime},
@@ -186,6 +188,28 @@ module HQMF
       status_by_category.delete('variable')
       status_by_category.delete('measurement_period')
       status_by_category.values.flatten
+    end
+
+    def referenced_data_criteria(document)
+      referenced = []
+      if (@children_criteria)
+        @children_criteria.each do |id|
+          dc = document.data_criteria(id) 
+          referenced << id
+          referenced.concat(dc.referenced_data_criteria(document))
+        end
+      end
+      if (@temporal_references)
+        @temporal_references.each do |tr|
+          id = tr.reference.id
+          if (id != HQMF::Document::MEASURE_PERIOD_ID)
+            dc = document.data_criteria(id) 
+            referenced << id
+            referenced.concat(dc.referenced_data_criteria(document))
+          end
+        end
+      end
+      referenced
     end
 
     private

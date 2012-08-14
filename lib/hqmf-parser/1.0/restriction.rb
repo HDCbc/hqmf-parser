@@ -56,6 +56,7 @@ module HQMF1
           'target_id' => target_id,
           'field' => field,
           'field_code' => field_code,
+          'field_time' => field_time,
           'value' => value)
         all_restrictions = []
         all_restrictions.concat @restrictions
@@ -94,6 +95,18 @@ module HQMF1
       attr_val('./cda:observation/cda:code/@code') || attr_val('./cda:encounter/cda:participant/cda:roleParticipant/@classCode')
     end
     
+    def field_time
+      effectiveTime = @entry.at_xpath('./cda:observation/cda:effectiveTime') || @entry.at_xpath('./cda:encounter/cda:participant/cda:roleParticipant/cda:effectiveTime')
+      
+      time = nil
+      if effectiveTime
+        time = :start if effectiveTime.at_xpath('./cda:low')
+        time = :end if effectiveTime.at_xpath('./cda:high')
+      end
+      time
+    end
+
+    
     def value
       value = nil
       type = attr_val('./cda:observation/cda:value/@xsi:type') || 'CD'
@@ -125,7 +138,7 @@ module HQMF1
     
     def to_json 
       return nil if from_parent
-      json = build_hash(self, [:subset,:type,:target_id,:field,:field_code,:from_parent, :negation])
+      json = build_hash(self, [:subset,:type,:target_id,:field,:field_code,:from_parent, :negation, :field_time])
       json[:range] = range.to_json if range
       if value
         if value.is_a? String

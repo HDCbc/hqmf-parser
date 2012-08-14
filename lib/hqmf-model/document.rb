@@ -106,6 +106,27 @@ module HQMF
     def all_data_criteria
       @data_criteria
     end
+
+    # @return [Array] an array of HQMF::DataCriteria ids that are actually used in the measure
+    def referenced_data_criteria
+      data_criteria_ids = []
+      @population_criteria.each do |population|
+        data_criteria_ids.concat(population.referenced_data_criteria)
+      end
+      references = []
+      data_criteria_ids.each do |id|
+        dc = data_criteria(id)
+        references << id
+        from_dc = dc.referenced_data_criteria(self)
+        references.concat(from_dc)
+      end
+      used_dc = []
+      references.uniq.each do |id|
+        used_dc << data_criteria(id)
+      end
+      used_dc
+    end
+    
     
     # Get a specific data criteria by id.
     # @param [String] id the data criteria identifier

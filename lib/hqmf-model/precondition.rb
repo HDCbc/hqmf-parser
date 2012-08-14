@@ -67,6 +67,18 @@ module HQMF
       @preconditions.length>0
     end
 
+    def referenced_data_criteria
+      data_criteria_ids = []
+      if @preconditions.empty?
+        data_criteria_ids << self.reference.id
+      else
+        @preconditions.each do |precondition|
+          data_criteria_ids.concat(precondition.referenced_data_criteria)
+        end
+      end
+      data_criteria_ids
+    end
+
   end
   
   
