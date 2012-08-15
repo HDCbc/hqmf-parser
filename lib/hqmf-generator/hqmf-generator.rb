@@ -100,6 +100,19 @@ module HQMF2
         xml
       end
       
+      def xml_for_template(template_id)
+        xml = ''
+        if template_id
+            template_path = File.expand_path(File.join('..', 'template_id.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'template_id' => template_id, 'title' => HQMF::DataCriteria.title_for_template_id(template_id)}
+            context = ErbContext.new(params)
+            xml = template.result(context.get_binding)
+        end
+        xml
+      end
+      
       def xml_for_subsets(data_criteria)
         subsets_xml = []
         if data_criteria.subset_operators
@@ -128,7 +141,8 @@ module HQMF2
         template_path = File.expand_path(File.join('..', data_criteria_template_name(data_criteria)), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'criteria' => data_criteria}
+        template_id = HQMF::DataCriteria.template_id_for_definition(data_criteria.definition, data_criteria.status, data_criteria.negation)
+        params = {'doc' => doc, 'criteria' => data_criteria, 'template_id' => template_id}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
