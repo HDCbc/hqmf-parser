@@ -419,7 +419,7 @@ Female patients are in the Initial Patient Population only because they received
                      <code code="30954-2" displayName="Results" codeSystem="2.16.840.1.113883.6.1"/>
                      <sourceOf typeCode="COMP">
                         <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
-                           <code code="2.16.840.1.113883.3.464.0003.11.02.0011" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
+                           <code code="2.16.840.1.113883.3.464.3.11.2.11" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
                            <title>Occurrence A of Laboratory Test, Performed: Pregnancy Test</title>
                            <statusCode code="completed"/>
                            <sourceOf typeCode="DURING">
@@ -500,7 +500,7 @@ Female patients are in the Initial Patient Population only because they received
                            <code code="30954-2" displayName="Results" codeSystem="2.16.840.1.113883.6.1"/>
                            <sourceOf typeCode="COMP">
                               <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
-                                 <code code="2.16.840.1.113883.3.464.0003.11.02.0011" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
+                                 <code code="2.16.840.1.113883.3.464.3.11.2.11" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
                                  <title>Occurrence A of Laboratory Test, Performed: Pregnancy Test</title>
                                  <statusCode code="completed"/>
                               </observation>
@@ -764,7 +764,7 @@ Female patients are in the Initial Patient Population only because they received
                            <code code="30954-2" displayName="Results" codeSystem="2.16.840.1.113883.6.1"/>
                            <sourceOf typeCode="COMP">
                               <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
-                                 <code code="2.16.840.1.113883.3.464.0003.11.02.0011" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
+                                 <code code="2.16.840.1.113883.3.464.3.11.2.11" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
                                  <title>Laboratory Test, Performed: Pregnancy Test</title>
                                  <statusCode code="completed"/>
                               </observation>
@@ -1003,7 +1003,7 @@ Female patients are in the Initial Patient Population only because they received
                <item>
                   <content>"Laboratory Test, Performed: Pap Test"</content> using "Pap Test Grouping Value Set (2.16.840.1.113883.3.464.0003.08.02.0017)"</item>
                <item>
-                  <content>"Laboratory Test, Performed: Pregnancy Test"</content> using "Pregnancy Test Grouping Value Set (2.16.840.1.113883.3.464.0003.11.02.0011)"</item>
+                  <content>"Laboratory Test, Performed: Pregnancy Test"</content> using "Pregnancy Test Grouping Value Set (2.16.840.1.113883.3.464.3.11.2.11)"</item>
                <item>
                   <content>"Laboratory Test, Result: Chlamydia Screening"</content> using "Chlamydia Screening Grouping Value Set (2.16.840.1.113883.3.464.0003.10.02.0052)"</item>
                <item>
@@ -1314,7 +1314,7 @@ Female patients are in the Initial Patient Population only because they received
                <code code="30954-2" displayName="Results" codeSystem="2.16.840.1.113883.6.1"/>
                <sourceOf typeCode="COMP">
                   <observation classCode="OBS" moodCode="EVN" isCriterionInd="true">
-                     <code code="2.16.840.1.113883.3.464.0003.11.02.0011" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
+                     <code code="2.16.840.1.113883.3.464.3.11.2.11" displayName="Pregnancy Test Grouping Value Set" codeSystem="2.16.840.1.113883.3.560.101.1"/>
                      <title>Laboratory Test, Performed: Pregnancy Test</title>
                      <statusCode code="completed"/>
                   </observation>
