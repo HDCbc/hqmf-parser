@@ -1,5 +1,6 @@
       <entry typeCode="DRIV">
         <observationCriteria  moodCode="EVN" classCode="OBS"<%= " actionNegationInd='true'" if criteria.negation %>>
+          <%= xml_for_template(template_id) %>
           <id>
             <item root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
           </id>

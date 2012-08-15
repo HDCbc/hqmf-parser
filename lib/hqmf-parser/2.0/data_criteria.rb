@@ -23,42 +23,101 @@ module HQMF2
       @code_list_xpath = './cda:observationCriteria/cda:code'
       @value_xpath = './cda:observationCriteria/cda:value'
       
-      entry_type = attr_val('./*/cda:definition/*/cda:id/@extension')
-      case entry_type
-      when 'Problem', 'Problems'
-        @definition = 'diagnosis'
+      # Try to determine what kind of data criteria we are dealing with
+      # First we look for a template id and if we find one just use the definition
+      # status and negation associated with that
+      if !extract_type_from_template_id()
+        # If no template id or not one we recognize then try to determine type from
+        # the definition element
+        extract_type_from_definition()
+      end
+      
+      patch_xpaths_for_criteria_type()
+    end
+
+    def patch_xpaths_for_criteria_type  
+      # Patch xpaths when necessary, HQMF dta criteria are irregular in structure so
+      # the same information is found in different places depending on the type of
+      # criteria
+      # Assumes @definition and @status are already set
+      case @definition
+      when 'diagnosis', 'diagnosis_family_history'
         @code_list_xpath = './cda:observationCriteria/cda:value'
-      when 'Encounter', 'Encounters'
-        @definition = 'encounter'
+      when 'encounter'
         @id_xpath = './cda:encounterCriteria/cda:id/cda:item/@extension'
         @code_list_xpath = './cda:encounterCriteria/cda:code'
-      when 'LabResults', 'Results'
-        @definition = 'laboratory_test'
+      when 'procedure_result', 'laboratory_test', 'diagnostic_study_result', 'functional_status_result', 'intervention_result'
         @value = extract_value
-      when 'Procedure', 'Procedures'
-        @definition = 'procedure'
+      when 'procedure', 'risk_category_assessment', 'physical_exam', 'communication_from_patient_to_provider', 'communication_from_provider_to_provider', 'device', 'diagnostic_study', 'intervention'
         @id_xpath = './cda:procedureCriteria/cda:id/cda:item/@extension'
         @code_list_xpath = './cda:procedureCriteria/cda:code'
-      when 'Medication', 'Medications'
-        @definition = 'medication'
-        @id_xpath = './cda:substanceAdministrationCriteria/cda:id/cda:item/@extension'
-        @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participation/cda:role/cda:code'
-      when 'RX'
-        @definition = 'medication'
-        @status = 'dispensed'
-        @id_xpath = './cda:supplyCriteria/cda:id/cda:item/@extension'
-        @code_list_xpath = './cda:supplyCriteria/cda:participation/cda:role/cda:code'
-      when 'Demographics'
-        @definition = definition_for_demographic
+      when 'medication'
+        case @status
+        when 'dispensed', 'ordered'
+          @id_xpath = './cda:supplyCriteria/cda:id/cda:item/@extension'
+          @code_list_xpath = './cda:supplyCriteria/cda:participation/cda:role/cda:code'
+        else # active or administered
+          @id_xpath = './cda:substanceAdministrationCriteria/cda:id/cda:item/@extension'
+          @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participation/cda:role/cda:code'
+        end
+      when 'patient_characteristic', 'patient_characteristic_birthdate', 'patient_characteristic_clinical_trial_participant', 'patient_characteristic_expired', 'patient_characteristic_gender', 'patient_characteristic_age', 'patient_characteristic_languages', 'patient_characteristic_marital_status', 'patient_characteristic_race'
         @value = extract_value
-      when 'Derived'
-        @definition = 'derived'
-      when nil
-        @definition = 'variable'
+      when 'variable'
         @value = extract_value
-      else
-        raise "Unknown data criteria template identifier [#{entry_type}]"
       end
+    end
+
+    def extract_type_from_definition
+      # See if we can find a match for the entry definition value and status.
+      entry_type = attr_val('./*/cda:definition/*/cda:id/@extension')
+      begin
+        settings = HQMF::DataCriteria.get_settings_for_definition(entry_type, @status)
+        @definition = entry_type
+      rescue
+        # if no exact match then try a string match just using entry definition value
+        case entry_type
+        when 'Problem', 'Problems'
+          @definition = 'diagnosis'
+        when 'Encounter', 'Encounters'
+          @definition = 'encounter'
+        when 'LabResults', 'Results'
+          @definition = 'laboratory_test'
+        when 'Procedure', 'Procedures'
+          @definition = 'procedure'
+        when 'Medication', 'Medications'
+          @definition = 'medication'
+          if !@status
+            @status = 'active'
+          end
+        when 'RX'
+          @definition = 'medication'
+          if !@status
+            @status = 'dispensed'
+          end
+        when 'Demographics'
+          @definition = definition_for_demographic
+        when 'Derived'
+          @definition = 'derived'
+        when nil
+          @definition = 'variable'
+        else
+          raise "Unknown data criteria template identifier [#{entry_type}]"
+        end
+      end
+    end
+    
+    def extract_type_from_template_id
+      template_id = attr_val('./*/cda:templateId/cda:item/@root')
+      if template_id
+        defs = HQMF::DataCriteria.definition_for_template_id(template_id)
+        if defs
+          @definition = defs['definition']
+          @status = defs['status'].length > 0 ? defs['status'] : nil
+          @negation = defs['negation']
+          return true
+        end
+      end
+      false
     end
     
     def to_s

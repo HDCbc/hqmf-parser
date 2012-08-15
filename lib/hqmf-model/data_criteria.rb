@@ -212,7 +212,50 @@ module HQMF
       referenced
     end
 
+    def self.get_settings_for_definition(definition, status)
+      settings_file = File.expand_path('../data_criteria.json', __FILE__)
+      settings_map = JSON.parse(File.read(settings_file))
+      key = definition + ((status.nil? || status.empty?) ? '' : "_#{status}")
+      settings = settings_map[key]
+      
+      raise "data criteria is not supported #{key}" if settings.nil? || settings["not_supported"]
+
+      settings
+    end
+
+    def self.definition_for_template_id(template_id)
+      get_template_id_map()[template_id]
+    end
+
+    def self.template_id_for_definition(definition, status, negation)
+      get_template_id_map().key({'definition' => definition, 'status' => status || '', 'negation' => negation})
+    end
+
+    def self.title_for_template_id(template_id)
+      value = get_template_id_map()[template_id]
+      if value
+        settings = self.get_settings_for_definition(value['definition'], value['status'])
+        if settings
+          settings['title']
+        else
+          'Unknown data criteria'
+        end
+      else
+        'Unknown template id'
+      end
+    end
+
+    def self.get_template_id_map
+      @@template_id_map ||= read_template_id_map
+      @@template_id_map
+    end
+    
     private
+    
+    def self.read_template_id_map
+      template_id_file = File.expand_path('../data_criteria_template_id_map.json', __FILE__)
+      JSON.parse(File.read(template_id_file))
+    end
 
     def normalize_status(definition, status)
       return status if status.nil?
@@ -229,17 +272,6 @@ module HQMF
         else
           status.downcase
       end
-    end
-
-    def self.get_settings_for_definition(definition, status)
-      settings_file = File.expand_path('../data_criteria.json', __FILE__)
-      settings_map = JSON.parse(File.read(settings_file))
-      key = definition + ((status.nil? || status.empty?) ? '' : "_#{status}")
-      settings = settings_map[key]
-      
-      raise "data criteria is not supported #{key}" if settings.nil? || settings["not_supported"]
-
-      settings
     end
 
     def self.convert_value(json)

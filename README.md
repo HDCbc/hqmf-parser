@@ -230,6 +230,32 @@ STAGE 2 Data Criteria
   procedure_result
   risk_category_assessment
 
+STAGE 2 Definitions
+  communication_from_patient_to_provider
+  communication_from_provider_to_provider
+  device
+  diagnosis
+  diagnosis_family_history
+  diagnostic_study
+  diagnostic_study_result
+  encounter
+  functional_status_result
+  intervention
+  intervention_result
+  laboratory_test
+  medication
+  medication_allergy
+  medication_intolerance
+  patient_characteristic
+  patient_characteristic_birthdate
+  patient_characteristic_clinical_trial_participant
+  patient_characteristic_expired
+  patient_characteristic_gender
+  physical_exam
+  procedure_intolerance
+  procedure
+  procedure_result
+  risk_category_assessment
 
 CHARACTERISTIC
 -------

@@ -100,6 +100,19 @@ module HQMF2
         xml
       end
       
+      def xml_for_template(template_id)
+        xml = ''
+        if template_id
+            template_path = File.expand_path(File.join('..', 'template_id.xml.erb'), __FILE__)
+            template_str = File.read(template_path)
+            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+            params = {'template_id' => template_id, 'title' => HQMF::DataCriteria.title_for_template_id(template_id)}
+            context = ErbContext.new(params)
+            xml = template.result(context.get_binding)
+        end
+        xml
+      end
+      
       def xml_for_subsets(data_criteria)
         subsets_xml = []
         if data_criteria.subset_operators
@@ -128,7 +141,8 @@ module HQMF2
         template_path = File.expand_path(File.join('..', data_criteria_template_name(data_criteria)), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'criteria' => data_criteria}
+        template_id = HQMF::DataCriteria.template_id_for_definition(data_criteria.definition, data_criteria.status, data_criteria.negation)
+        params = {'doc' => doc, 'criteria' => data_criteria, 'template_id' => template_id}
         context = ErbContext.new(params)
         template.result(context.get_binding)
       end
@@ -223,20 +237,23 @@ module HQMF2
       end
       
       def data_criteria_template_name(data_criteria)
-        case data_criteria.type
-        when :conditions, :activeDiagnoses 
+        case data_criteria.definition
+        when 'diagnosis', 'diagnosis_family_history'
           'condition_criteria.xml.erb'
-        when :encounters 
+        when 'encounter' 
           'encounter_criteria.xml.erb'
-        when :procedures
+        when 'procedure', 'risk_category_assessment', 'physical_exam', 'communication_from_patient_to_provider', 'communication_from_provider_to_provider', 'device', 'diagnostic_study', 'intervention'
           'procedure_criteria.xml.erb'
-        when :medications, :allMedications
-          'substance_criteria.xml.erb'
-        when :medication_supply
-          'supply_criteria.xml.erb'
-        when :characteristic
+        when 'medication'
+          case data_criteria.status
+          when 'dispensed', 'ordered'
+            'supply_criteria.xml.erb'
+          else # active or administered
+            'substance_criteria.xml.erb'
+          end
+        when 'patient_characteristic', 'patient_characteristic_birthdate', 'patient_characteristic_clinical_trial_participant', 'patient_characteristic_expired', 'patient_characteristic_gender', 'patient_characteristic_age', 'patient_characteristic_languages', 'patient_characteristic_marital_status', 'patient_characteristic_race'
           'characteristic_criteria.xml.erb'
-        when :variable
+        when 'variable'
           'variable_criteria.xml.erb'
         else
           'observation_criteria.xml.erb'
@@ -244,28 +261,7 @@ module HQMF2
       end
 
       def section_name(data_criteria)
-        case data_criteria.type
-        when :conditions
-          'Problems'
-        when :encounters
-          'Encounters'
-        when :results, :laboratory_tests
-          'Results'
-        when :procedures
-          'Procedures'
-        when :medications
-          'Medications'
-        when :medication_supply
-          'RX'
-        when :characteristic
-          'Demographics'
-        when :derived
-          'Derived'
-        when :variable
-          'Demographics'
-        else
-          raise "Unknown data criteria type [#{data_criteria.type}]"
-        end
+        data_criteria.definition.to_s
       end
 
       def element_name_prefix(data_criteria)
