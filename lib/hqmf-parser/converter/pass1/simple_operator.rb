@@ -12,7 +12,7 @@ module HQMF
                      '117363000' => 'ORDINAL',
                      '410666004' => 'REASON',
                      '260753009' => 'SOURCE',
-                     '363819003' => 'CUMULATIVE_MEDICTION_DURATION',
+                     '363819003' => 'CUMULATIVE_MEDICATION_DURATION',
                      'SDLOC'     => 'FACILITY_LOCATION',
                      '442864001' => 'DISCHARGE_DATETIME',
                      '309039003' => 'DISCHARGE_STATUS',

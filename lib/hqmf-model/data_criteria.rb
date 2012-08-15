@@ -11,7 +11,7 @@ module HQMF
              'ORDINAL'=>{title:'Ordinal',coded_entry_method: :ordinal},
              'REASON'=>{title:'Reason',coded_entry_method: :reason},
              'SOURCE'=>{title:'Source',coded_entry_method: :source},
-             'CUMULATIVE_MEDICTION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
+             'CUMULATIVE_MEDICATION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
              'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location},
              'FACILITY_LOCATION_ARRIVAL_DATETIME'=>{title:'Facility Location Arrival Date/Time',coded_entry_method: :facility_location},
              'FACILITY_LOCATION_DEPARTURE_DATETIME'=>{title:'Facility Location Departure Date/Time',coded_entry_method: :facility_location},
