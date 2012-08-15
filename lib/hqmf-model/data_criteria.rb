@@ -245,15 +245,15 @@ module HQMF
       end
     end
 
-    private
-    
     def self.get_template_id_map
       @@template_id_map ||= read_template_id_map
       @@template_id_map
     end
     
+    private
+    
     def self.read_template_id_map
-      template_id_file = File.expand_path('../../hqmf-parser/1.0/data_criteria_template_id_map.json', __FILE__)
+      template_id_file = File.expand_path('../data_criteria_template_id_map.json', __FILE__)
       JSON.parse(File.read(template_id_file))
     end
 

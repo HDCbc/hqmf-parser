@@ -11,9 +11,8 @@ module HQMF1
     def initialize(entry)
       @entry = entry
       
-      template_map_file = File.expand_path('../data_criteria_template_id_map.json', __FILE__)
+      template_map = HQMF::DataCriteria.get_template_id_map()
       oid_xpath_file = File.expand_path('../data_criteria_oid_xpath.json', __FILE__)
-      template_map = JSON.parse(File.read(template_map_file))
       oid_xpath_map = JSON.parse(File.read(oid_xpath_file))
       template_id = attr_val('cda:act/cda:templateId/@root') || attr_val('cda:observation/cda:templateId/@root')
       
