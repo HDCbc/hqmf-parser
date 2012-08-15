@@ -70,7 +70,6 @@ module HQMF
     def self.backfill_patient_characteristics_with_codes(doc, codes)
       
       [].concat(doc.all_data_criteria).concat(doc.source_data_criteria).each do |data_criteria|
-        
         if (data_criteria.type == :characteristic and !data_criteria.property.nil?)
           if (codes)
             value_set = codes[data_criteria.code_list_id]
@@ -87,7 +86,15 @@ module HQMF
             data_criteria.inline_code_list = value_set
           end
           
-          
+        elsif (data_criteria.type == :characteristic)
+          if (codes)
+            value_set = codes[data_criteria.code_list_id]
+            # this is looking for a birthdate characteristic that is set as a generic characteristic but points to a loinc code set
+            if (value_set and value_set['LOINC'] == '21112-8')
+              data_criteria.definition = 'patient_characteristic_birthdate'
+            end
+          end
+
         end
       end
     end
