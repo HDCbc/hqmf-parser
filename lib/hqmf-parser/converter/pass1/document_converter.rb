@@ -90,7 +90,7 @@ module HQMF
           if (codes)
             value_set = codes[data_criteria.code_list_id]
             # this is looking for a birthdate characteristic that is set as a generic characteristic but points to a loinc code set
-            if (value_set and value_set['LOINC'] == '21112-8')
+            if (value_set and value_set['LOINC'] and value_set['LOINC'].first == '21112-8')
               data_criteria.definition = 'patient_characteristic_birthdate'
             end
           end
