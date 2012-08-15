@@ -3,6 +3,7 @@
           <id>
             <item root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
           </id>
+          <%= "<statusCode code=\"#{criteria.status}\"/>" if criteria.status %>
           <%= xml_for_effective_time(criteria) %>
           <%= xml_for_reason(criteria) %>
           <participation typeCode="PRD">

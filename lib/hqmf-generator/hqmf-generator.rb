@@ -223,20 +223,23 @@ module HQMF2
       end
       
       def data_criteria_template_name(data_criteria)
-        case data_criteria.type
-        when :conditions, :activeDiagnoses 
+        case data_criteria.definition
+        when 'diagnosis', 'diagnosis_family_history'
           'condition_criteria.xml.erb'
-        when :encounters 
+        when 'encounter' 
           'encounter_criteria.xml.erb'
-        when :procedures
+        when 'procedure', 'risk_category_assessment', 'physical_exam', 'communication_from_patient_to_provider', 'communication_from_provider_to_provider', 'device', 'diagnostic_study', 'intervention'
           'procedure_criteria.xml.erb'
-        when :medications, :allMedications
-          'substance_criteria.xml.erb'
-        when :medication_supply
-          'supply_criteria.xml.erb'
-        when :characteristic
+        when 'medication'
+          case data_criteria.status
+          when 'dispensed', 'ordered'
+            'supply_criteria.xml.erb'
+          else # active or administered
+            'substance_criteria.xml.erb'
+          end
+        when 'patient_characteristic', 'patient_characteristic_birthdate', 'patient_characteristic_clinical_trial_participant', 'patient_characteristic_expired', 'patient_characteristic_gender', 'patient_characteristic_age', 'patient_characteristic_languages', 'patient_characteristic_marital_status', 'patient_characteristic_race'
           'characteristic_criteria.xml.erb'
-        when :variable
+        when 'variable'
           'variable_criteria.xml.erb'
         else
           'observation_criteria.xml.erb'
@@ -244,28 +247,7 @@ module HQMF2
       end
 
       def section_name(data_criteria)
-        case data_criteria.type
-        when :conditions
-          'Problems'
-        when :encounters
-          'Encounters'
-        when :results, :laboratory_tests
-          'Results'
-        when :procedures
-          'Procedures'
-        when :medications
-          'Medications'
-        when :medication_supply
-          'RX'
-        when :characteristic
-          'Demographics'
-        when :derived
-          'Derived'
-        when :variable
-          'Demographics'
-        else
-          raise "Unknown data criteria type [#{data_criteria.type}]"
-        end
+        data_criteria.definition.to_s
       end
 
       def element_name_prefix(data_criteria)

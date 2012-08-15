@@ -212,6 +212,17 @@ module HQMF
       referenced
     end
 
+    def self.get_settings_for_definition(definition, status)
+      settings_file = File.expand_path('../data_criteria.json', __FILE__)
+      settings_map = JSON.parse(File.read(settings_file))
+      key = definition + ((status.nil? || status.empty?) ? '' : "_#{status}")
+      settings = settings_map[key]
+      
+      raise "data criteria is not supported #{key}" if settings.nil? || settings["not_supported"]
+
+      settings
+    end
+
     private
 
     def normalize_status(definition, status)
@@ -229,17 +240,6 @@ module HQMF
         else
           status.downcase
       end
-    end
-
-    def self.get_settings_for_definition(definition, status)
-      settings_file = File.expand_path('../data_criteria.json', __FILE__)
-      settings_map = JSON.parse(File.read(settings_file))
-      key = definition + ((status.nil? || status.empty?) ? '' : "_#{status}")
-      settings = settings_map[key]
-      
-      raise "data criteria is not supported #{key}" if settings.nil? || settings["not_supported"]
-
-      settings
     end
 
     def self.convert_value(json)

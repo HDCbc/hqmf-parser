@@ -29,56 +29,6 @@
       <code code="57025-9" codeSystem="2.16.840.1.113883.6.1"/>
       <title value="Data Criteria Section"/>
       <text>This section describes the data criteria.</text>
-      <definition>
-        <observationDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Derived" />
-        </observationDefinition>
-      </definition>
-      <definition>
-        <observationDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Demographics" />
-        </observationDefinition>
-      </definition>
-      <definition>
-        <encounterDefinition moodCode="DEF" classCode="ENC">
-          <id root="2.16.840.1.113883.3.100.1" extension="Encounters" />
-        </encounterDefinition>
-      </definition>
-      <definition>
-        <observationDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Problems" />
-        </observationDefinition>
-      </definition>
-      <definition>
-        <observationDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Allergies" />
-        </observationDefinition>
-      </definition>
-      <definition>
-        <procedureDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Procedures" />
-        </procedureDefinition>
-      </definition>
-      <definition>
-        <observationDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Results" />
-        </observationDefinition>
-      </definition>
-      <definition>
-        <observationDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Vitals" />
-        </observationDefinition>
-      </definition>
-      <definition>
-        <substanceAdministrationDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="Medications" />
-        </substanceAdministrationDefinition>
-      </definition>
-      <definition>
-        <supplyDefinition moodCode="DEF">
-          <id root="2.16.840.1.113883.3.100.1" extension="RX" />
-        </supplyDefinition>
-      </definition>
       <%- doc.all_data_criteria.each do |data_criteria| -%>
       <%= xml_for_data_criteria(data_criteria) %>
       <%- end -%>

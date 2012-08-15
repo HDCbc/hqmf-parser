@@ -24,41 +24,67 @@ module HQMF2
       @value_xpath = './cda:observationCriteria/cda:value'
       
       entry_type = attr_val('./*/cda:definition/*/cda:id/@extension')
-      case entry_type
-      when 'Problem', 'Problems'
-        @definition = 'diagnosis'
+      
+      begin
+        settings = HQMF::DataCriteria.get_settings_for_definition(entry_type, @status)
+        @definition = entry_type
+      rescue
+        case entry_type
+        when 'Problem', 'Problems'
+          @definition = 'diagnosis'
+        when 'Encounter', 'Encounters'
+          @definition = 'encounter'
+        when 'LabResults', 'Results'
+          @definition = 'laboratory_test'
+        when 'Procedure', 'Procedures'
+          @definition = 'procedure'
+        when 'Medication', 'Medications'
+          @definition = 'medication'
+          if !@status
+            @status = 'active'
+          end
+        when 'RX'
+          @definition = 'medication'
+          if !@status
+            @status = 'dispensed'
+          end
+        when 'Demographics'
+          @definition = definition_for_demographic
+        when 'Derived'
+          @definition = 'derived'
+        when nil
+          @definition = 'variable'
+        else
+          raise "Unknown data criteria template identifier [#{entry_type}]"
+        end
+      end
+      
+      case @definition
+      when 'diagnosis', 'diagnosis_family_history'
         @code_list_xpath = './cda:observationCriteria/cda:value'
-      when 'Encounter', 'Encounters'
-        @definition = 'encounter'
+      when 'encounter'
         @id_xpath = './cda:encounterCriteria/cda:id/cda:item/@extension'
         @code_list_xpath = './cda:encounterCriteria/cda:code'
-      when 'LabResults', 'Results'
-        @definition = 'laboratory_test'
+      when 'procedure_result', 'laboratory_test', 'diagnostic_study_result', 'functional_status_result', 'intervention_result'
         @value = extract_value
-      when 'Procedure', 'Procedures'
-        @definition = 'procedure'
+      when 'procedure', 'risk_category_assessment', 'physical_exam', 'communication_from_patient_to_provider', 'communication_from_provider_to_provider', 'device', 'diagnostic_study', 'intervention'
         @id_xpath = './cda:procedureCriteria/cda:id/cda:item/@extension'
         @code_list_xpath = './cda:procedureCriteria/cda:code'
-      when 'Medication', 'Medications'
-        @definition = 'medication'
-        @id_xpath = './cda:substanceAdministrationCriteria/cda:id/cda:item/@extension'
-        @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participation/cda:role/cda:code'
-      when 'RX'
-        @definition = 'medication'
-        @status = 'dispensed'
-        @id_xpath = './cda:supplyCriteria/cda:id/cda:item/@extension'
-        @code_list_xpath = './cda:supplyCriteria/cda:participation/cda:role/cda:code'
-      when 'Demographics'
-        @definition = definition_for_demographic
+      when 'medication'
+        case @status
+        when 'dispensed', 'ordered'
+          @id_xpath = './cda:supplyCriteria/cda:id/cda:item/@extension'
+          @code_list_xpath = './cda:supplyCriteria/cda:participation/cda:role/cda:code'
+        else # active or administered
+          @id_xpath = './cda:substanceAdministrationCriteria/cda:id/cda:item/@extension'
+          @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participation/cda:role/cda:code'
+        end
+      when 'patient_characteristic', 'patient_characteristic_birthdate', 'patient_characteristic_clinical_trial_participant', 'patient_characteristic_expired', 'patient_characteristic_gender', 'patient_characteristic_age', 'patient_characteristic_languages', 'patient_characteristic_marital_status', 'patient_characteristic_race'
         @value = extract_value
-      when 'Derived'
-        @definition = 'derived'
-      when nil
-        @definition = 'variable'
+      when 'variable'
         @value = extract_value
-      else
-        raise "Unknown data criteria template identifier [#{entry_type}]"
       end
+  
     end
     
     def to_s
