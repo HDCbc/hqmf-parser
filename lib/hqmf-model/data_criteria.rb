@@ -224,21 +224,15 @@ module HQMF
     end
 
     def self.definition_for_template_id(template_id)
-      template_id_file = File.expand_path('../../hqmf-parser/1.0/data_criteria_template_id_map.json', __FILE__)
-      template_id_map = JSON.parse(File.read(template_id_file))
-      template_id_map[template_id]
+      get_template_id_map()[template_id]
     end
 
     def self.template_id_for_definition(definition, status, negation)
-      template_id_file = File.expand_path('../../hqmf-parser/1.0/data_criteria_template_id_map.json', __FILE__)
-      template_id_map = JSON.parse(File.read(template_id_file))
-      template_id_map.key({'definition' => definition, 'status' => status || '', 'negation' => negation})
+      get_template_id_map().key({'definition' => definition, 'status' => status || '', 'negation' => negation})
     end
 
     def self.title_for_template_id(template_id)
-      template_id_file = File.expand_path('../../hqmf-parser/1.0/data_criteria_template_id_map.json', __FILE__)
-      template_id_map = JSON.parse(File.read(template_id_file))
-      value = template_id_map[template_id]
+      value = get_template_id_map()[template_id]
       if value
         settings = self.get_settings_for_definition(value['definition'], value['status'])
         if settings
@@ -252,6 +246,16 @@ module HQMF
     end
 
     private
+    
+    def self.get_template_id_map
+      @@template_id_map ||= read_template_id_map
+      @@template_id_map
+    end
+    
+    def self.read_template_id_map
+      template_id_file = File.expand_path('../../hqmf-parser/1.0/data_criteria_template_id_map.json', __FILE__)
+      JSON.parse(File.read(template_id_file))
+    end
 
     def normalize_status(definition, status)
       return status if status.nil?
