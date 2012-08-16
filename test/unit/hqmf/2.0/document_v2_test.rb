@@ -157,7 +157,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'birthdateFiftyYearsBeforeMeasurementPeriod', criteria.title
+      assert_equal 'Birthdate', criteria.title
       assert_equal :birthtime, criteria.to_model.property
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SBS', criteria.temporal_references[0].type
@@ -184,7 +184,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('genderMale')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'genderMale', criteria.title
+      assert_equal 'Gender', criteria.title
       assert_equal :gender, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -193,7 +193,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('DummyLanguage_Arabic')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'DummyLanguage_Arabic', criteria.title
+      assert_equal 'Language', criteria.title
       assert_equal :languages, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -202,7 +202,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('DummyMaritalStatus_Divorced')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'DummyMaritalStatus_Divorced', criteria.title
+      assert_equal 'Marital Status', criteria.title
       assert_equal :maritalStatus, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -211,7 +211,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('DummyRace_Latin_American')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'DummyRace_Latin_American', criteria.title
+      assert_equal 'Race', criteria.title
       assert_equal :race, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -341,7 +341,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
       assert_equal :characteristic, criteria.type
-      assert_equal 'birthdateFiftyYearsBeforeMeasurementPeriod', criteria.title
+      assert_equal 'Birthdate', criteria.title
       assert_equal :birthtime, criteria.property
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SBS', criteria.temporal_references[0].type
@@ -368,7 +368,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('genderMale')
       assert_equal :characteristic, criteria.type
-      assert_equal 'genderMale', criteria.title
+      assert_equal 'Gender', criteria.title
       assert_equal :gender, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -377,7 +377,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('DummyLanguage_Arabic')
       assert_equal :characteristic, criteria.type
-      assert_equal 'DummyLanguage_Arabic', criteria.title
+      assert_equal 'Language', criteria.title
       assert_equal :languages, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -386,7 +386,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('DummyMaritalStatus_Divorced')
       assert_equal :characteristic, criteria.type
-      assert_equal 'DummyMaritalStatus_Divorced', criteria.title
+      assert_equal 'Marital Status', criteria.title
       assert_equal :maritalStatus, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -395,7 +395,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('DummyRace_Latin_American')
       assert_equal :characteristic, criteria.type
-      assert_equal 'DummyRace_Latin_American', criteria.title
+      assert_equal 'Race', criteria.title
       assert_equal :race, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type

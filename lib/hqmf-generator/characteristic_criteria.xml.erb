@@ -1,12 +1,13 @@
       <entry typeCode="DRIV">
         <observationCriteria moodCode="EVN" classCode="OBS">
-          <%= xml_for_template(template_id) %>
+          <%= xml_for_template(criteria) %>
           <id>
             <item root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
           </id>
           <code code="<%= code_for_characteristic(criteria.property) %>" codeSystem="<%= oid_for_characteristic(criteria.property) %>">
             <displayName value="<%= criteria.property.to_s.capitalize %>"/>
           </code>
+          <%= xml_for_description(criteria) %>
           <%= xml_for_effective_time(criteria) %>
           <%- if criteria.value -%>
           <%= xml_for_value(criteria.value) %>
