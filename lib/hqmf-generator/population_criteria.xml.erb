@@ -6,8 +6,16 @@
             codeSystemName="HL7 Observation Value"
             code="<%= population_criteria.id %>"/>
           <isCriterionInd value="true"/>
-          <%- population_criteria.preconditions.each do |precondition| -%>
+          <%- if population_criteria.preconditions.length > 0 -%>
+            <%- population_criteria.preconditions.each do |precondition| -%>
           <%= xml_for_precondition(precondition) %>
+            <%- end -%>
+          <%- else -%>
+          <precondition typeCode="PRCN" nullFlavor="NA">
+            <allTrue>
+              <id/>
+            </allTrue>
+          </precondition>
           <%- end -%>
         </<%= population_element_prefix(criteria_id) %>Criteria>
       </component>

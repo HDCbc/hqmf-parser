@@ -12,7 +12,7 @@ module HQMF2
     def initialize(entry, doc)
       @doc = doc
       @entry = entry
-      @preconditions = @entry.xpath('./*/cda:precondition', HQMF2::Document::NAMESPACES).collect do |precondition|
+      @preconditions = @entry.xpath('./*/cda:precondition[not(@nullFlavor)]', HQMF2::Document::NAMESPACES).collect do |precondition|
         Precondition.new(precondition, @doc)
       end
     end
@@ -35,7 +35,7 @@ module HQMF2
       case id
       when 'IPP', 'DENOM', 'NUMER'
         'allTrue'
-      when 'DENEXCEP'
+      when 'DENEXCEP', 'EXCL', 'DENEX', 'EXCEP'
         'atLeastOneTrue'
       else
         raise "Unknown population type [#{id}]"

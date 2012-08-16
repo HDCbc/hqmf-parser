@@ -304,7 +304,7 @@ module HQMF2
         when 'DENEXCEP'
           'denominatorException'
         when 'EXCL'
-          'exclusion'
+          'denominatorExclusion'
         else
           raise "Unknown population criteria type #{population_criteria_code}"
         end
