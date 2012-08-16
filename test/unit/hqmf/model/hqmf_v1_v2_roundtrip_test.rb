@@ -13,7 +13,14 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
   end
 
   def test_roundtrip
-    diff = @v1_model.to_json.diff_hash(@v2_model.to_json)
+    v1_json = @v1_model.to_json
+    # remove any source_data_criteria or specific_occurrence_const from v1 tree since
+    # we don't support these in v2_model
+    v1_json[:data_criteria].each_pair do |key, criteria|
+      criteria[:source_data_criteria] = key
+      criteria[:specific_occurrence_const] = nil
+    end
+    diff = v1_json.diff_hash(@v2_model.to_json)
   end
   
 end
