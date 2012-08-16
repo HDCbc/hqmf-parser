@@ -71,7 +71,7 @@ module HQMFModel
          
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test", :negation=>false,
          :standard_category=>"laboratory_test",:qds_data_type=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:type=>:laboratory_tests, :patient_api_function=>:laboratoryTests,:status=>"performed",
-         :temporal_references=>[{:type=>"EBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
+         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
           
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics", :negation=>false,
          :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:medications,:patient_api_function=>:allMedications,:status=>"dispensed"}

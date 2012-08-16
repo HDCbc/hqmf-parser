@@ -89,9 +89,17 @@ module HQMF
         elsif (data_criteria.type == :characteristic)
           if (codes)
             value_set = codes[data_criteria.code_list_id]
-            # this is looking for a birthdate characteristic that is set as a generic characteristic but points to a loinc code set
-            if (value_set and value_set['LOINC'] and value_set['LOINC'].first == '21112-8')
-              data_criteria.definition = 'patient_characteristic_birthdate'
+            if (value_set)
+              # this is looking for a birthdate characteristic that is set as a generic characteristic but points to a loinc code set
+              if (value_set['LOINC'] and value_set['LOINC'].first == '21112-8')
+                data_criteria.definition = 'patient_characteristic_birthdate'
+              end
+              # this is looking for a gender characteristic that is set as a generic characteristic
+              gender_key = (value_set.keys.select {|set| set.start_with? 'HL7'}).first
+              if (gender_key and ['M','F'].include? value_set[gender_key].first) 
+                data_criteria.definition = 'patient_characteristic_gender'
+                data_criteria.value = HQMF::Coded.new('CD','Gender',value_set[gender_key].first)
+              end
             end
           end
 
