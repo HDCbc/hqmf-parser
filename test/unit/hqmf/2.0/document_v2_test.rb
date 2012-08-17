@@ -515,13 +515,13 @@ require_relative '../../../test_helper'
       
       population_criteria = logic[:IPP]
       
-      ipp = {conjunction?:true, type: 'IPP', title: '', :preconditions=>[{:reference=>"ageBetween17and64"}]}
+      ipp = {conjunction?:true, type: 'IPP', title: 'Initial Patient Population', :preconditions=>[{:reference=>"ageBetween17and64"}]}
       diff = ipp.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       
       population_criteria = logic[:DENOM]
       denom =
-      {conjunction?:true, type: 'DENOM', title:'', :preconditions=>
+      {conjunction?:true, type: 'DENOM', title:'Denominator', :preconditions=>
           [{:preconditions=>[{:preconditions=>
             [
               { :reference=>"HasDiabetes" },
@@ -546,13 +546,13 @@ require_relative '../../../test_helper'
       assert diff.empty?, "differences: #{diff.to_json}"
       
       population_criteria = logic[:NUMER]
-      numer={conjunction?:true, type: 'NUMER', title:'', :preconditions=>[{:reference=>"HbA1C"}]}
+      numer={conjunction?:true, type: 'NUMER', title:'Numerator', :preconditions=>[{:reference=>"HbA1C"}]}
       diff = numer.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       
       
       population_criteria = logic[:DENEXCEP]
-      denomexc = {conjunction?:true, type: 'DENEXCEP', title:'', 
+      denomexc = {conjunction?:true, type: 'DENEXCEP', title:'Denominator exception', 
          :preconditions=>
           [{:preconditions=>
              [{:reference=>"HasPolycysticOvaries"},
