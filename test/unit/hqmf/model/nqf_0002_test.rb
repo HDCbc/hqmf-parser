@@ -61,7 +61,7 @@ module HQMFModel
          :standard_category=>"encounter",:qds_data_type=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:type=>:encounters,:patient_api_function=>:encounters,
          :temporal_references=>
           [{:type=>"DURING", :reference=>"MeasurePeriod"},
-           {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
+           {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true, derived?:false}}}]}
            
       expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
          :description=>"", :negation=>false,
@@ -71,7 +71,7 @@ module HQMFModel
          
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test", :negation=>false,
          :standard_category=>"laboratory_test",:qds_data_type=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:type=>:laboratory_tests, :patient_api_function=>:laboratoryTests,:status=>"performed",
-         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
+         :temporal_references=>[{:type=>"SBE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true, derived?:false}}}]}
           
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics", :negation=>false,
          :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:medications,:patient_api_function=>:allMedications,:status=>"dispensed"}
@@ -86,7 +86,7 @@ module HQMFModel
           :standard_category=>"encounter",:qds_data_type=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:type=>:encounters,:patient_api_function=>:encounters,
           :temporal_references=>
            [{:type=>"DURING", :reference=>"MeasurePeriod"},
-            {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
+            {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true, derived?:false}}}]}
             
       expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d",
           :description=>"", :negation=>false,
@@ -97,7 +97,7 @@ module HQMFModel
       expected_dc[:LaboratoryTestPerformedGroupAStreptococcusTest] << {:title=>"Group A Streptococcus Test",:description=>"Laboratory Test, Performed: Group A Streptococcus Test", :negation=>false,
           :standard_category=>"laboratory_test",:qds_data_type=>"laboratory_test",:code_list_id=>"2.16.840.1.113883.3.464.0001.250",:type=>:laboratory_tests, :patient_api_function=>:laboratoryTests,:status=>"performed",
           :temporal_references=>
-           [{:type=>"SAE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
+           [{:type=>"SAE",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true, derived?:false}}}]}
            
       expected_dc[:EncounterEncounterAmbulatoryIncludingPediatrics] << {:title=>"Encounter ambulatory including pediatrics",:description=>"Encounter: Encounter ambulatory including pediatrics", :negation=>false,
           :standard_category=>"encounter",:qds_data_type=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:type=>:encounters,:patient_api_function=>:encounters,
@@ -125,7 +125,7 @@ module HQMFModel
            :standard_category=>"encounter",:qds_data_type=>"encounter",:code_list_id=>"2.16.840.1.113883.3.464.0001.231",:type=>:encounters,:patient_api_function=>:encounters, :negation=>false,
            :temporal_references=>
             [{:type=>"DURING", :reference=>"MeasurePeriod"},
-             {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true}}}]}
+             {:type=>"SBS",:reference=>"GROUP_SBS",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"3", inclusive?:true, derived?:false}}}]}
              
       expected_dc[:GROUP_SBS] << {:title=>"EncounterEncounterAmbulatoryIncludingPediatrics<=3 d", :negation=>false,
            :description=>"",
@@ -139,24 +139,24 @@ module HQMFModel
            
       expected_dc[:MedicationDispensedPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Dispensed: pharyngitis antibiotics", :negation=>false,
             :standard_category=>"medication",:qds_data_type=>"medication_dispensed",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:medications,:patient_api_function=>:allMedications,:status=>"dispensed",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true}}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true, derived?:false}}}]}
             
       expected_dc[:MedicationOrderPharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Order: pharyngitis antibiotics", :negation=>false,
             :standard_category=>"medication",:qds_data_type=>"medication_order",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:medications,:patient_api_function=>:allMedications,:status=>"ordered",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true}}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true, derived?:false}}}]}
             
       expected_dc[:MedicationActivePharyngitisAntibiotics] << {:title=>"pharyngitis antibiotics",:description=>"Medication, Active: pharyngitis antibiotics", :negation=>false,
             :standard_category=>"medication",:qds_data_type=>"medication_active",:code_list_id=>"2.16.840.1.113883.3.464.0001.373",:type=>:medications,:patient_api_function=>:allMedications,:status=>"active",
-            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true}}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"d", :value=>"30", inclusive?:true, derived?:false}}}]}
             
       age_codes = {'LOINC'=>['21112-8']}      
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date", :negation=>false,
             :standard_category=>"individual_characteristic",:qds_data_type=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:birthtime,:inline_code_list=>age_codes,:type=>:characteristic, :patient_api_function=>nil,
-            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:range=>{:type=>'IVL_PQ', :low=>{:type=>'PQ', :unit=>"a", :value=>"2", inclusive?:true}}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:range=>{:type=>'IVL_PQ', :low=>{:type=>'PQ', :unit=>"a", :value=>"2", inclusive?:true, derived?:false}}}]}
             
       expected_dc[:PatientCharacteristicBirthDate] << {:title=>"birth date",:description=>"Patient Characteristic: birth date", :negation=>false,
             :standard_category=>"individual_characteristic",:qds_data_type=>"individual_characteristic",:code_list_id=>"2.16.840.1.113883.3.560.100.4",:property=>:birthtime,:inline_code_list=>age_codes,:type=>:characteristic, :patient_api_function=>nil,
-            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"a", :value=>"17", inclusive?:true}}}]}
+            :temporal_references=>[{:type=>"SBS",:reference=>"MeasurePeriod",:range=>{:type=>'IVL_PQ', :high=>{:type=>'PQ', :unit=>"a", :value=>"17", inclusive?:true, derived?:false}}}]}
        
       all_criteria.keys.each do |key|
         orig_key = key
@@ -192,9 +192,8 @@ module HQMFModel
        type: 'NUMER',
        :preconditions=>
         [{:preconditions=>
-           [{:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest",
-             :conjunction_code=>"laboratoryTestsReference"}, {:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest",
-                :conjunction_code=>"laboratoryTestsReference"}],
+           [{:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest"}, 
+           {:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest"}],
           :conjunction_code=>"allTrue"},
         ]}
       
@@ -209,7 +208,7 @@ module HQMFModel
         title: 'Initial Patient Population',
         type: 'IPP',
         :preconditions=>[
-          {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}, {:reference=>"PatientCharacteristicBirthDate",:conjunction_code=>"characteristicReference"}],:conjunction_code=>"allTrue"}]
+          {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate"}, {:reference=>"PatientCharacteristicBirthDate"}],:conjunction_code=>"allTrue"}]
       }
       
       diff = ipp.diff_hash(population_criteria,true)
@@ -223,16 +222,16 @@ module HQMFModel
         type: 'DENOM',
        :preconditions=>
         [{:preconditions=>
-           [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"},
-            {:reference=>"DiagnosisActivePharyngitis",:conjunction_code=>"conditionsReference"},
+           [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics"},
+            {:reference=>"DiagnosisActivePharyngitis"},
             {:preconditions=>
-              [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics",:conjunction_code=>"encountersReference"}],
+              [{:reference=>"EncounterEncounterAmbulatoryIncludingPediatrics"}],
              :conjunction_code=>"atLeastOneTrue"},
             {:preconditions=>
               [{:preconditions=>
-                 [{:reference=>"MedicationDispensedPharyngitisAntibiotics",:conjunction_code=>"medicationsReference"},
-                  {:reference=>"MedicationOrderPharyngitisAntibiotics",:conjunction_code=>"medicationsReference"},
-                  {:reference=>"MedicationActivePharyngitisAntibiotics",:conjunction_code=>"medicationsReference"}],
+                 [{:reference=>"MedicationDispensedPharyngitisAntibiotics"},
+                  {:reference=>"MedicationOrderPharyngitisAntibiotics"},
+                  {:reference=>"MedicationActivePharyngitisAntibiotics"}],
                 :conjunction_code=>"atLeastOneTrue"}],
              :conjunction_code=>"allTrue",
              :negation=>true}],

@@ -27,7 +27,11 @@ module HQMF2
     # Get the conjunction code, e.g. allTrue, allFalse
     # @return [String] conjunction code
     def conjunction_code
-      @entry.at_xpath('./*[1]', HQMF2::Document::NAMESPACES).name
+      if conjunction?
+        @entry.at_xpath('./*[1]', HQMF2::Document::NAMESPACES).name
+      else
+        nil
+      end
     end
     
     def to_model

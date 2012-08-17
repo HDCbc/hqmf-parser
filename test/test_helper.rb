@@ -37,9 +37,9 @@ class Hash
           end
           diff[k] = tmp unless tmp.empty?
         elsif(left==nil && right && right.respond_to?(:empty?) && right.empty?)
-          # do nothing so nil with match an empty hash or array
+          # do nothing so nil will match an empty hash or array
         elsif(!ignore_id || (k != :id && k!="id"))
-          diff[k] = "EXPECTED: #{left}, FOUND: #{right}"
+          diff[k] = "EXPECTED: [#{left}], FOUND: [#{right}]"
         end
       end
       diff

@@ -28,7 +28,7 @@ module HQMF2
           'DENOM' => 'denominatorCriteria',
           'NUMER' => 'numeratorCriteria',
           'DENEXCEP' => 'denominatorExceptionCriteria',
-          'EXCL' => 'exclusionCriteria'
+          'EXCL' => 'denominatorExclusionCriteria'
         }.each_pair do |criteria_id, criteria_element_name|
           criteria_def = population_def.at_xpath("cda:component[cda:#{criteria_element_name}]", NAMESPACES)
           if criteria_def
