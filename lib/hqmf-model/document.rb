@@ -106,6 +106,14 @@ module HQMF
     def all_data_criteria
       @data_criteria
     end
+    
+    # Get the source data criteria that are specific occurrences
+    # @return [Array] an array of HQMF::DataCriteria describing the data elements used by the measure that are specific occurrences
+    def specific_occurrence_source_data_criteria
+      return [] if @source_data_criteria.nil?
+      @source_data_criteria.select {|dc| !dc.specific_occurrence.nil?}
+    end
+    
 
     # @return [Array] an array of HQMF::DataCriteria ids that are actually used in the measure
     def referenced_data_criteria
