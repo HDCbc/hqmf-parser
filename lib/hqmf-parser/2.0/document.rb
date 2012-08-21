@@ -38,7 +38,9 @@ module HQMF2
           end
         end
         id_def = population_def.at_xpath('cda:id/@extension', NAMESPACES)
-        population['ID'] = id_def ? id_def.value : "Population#{population_index}"
+        population['id'] = id_def ? id_def.value : "Population#{population_index}"
+        title_def = population_def.at_xpath('cda:title/@value', NAMESPACES)
+        population['title'] = title_def ? title_def.value : "Population #{population_index}"
         @populations << population
       end
     end

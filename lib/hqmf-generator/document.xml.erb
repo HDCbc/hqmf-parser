@@ -37,9 +37,9 @@
   <%- doc.populations.each_with_index do |population, population_index| -%>
   <component>
     <populationCriteriaSection>
-      <id root="2.16.840.1.113883.3.100.1" extension="<%= population['ID'] || "Population#{population_index}" %>"/>
+      <id root="2.16.840.1.113883.3.100.1" extension="<%= population['id'] || "Population#{population_index}" %>"/>
       <code code="57026-7" codeSystem="2.16.840.1.113883.6.1"/>
-      <title value="Population Criteria Section"/>
+      <title value="<%= population['title'] %>"/>
       <text>This section describes the Initial Patient Population,
         Numerator, Denominator, Denominator Exceptions, and Measure
         Populations</text>

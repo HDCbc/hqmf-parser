@@ -58,7 +58,10 @@ module HQMF
           
         end
         
-        keep.each_with_index { |sub, i| sub[:title] = "Population #{i+1}" }
+        keep.each_with_index do |sub, i|
+          sub['title'] = "Population #{i+1}"
+          sub['id'] = "Population#{i+1}"
+        end
         
         @sub_measures = keep
         
