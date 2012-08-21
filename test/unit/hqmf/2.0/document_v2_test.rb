@@ -21,7 +21,7 @@ require_relative '../../../test_helper'
       assert_equal '20110101', @doc.measure_period.low.value
       assert_equal '20111231', @doc.measure_period.high.value
     end
-
+    
     def test_model_metadata
       assert_equal 'foo', @model.id
       assert_equal "Sample Quality Measure Document", @model.title
@@ -31,6 +31,22 @@ require_relative '../../../test_helper'
       assert_equal '20111231', @model.measure_period.high.value
     end
   
+    def test_attributes
+      assert_equal 1, @doc.attributes.length
+      assert_equal 'COPYRIGHT', @doc.attributes[0].id
+      assert_equal 'COPY', @doc.attributes[0].code
+      assert_equal 'Copyright', @doc.attributes[0].name
+      assert_equal 'Copyright Statement', @doc.attributes[0].value
+    end
+
+    def test_model_attributes
+      assert_equal 1, @model.attributes.length
+      assert_equal 'COPYRIGHT', @model.attributes[0].id
+      assert_equal 'COPY', @model.attributes[0].code
+      assert_equal 'Copyright', @model.attributes[0].name
+      assert_equal 'Copyright Statement', @model.attributes[0].value
+    end
+
     def test_population_criteria
       all_population_criteria = @doc.all_population_criteria
       assert_equal 8, all_population_criteria.length

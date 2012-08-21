@@ -28,6 +28,15 @@
       </value>
     </measurePeriod>
   </controlVariable>
+	<subjectOf>
+		<measureAttribute>
+			<id root="0" extension="COPYRIGHT"/>
+			<code code="COPY">
+				<displayName value="Copyright"/>
+			</code>
+			<value xsi:type="ED" value="Copyright Statement"/>
+		</measureAttribute>
+	</subjectOf>
   <component>
     <measureDescriptionSection>
       <code code="34089-3" codeSystem="2.16.840.1.113883.6.1"/>

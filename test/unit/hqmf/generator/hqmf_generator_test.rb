@@ -30,7 +30,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
 
     criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
     assert_equal :characteristic, criteria.type
-    assert_equal 'Birthtime', criteria.title
+    assert_equal 'Birthdate', criteria.title
     assert_equal :birthtime, criteria.property
     assert_equal 1, criteria.temporal_references.length
     assert_equal 'SBS', criteria.temporal_references[0].type
