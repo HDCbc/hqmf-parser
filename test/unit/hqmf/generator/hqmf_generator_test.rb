@@ -20,6 +20,12 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     data_criteria = @model.all_data_criteria
     assert_equal 35, data_criteria.length
 
+    assert_equal 1, @model.attributes.length
+    assert_equal 'COPYRIGHT', @model.attributes[0].id
+    assert_equal 'COPY', @model.attributes[0].code
+    assert_equal 'Copyright', @model.attributes[0].name
+    assert_equal 'Copyright Statement', @model.attributes[0].value
+
     criteria = @model.data_criteria('DiabetesMedNotAdministeredForNoStatedReason')
     assert criteria.negation
     assert !criteria.negation_code_list_id

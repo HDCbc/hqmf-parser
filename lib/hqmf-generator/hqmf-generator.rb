@@ -43,6 +43,15 @@ module HQMF2
         template.result(context.get_binding)        
       end
       
+      def xml_for_attribute(attribute)
+        template_path = File.expand_path(File.join('..', 'attribute.xml.erb'), __FILE__)
+        template_str = File.read(template_path)
+        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        params = {'attribute' => attribute}
+        context = ErbContext.new(params)
+        template.result(context.get_binding)        
+      end
+      
       def xml_for_value(value, element_name='value', include_type=true)
         template_path = File.expand_path(File.join('..', 'value.xml.erb'), __FILE__)
         template_str = File.read(template_path)
