@@ -93,12 +93,13 @@ module HQMF
         subset_operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(subset_type), subset_type, nil)
         
         reference = nil
-        conjunction_code = "operator"
+#        conjunction_code = "operator"
+        conjunction_code = nil
         
         restriction = HQMF::Converter::SimpleRestriction.new(subset_operator, target_id)
         restriction.preconditions = children
         
-        comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil,[restriction],reference,conjunction_code, false)
+        comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil, [restriction], reference, conjunction_code, false)
         comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
         
         container = HQMF::Converter::SimpleRestriction.new(operator, nil, [comparison_precondition])
@@ -116,7 +117,8 @@ module HQMF
 
       data_criteria = data_criteria_converter.v1_data_criteria_by_id[comparison[:data_criteria_id]]
       reference = HQMF::Reference.new(data_criteria.id)
-      conjunction_code = "#{data_criteria.type.to_s.gsub(/(?:_|(\/))([a-z\d]*)/) { "#{$1}#{$2.capitalize}" }}Reference"
+#      conjunction_code = "#{data_criteria.type.to_s.gsub(/(?:_|(\/))([a-z\d]*)/) { "#{$1}#{$2.capitalize}" }}Reference"
+      conjunction_code = nil
 
       preconditions = []
       if comparison[:restrictions]

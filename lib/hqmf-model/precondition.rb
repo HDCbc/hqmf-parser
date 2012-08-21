@@ -22,7 +22,7 @@ module HQMF
     # @param [Array#Precondition] preconditions 
     # @param [Reference] reference
     # @param [String] conjunction_code
-    def initialize(id, preconditions,reference,conjunction_code,negation)
+    def initialize(id, preconditions, reference, conjunction_code, negation)
       @preconditions = preconditions || []
       @reference = reference
       @conjunction_code = conjunction_code

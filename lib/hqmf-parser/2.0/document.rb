@@ -28,7 +28,7 @@ module HQMF2
           'DENOM' => 'denominatorCriteria',
           'NUMER' => 'numeratorCriteria',
           'DENEXCEP' => 'denominatorExceptionCriteria',
-          'EXCL' => 'exclusionCriteria'
+          'EXCL' => 'denominatorExclusionCriteria'
         }.each_pair do |criteria_id, criteria_element_name|
           criteria_def = population_def.at_xpath("cda:component[cda:#{criteria_element_name}]", NAMESPACES)
           if criteria_def
@@ -38,7 +38,9 @@ module HQMF2
           end
         end
         id_def = population_def.at_xpath('cda:id/@extension', NAMESPACES)
-        population['ID'] = id_def ? id_def.value : "Population#{population_index}"
+        population['id'] = id_def ? id_def.value : "Population#{population_index}"
+        title_def = population_def.at_xpath('cda:title/@value', NAMESPACES)
+        population['title'] = title_def ? title_def.value : "Population #{population_index}"
         @populations << population
       end
     end

@@ -6,13 +6,14 @@ module HQMF2
     
     attr_reader :property, :type, :status, :value, :effective_time, :section
     attr_reader :temporal_references, :subset_operators, :children_criteria 
-    attr_reader :derivation_operator, :negation, :negation_code_list_id
+    attr_reader :derivation_operator, :negation, :negation_code_list_id, :description
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
     def initialize(entry)
       @entry = entry
       @status = attr_val('./*/cda:statusCode/@code')
+      @description = attr_val('./*/cda:text/@value')
       extract_negation()
       @effective_time = extract_effective_time
       @temporal_references = extract_temporal_references
@@ -139,7 +140,7 @@ module HQMF2
     # Get the title of the criteria, provides a human readable description
     # @return [String] the title of this data criteria
     def title
-      id
+      attr_val("#{@code_list_xpath}/cda:displayName/@value") || id
     end
     
     # Get the code list OID of the criteria, used as an index to the code list database
@@ -170,7 +171,7 @@ module HQMF2
       mso = subset_operators.collect {|opr| opr.to_model}
       field_values = nil
       
-      HQMF::DataCriteria.new(id, title, nil, nil, code_list_id, children_criteria, derivation_operator, @definition, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso, nil, nil)
+      HQMF::DataCriteria.new(id, title, nil, description, code_list_id, children_criteria, derivation_operator, @definition, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso, nil, nil)
     end
     
     private

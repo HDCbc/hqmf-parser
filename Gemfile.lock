@@ -22,6 +22,8 @@ GEM
     ansi (1.4.2)
     awesome_print (1.0.2)
     bson (1.6.2)
+    bson_ext (1.6.2)
+      bson (~> 1.6.2)
     builder (3.0.0)
     choice (0.1.6)
     coderay (1.0.6)
@@ -95,6 +97,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  bson_ext
   cover_me (~> 1.2.0)
   google-spreadsheet-ruby (= 0.1.8)
   health-data-standards!

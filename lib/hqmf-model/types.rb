@@ -18,8 +18,8 @@ module HQMF
       @type = type || 'PQ'
       @unit = unit
       @value = value
-      @inclusive = inclusive
-      @derived = derived
+      @inclusive = inclusive == nil ? true : inclusive
+      @derived = derived || false
       @expression = expression
     end
     

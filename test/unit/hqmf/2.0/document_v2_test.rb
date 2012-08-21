@@ -69,8 +69,8 @@ require_relative '../../../test_helper'
       assert_equal 3, ipp.preconditions.length
       
       assert_equal 2, @doc.populations.length
-      assert_equal 'Population1', @doc.populations[0]['ID']
-      assert_equal 'Population2', @doc.populations[1]['ID']
+      assert_equal 'Population1', @doc.populations[0]['id']
+      assert_equal 'Population2', @doc.populations[1]['id']
       assert_equal 'IPP', @doc.populations[0]['IPP']
       assert_equal 'IPP2', @doc.populations[1]['IPP']
       assert_equal 'DENOM', @doc.populations[0]['DENOM']
@@ -121,8 +121,8 @@ require_relative '../../../test_helper'
       assert_equal 3, ipp.preconditions.length
 
       assert_equal 2, @model.populations.length
-      assert_equal 'Population1', @model.populations[0]['ID']
-      assert_equal 'Population2', @model.populations[1]['ID']
+      assert_equal 'Population1', @model.populations[0]['id']
+      assert_equal 'Population2', @model.populations[1]['id']
       assert_equal 'IPP', @model.populations[0]['IPP']
       assert_equal 'IPP2', @model.populations[1]['IPP']
       assert_equal 'DENOM', @model.populations[0]['DENOM']
@@ -157,7 +157,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'birthdateFiftyYearsBeforeMeasurementPeriod', criteria.title
+      assert_equal 'Birthdate', criteria.title
       assert_equal :birthtime, criteria.to_model.property
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SBS', criteria.temporal_references[0].type
@@ -184,7 +184,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('genderMale')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'genderMale', criteria.title
+      assert_equal 'Gender', criteria.title
       assert_equal :gender, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -193,7 +193,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('DummyLanguage_Arabic')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'DummyLanguage_Arabic', criteria.title
+      assert_equal 'Language', criteria.title
       assert_equal :languages, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -202,7 +202,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('DummyMaritalStatus_Divorced')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'DummyMaritalStatus_Divorced', criteria.title
+      assert_equal 'Marital Status', criteria.title
       assert_equal :maritalStatus, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -211,7 +211,7 @@ require_relative '../../../test_helper'
 
       criteria = @doc.data_criteria('DummyRace_Latin_American')
       assert_equal :characteristic, criteria.to_model.type
-      assert_equal 'DummyRace_Latin_American', criteria.title
+      assert_equal 'Race', criteria.title
       assert_equal :race, criteria.to_model.property
       assert_equal HQMF2::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -341,7 +341,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
       assert_equal :characteristic, criteria.type
-      assert_equal 'birthdateFiftyYearsBeforeMeasurementPeriod', criteria.title
+      assert_equal 'Birthdate', criteria.title
       assert_equal :birthtime, criteria.property
       assert_equal 1, criteria.temporal_references.length
       assert_equal 'SBS', criteria.temporal_references[0].type
@@ -368,7 +368,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('genderMale')
       assert_equal :characteristic, criteria.type
-      assert_equal 'genderMale', criteria.title
+      assert_equal 'Gender', criteria.title
       assert_equal :gender, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -377,7 +377,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('DummyLanguage_Arabic')
       assert_equal :characteristic, criteria.type
-      assert_equal 'DummyLanguage_Arabic', criteria.title
+      assert_equal 'Language', criteria.title
       assert_equal :languages, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -386,7 +386,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('DummyMaritalStatus_Divorced')
       assert_equal :characteristic, criteria.type
-      assert_equal 'DummyMaritalStatus_Divorced', criteria.title
+      assert_equal 'Marital Status', criteria.title
       assert_equal :maritalStatus, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -395,7 +395,7 @@ require_relative '../../../test_helper'
 
       criteria = @model.data_criteria('DummyRace_Latin_American')
       assert_equal :characteristic, criteria.type
-      assert_equal 'DummyRace_Latin_American', criteria.title
+      assert_equal 'Race', criteria.title
       assert_equal :race, criteria.property
       assert_equal HQMF::Coded, criteria.value.class
       assert_equal 'CD', criteria.value.type
@@ -515,31 +515,30 @@ require_relative '../../../test_helper'
       
       population_criteria = logic[:IPP]
       
-      ipp = {conjunction?:true, type: 'IPP', title: '', :preconditions=>[{:reference=>"ageBetween17and64",:conjunction_code=>"observationReference"}]}
+      ipp = {conjunction?:true, type: 'IPP', title: 'Initial Patient Population', :preconditions=>[{:reference=>"ageBetween17and64"}]}
       diff = ipp.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       
       population_criteria = logic[:DENOM]
       denom =
-      {conjunction?:true, type: 'DENOM', title:'', :preconditions=>
+      {conjunction?:true, type: 'DENOM', title:'Denominator', :preconditions=>
           [{:preconditions=>[{:preconditions=>
             [
-              { :reference=>"HasDiabetes",
-                :conjunction_code=>"observationReference"},
+              { :reference=>"HasDiabetes" },
                 {:preconditions=>
                    [
-                    {:reference=>"EDorInpatientEncounter",:conjunction_code=>"encounterReference"},
-                    {:reference=>"AmbulatoryEncounter",:conjunction_code=>"encounterReference"}
+                    {:reference=>"EDorInpatientEncounter"},
+                    {:reference=>"AmbulatoryEncounter"}
                    ],
                  :conjunction_code=>"atLeastOneTrue"
                 }
             ],
             :conjunction_code=>"allTrue"
            },
-           {:reference=>"DiabetesMedAdministered",:conjunction_code=>"substanceAdministrationReference"},
-           {:reference=>"DiabetesMedIntended",:conjunction_code=>"substanceAdministrationReference"},
-           {:reference=>"DiabetesMedSupplied",:conjunction_code=>"supplyReference"},
-           {:reference=>"DiabetesMedOrdered",:conjunction_code=>"supplyReference"}],
+           {:reference=>"DiabetesMedAdministered"},
+           {:reference=>"DiabetesMedIntended"},
+           {:reference=>"DiabetesMedSupplied"},
+           {:reference=>"DiabetesMedOrdered"}],
            :conjunction_code=>"atLeastOneTrue"
           }]
       }
@@ -547,20 +546,20 @@ require_relative '../../../test_helper'
       assert diff.empty?, "differences: #{diff.to_json}"
       
       population_criteria = logic[:NUMER]
-      numer={conjunction?:true, type: 'NUMER', title:'', :preconditions=>[{:reference=>"HbA1C", :conjunction_code=>"observationReference"}]}
+      numer={conjunction?:true, type: 'NUMER', title:'Numerator', :preconditions=>[{:reference=>"HbA1C"}]}
       diff = numer.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       
       
       population_criteria = logic[:DENEXCEP]
-      denomexc = {conjunction?:true, type: 'DENEXCEP', title:'', 
+      denomexc = {conjunction?:true, type: 'DENEXCEP', title:'Denominator exception', 
          :preconditions=>
           [{:preconditions=>
-             [{:reference=>"HasPolycysticOvaries",:conjunction_code=>"observationReference"},
-              {:reference=>"HasDiabetes",:conjunction_code=>"observationReference"}],
+             [{:reference=>"HasPolycysticOvaries"},
+              {:reference=>"HasDiabetes"}],
             :conjunction_code=>"allTrue"},
-           {:reference=>"HasSteroidInducedDiabetes",:conjunction_code=>"observationReference"},
-           {:reference=>"HasGestationalDiabetes",:conjunction_code=>"observationReference"}]}
+           {:reference=>"HasSteroidInducedDiabetes"},
+           {:reference=>"HasGestationalDiabetes"}]}
            
       diff = denomexc.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
