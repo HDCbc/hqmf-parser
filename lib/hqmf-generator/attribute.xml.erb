@@ -4,6 +4,8 @@
 			<code code="<%= attribute.code %>">
 				<displayName value="<%= attribute.name %>"/>
 			</code>
+			<%- if attribute.value -%>
 			<value xsi:type="ED" value="<%= attribute.value %>"/>
+			<%- end -%>
 		</measureAttribute>
 	</subjectOf>
