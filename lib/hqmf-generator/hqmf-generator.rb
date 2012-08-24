@@ -1,17 +1,21 @@
 module HQMF2
   module Generator
   
+    def self.render_template(name, params)
+      template_path = File.expand_path(File.join('..', "#{name}.xml.erb"), __FILE__)
+      template_str = File.read(template_path)
+      template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+      context = ErbContext.new(params)
+      template.result(context.get_binding)        
+    end
+  
     # Class to serialize HQMF::Document as HQMF V2 XML
     class ModelProcessor
       # Convert the supplied model instance to XML
       # @param [HQMF::Document] doc the model instance
       # @return [String] the serialized XML as a String
       def self.to_hqmf(doc)
-        template_str = File.read(File.expand_path("../document.xml.erb", __FILE__))
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)
+        HQMF2::Generator.render_template('document', {'doc' => doc})
       end
     end
   
@@ -34,34 +38,26 @@ module HQMF2
         xml_for_reference(reference)
       end
       
-      def render_template(name, params)
-        template_path = File.expand_path(File.join('..', "#{name}.xml.erb"), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        context = ErbContext.new(params)
-        template.result(context.get_binding)        
-      end
-      
       def xml_for_reference(reference)
-        render_template('reference', {'doc' => doc, 'reference' => reference})
+        HQMF2::Generator.render_template('reference', {'doc' => doc, 'reference' => reference})
       end
       
       def xml_for_attribute(attribute)
-        render_template('attribute', {'attribute' => attribute})
+        HQMF2::Generator.render_template('attribute', {'attribute' => attribute})
       end
       
       def xml_for_value(value, element_name='value', include_type=true)
-        render_template('value', {'doc' => doc, 'value' => value, 'name' => element_name, 'include_type' => include_type})
+        HQMF2::Generator.render_template('value', {'doc' => doc, 'value' => value, 'name' => element_name, 'include_type' => include_type})
       end
       
       def xml_for_code(criteria, element_name='code', include_type=true)
-        render_template('code', {'doc' => doc, 'criteria' => criteria, 'name' => element_name, 'include_type' => include_type})
+        HQMF2::Generator.render_template('code', {'doc' => doc, 'criteria' => criteria, 'name' => element_name, 'include_type' => include_type})
       end
            
       def xml_for_derivation(data_criteria)
         xml = ''
         if data_criteria.derivation_operator
-          xml = render_template('derivation', {'doc' => doc, 'criteria' => data_criteria})
+          xml = HQMF2::Generator.render_template('derivation', {'doc' => doc, 'criteria' => data_criteria})
         end
         xml
       end
@@ -69,7 +65,7 @@ module HQMF2
       def xml_for_effective_time(data_criteria)
         xml = ''
         if data_criteria.effective_time
-          xml = render_template('effective_time', {'doc' => doc, 'effective_time' => data_criteria.effective_time})
+          xml = HQMF2::Generator.render_template('effective_time', {'doc' => doc, 'effective_time' => data_criteria.effective_time})
         end
         xml
       end
@@ -77,7 +73,7 @@ module HQMF2
       def xml_for_reason(data_criteria)
         xml = ''
         if data_criteria.negation && data_criteria.negation_code_list_id
-          xml = render_template('reason', {'doc' => doc, 'code_list_id' => data_criteria.negation_code_list_id})
+          xml = HQMF2::Generator.render_template('reason', {'doc' => doc, 'code_list_id' => data_criteria.negation_code_list_id})
         end
         xml
       end
@@ -86,7 +82,7 @@ module HQMF2
         xml = ''
         template_id = HQMF::DataCriteria.template_id_for_definition(data_criteria.definition, data_criteria.status, data_criteria.negation)
         if template_id
-          xml = render_template('template_id', {'template_id' => template_id, 'title' => HQMF::DataCriteria.title_for_template_id(template_id)})
+          xml = HQMF2::Generator.render_template('template_id', {'template_id' => template_id, 'title' => HQMF::DataCriteria.title_for_template_id(template_id)})
         end
         xml
       end
@@ -94,7 +90,7 @@ module HQMF2
       def xml_for_description(data_criteria)
         xml = ''
         if data_criteria.description
-          xml = render_template('description', {'text' => data_criteria.description})
+          xml = HQMF2::Generator.render_template('description', {'text' => data_criteria.description})
         end
         xml
       end
@@ -103,25 +99,25 @@ module HQMF2
         subsets_xml = []
         if data_criteria.subset_operators
           subsets_xml = data_criteria.subset_operators.collect do |operator|
-            render_template('subset', {'doc' => doc, 'subset' => operator, 'criteria' => data_criteria})
+            HQMF2::Generator.render_template('subset', {'doc' => doc, 'subset' => operator, 'criteria' => data_criteria})
           end
         end
         subsets_xml.join()
       end
       
       def xml_for_precondition(precondition)
-        render_template('precondition', {'doc' => doc, 'precondition' => precondition})
+        HQMF2::Generator.render_template('precondition', {'doc' => doc, 'precondition' => precondition})
       end
       
       def xml_for_data_criteria(data_criteria)
-        render_template(data_criteria_template_name(data_criteria), {'doc' => doc, 'criteria' => data_criteria})
+        HQMF2::Generator.render_template(data_criteria_template_name(data_criteria), {'doc' => doc, 'criteria' => data_criteria})
       end
       
       def xml_for_population_criteria(population, criteria_id)
         xml = ''
         population_criteria = doc.population_criteria(population[criteria_id])
         if population_criteria
-          xml = render_template('population_criteria', {'doc' => doc, 'population' => population, 'criteria_id' => criteria_id, 'population_criteria' => population_criteria})
+          xml = HQMF2::Generator.render_template('population_criteria', {'doc' => doc, 'population' => population, 'criteria_id' => criteria_id, 'population_criteria' => population_criteria})
         end
         xml
       end
@@ -130,7 +126,7 @@ module HQMF2
         refs = []
         if criteria.temporal_references
           refs = criteria.temporal_references.collect do |reference|
-            render_template('temporal_relationship', {'doc' => doc, 'relationship' => reference})
+            HQMF2::Generator.render_template('temporal_relationship', {'doc' => doc, 'relationship' => reference})
           end
         end
         refs.join
