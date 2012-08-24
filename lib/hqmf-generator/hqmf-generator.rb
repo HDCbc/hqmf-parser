@@ -34,51 +34,34 @@ module HQMF2
         xml_for_reference(reference)
       end
       
-      def xml_for_reference(reference)
-        template_path = File.expand_path(File.join('..', 'reference.xml.erb'), __FILE__)
+      def render_template(name, params)
+        template_path = File.expand_path(File.join('..', "#{name}.xml.erb"), __FILE__)
         template_str = File.read(template_path)
         template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'reference' => reference}
         context = ErbContext.new(params)
         template.result(context.get_binding)        
+      end
+      
+      def xml_for_reference(reference)
+        render_template('reference', {'doc' => doc, 'reference' => reference})
       end
       
       def xml_for_attribute(attribute)
-        template_path = File.expand_path(File.join('..', 'attribute.xml.erb'), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'attribute' => attribute}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)        
+        render_template('attribute', {'attribute' => attribute})
       end
       
       def xml_for_value(value, element_name='value', include_type=true)
-        template_path = File.expand_path(File.join('..', 'value.xml.erb'), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'value' => value, 'name' => element_name, 'include_type' => include_type}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)        
+        render_template('value', {'doc' => doc, 'value' => value, 'name' => element_name, 'include_type' => include_type})
       end
       
       def xml_for_code(criteria, element_name='code', include_type=true)
-        template_path = File.expand_path(File.join('..', 'code.xml.erb'), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'criteria' => criteria, 'name' => element_name, 'include_type' => include_type}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)
+        render_template('code', {'doc' => doc, 'criteria' => criteria, 'name' => element_name, 'include_type' => include_type})
       end
            
       def xml_for_derivation(data_criteria)
         xml = ''
         if data_criteria.derivation_operator
-            template_path = File.expand_path(File.join('..', 'derivation.xml.erb'), __FILE__)
-            template_str = File.read(template_path)
-            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-            params = {'doc' => doc, 'criteria' => data_criteria}
-            context = ErbContext.new(params)
-            xml = template.result(context.get_binding)
+          xml = render_template('derivation', {'doc' => doc, 'criteria' => data_criteria})
         end
         xml
       end
@@ -86,12 +69,7 @@ module HQMF2
       def xml_for_effective_time(data_criteria)
         xml = ''
         if data_criteria.effective_time
-            template_path = File.expand_path(File.join('..', 'effective_time.xml.erb'), __FILE__)
-            template_str = File.read(template_path)
-            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-            params = {'doc' => doc, 'effective_time' => data_criteria.effective_time}
-            context = ErbContext.new(params)
-            xml = template.result(context.get_binding)
+          xml = render_template('effective_time', {'doc' => doc, 'effective_time' => data_criteria.effective_time})
         end
         xml
       end
@@ -99,12 +77,7 @@ module HQMF2
       def xml_for_reason(data_criteria)
         xml = ''
         if data_criteria.negation && data_criteria.negation_code_list_id
-            template_path = File.expand_path(File.join('..', 'reason.xml.erb'), __FILE__)
-            template_str = File.read(template_path)
-            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-            params = {'doc' => doc, 'code_list_id' => data_criteria.negation_code_list_id}
-            context = ErbContext.new(params)
-            xml = template.result(context.get_binding)
+          xml = render_template('reason', {'doc' => doc, 'code_list_id' => data_criteria.negation_code_list_id})
         end
         xml
       end
@@ -113,12 +86,7 @@ module HQMF2
         xml = ''
         template_id = HQMF::DataCriteria.template_id_for_definition(data_criteria.definition, data_criteria.status, data_criteria.negation)
         if template_id
-            template_path = File.expand_path(File.join('..', 'template_id.xml.erb'), __FILE__)
-            template_str = File.read(template_path)
-            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-            params = {'template_id' => template_id, 'title' => HQMF::DataCriteria.title_for_template_id(template_id)}
-            context = ErbContext.new(params)
-            xml = template.result(context.get_binding)
+          xml = render_template('template_id', {'template_id' => template_id, 'title' => HQMF::DataCriteria.title_for_template_id(template_id)})
         end
         xml
       end
@@ -126,12 +94,7 @@ module HQMF2
       def xml_for_description(data_criteria)
         xml = ''
         if data_criteria.description
-            template_path = File.expand_path(File.join('..', 'description.xml.erb'), __FILE__)
-            template_str = File.read(template_path)
-            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-            params = {'text' => data_criteria.description}
-            context = ErbContext.new(params)
-            xml = template.result(context.get_binding)
+          xml = render_template('description', {'text' => data_criteria.description})
         end
         xml
       end
@@ -140,57 +103,34 @@ module HQMF2
         subsets_xml = []
         if data_criteria.subset_operators
           subsets_xml = data_criteria.subset_operators.collect do |operator|
-            template_path = File.expand_path(File.join('..', 'subset.xml.erb'), __FILE__)
-            template_str = File.read(template_path)
-            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-            params = {'doc' => doc, 'subset' => operator, 'criteria' => data_criteria}
-            context = ErbContext.new(params)
-            template.result(context.get_binding)
+            render_template('subset', {'doc' => doc, 'subset' => operator, 'criteria' => data_criteria})
           end
         end
         subsets_xml.join()
       end
       
       def xml_for_precondition(precondition)
-        template_path = File.expand_path(File.join('..', 'precondition.xml.erb'), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'precondition' => precondition}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)
+        render_template('precondition', {'doc' => doc, 'precondition' => precondition})
       end
       
       def xml_for_data_criteria(data_criteria)
-        template_path = File.expand_path(File.join('..', data_criteria_template_name(data_criteria)), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-        params = {'doc' => doc, 'criteria' => data_criteria}
-        context = ErbContext.new(params)
-        template.result(context.get_binding)
+        render_template(data_criteria_template_name(data_criteria), {'doc' => doc, 'criteria' => data_criteria})
       end
       
       def xml_for_population_criteria(population, criteria_id)
-        template_path = File.expand_path(File.join('..', 'population_criteria.xml.erb'), __FILE__)
-        template_str = File.read(template_path)
-        template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
+        xml = ''
         population_criteria = doc.population_criteria(population[criteria_id])
         if population_criteria
-          params = {'doc' => doc, 'population' => population, 'criteria_id' => criteria_id, 'population_criteria' => population_criteria}
-          context = ErbContext.new(params)
-          template.result(context.get_binding)
+          xml = render_template('population_criteria', {'doc' => doc, 'population' => population, 'criteria_id' => criteria_id, 'population_criteria' => population_criteria})
         end
+        xml
       end
       
       def xml_for_temporal_references(criteria)
         refs = []
         if criteria.temporal_references
           refs = criteria.temporal_references.collect do |reference|
-            template_path = File.expand_path(File.join('..', 'temporal_relationship.xml.erb'), __FILE__)
-            template_str = File.read(template_path)
-            template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.new_id}")
-            params = {'doc' => doc, 'relationship' => reference}
-            context = ErbContext.new(params)
-            template.result(context.get_binding)
+            render_template('temporal_relationship', {'doc' => doc, 'relationship' => reference})
           end
         end
         refs.join
@@ -261,24 +201,24 @@ module HQMF2
       def data_criteria_template_name(data_criteria)
         case data_criteria.definition
         when 'diagnosis', 'diagnosis_family_history'
-          'condition_criteria.xml.erb'
+          'condition_criteria'
         when 'encounter' 
-          'encounter_criteria.xml.erb'
+          'encounter_criteria'
         when 'procedure', 'risk_category_assessment', 'physical_exam', 'communication_from_patient_to_provider', 'communication_from_provider_to_provider', 'device', 'diagnostic_study', 'intervention'
-          'procedure_criteria.xml.erb'
+          'procedure_criteria'
         when 'medication'
           case data_criteria.status
           when 'dispensed', 'ordered'
-            'supply_criteria.xml.erb'
+            'supply_criteria'
           else # active or administered
-            'substance_criteria.xml.erb'
+            'substance_criteria'
           end
         when 'patient_characteristic', 'patient_characteristic_birthdate', 'patient_characteristic_clinical_trial_participant', 'patient_characteristic_expired', 'patient_characteristic_gender', 'patient_characteristic_age', 'patient_characteristic_languages', 'patient_characteristic_marital_status', 'patient_characteristic_race'
-          'characteristic_criteria.xml.erb'
+          'characteristic_criteria'
         when 'variable'
-          'variable_criteria.xml.erb'
+          'variable_criteria'
         else
-          'observation_criteria.xml.erb'
+          'observation_criteria'
         end
       end
 
