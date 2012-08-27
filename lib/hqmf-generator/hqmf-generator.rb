@@ -201,7 +201,11 @@ module HQMF2
         when 'encounter' 
           'encounter_criteria'
         when 'procedure', 'risk_category_assessment', 'physical_exam', 'communication_from_patient_to_provider', 'communication_from_provider_to_provider', 'device', 'diagnostic_study', 'intervention'
-          'procedure_criteria'
+          if data_criteria.value.nil?
+            'procedure_criteria'
+          else
+            'observation_criteria'
+          end
         when 'medication'
           case data_criteria.status
           when 'dispensed', 'ordered'

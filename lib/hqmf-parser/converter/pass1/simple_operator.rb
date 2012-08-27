@@ -81,6 +81,10 @@ module HQMF
           HQMF::Range.from_json(JSON.parse(value.to_json))
         elsif (value[:type] == 'CD')
           HQMF::Coded.from_json(JSON.parse(value.to_json))
+        elsif (value[:type] == 'ANYNonNull')
+          HQMF::AnyValue.from_json(JSON.parse(value.to_json))
+        else
+          raise "Unexpected value format: #{value.to_json}"
         end
       end
       

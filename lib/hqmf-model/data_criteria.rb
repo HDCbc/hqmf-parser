@@ -285,6 +285,8 @@ module HQMF
           value = HQMF::Range.from_json(json)
         when 'CD'
           value = HQMF::Coded.from_json(json)
+        when 'ANYNonNull'
+          value = HQMF::AnyValue.from_json(json)
         else
           raise "Unknown value type [#{type}]"
         end
