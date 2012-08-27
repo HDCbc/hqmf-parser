@@ -10,6 +10,10 @@ module HQMF
       @type = type 
     end
     
+    def derived?
+      false
+    end
+
     def self.from_json(json)
       type = json["type"] || 'ANYNonNull'
       HQMF::AnyValue.new(type)
