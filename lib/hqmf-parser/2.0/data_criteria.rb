@@ -233,7 +233,7 @@ module HQMF2
             value = Range.new(value_def)
           when 'CD'
             value = Coded.new(value_def)
-          when 'ANYNonNull'
+          when 'ANY'
             value = AnyValue.new()
           else
             raise "Unknown value type [#{value_type}]"

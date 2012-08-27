@@ -20,5 +20,5 @@
   <<%= name %> <%= "xsi:type=\"#{value.type}\"" if include_type %> value="<%= value.value %>"<%= " unit=\"#{value.unit}\"" if value.unit %>/>
   <%- end -%>
 <%- elsif value.class==HQMF::AnyValue -%>
-  <<%= name %> <%= "xsi:type=\"#{value.type}\"" if include_type %>/>
+  <<%= name %> xsi:type="ANY" nullFlavor="NI"/>
 <%- end -%>

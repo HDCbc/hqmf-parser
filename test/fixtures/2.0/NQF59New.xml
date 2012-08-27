@@ -799,7 +799,7 @@
             <displayName value="Standardized Pain Assessment Tool"/>
           </code>
           <text value="Risk Category Assessment: Standardized Pain Assessment Tool"/>
-          <value xsi:type="ANYNonNull"/>
+          <value xsi:type="ANY" nullFlavor="NI"/>
           <definition>
             <observationReference moodCode="EVN" classCode="OBS">
               <id root="2.16.840.1.113883.3.100.1" extension="risk_category_assessment"/>
