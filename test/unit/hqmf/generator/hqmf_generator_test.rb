@@ -18,7 +18,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal "Sample Quality Measure Document", @model.title.strip
     assert_equal "This is the measure description.", @model.description.strip
     data_criteria = @model.all_data_criteria
-    assert_equal 35, data_criteria.length
+    assert_equal 36, data_criteria.length
 
     assert_equal 1, @model.attributes.length
     assert_equal 'COPYRIGHT', @model.attributes[0].id

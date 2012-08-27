@@ -153,7 +153,7 @@ require_relative '../../../test_helper'
   
     def test_data_criteria
       data_criteria = @doc.all_data_criteria
-      assert_equal 35, data_criteria.length
+      assert_equal 36, data_criteria.length
     
       criteria = @doc.data_criteria('EndDate')
       assert criteria.to_xml.include?('extension="EndDate"')
@@ -332,13 +332,17 @@ require_relative '../../../test_helper'
       assert_equal 2, criteria.children_criteria.length
       assert criteria.children_criteria.include? 'HasDiabetes'
       assert criteria.children_criteria.include? 'HasGestationalDiabetes'
+      
+      criteria = @doc.data_criteria('RiskCategoryAssessment')
+      assert_equal :risk_category_assessments, criteria.to_model.type
+      assert_equal HQMF2::AnyValue, criteria.value.class      
 
       assert_nil @doc.data_criteria('foo')
     end
     
     def test_model_data_criteria
       data_criteria = @model.all_data_criteria
-      assert_equal 35, data_criteria.length
+      assert_equal 36, data_criteria.length
     
       criteria = @model.data_criteria('EndDate')
       assert_equal :variable, criteria.type
@@ -517,6 +521,10 @@ require_relative '../../../test_helper'
       assert_equal 2, criteria.children_criteria.length
       assert criteria.children_criteria.include? 'HasDiabetes'
       assert criteria.children_criteria.include? 'HasGestationalDiabetes'
+
+      criteria = @model.data_criteria('RiskCategoryAssessment')
+      assert_equal :risk_category_assessments, criteria.type
+      assert_equal HQMF::AnyValue, criteria.value.class      
 
       assert_nil @model.data_criteria('foo')
     end
