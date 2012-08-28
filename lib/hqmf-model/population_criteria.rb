@@ -5,14 +5,17 @@ module HQMF
   
     include HQMF::Conversion::Utilities
 
-    attr_reader :preconditions, :id, :type, :title
+    attr_reader :preconditions, :id, :type, :title, :hqmf_id
+    attr_accessor :is_stratification
     
     # Create a new population criteria
     # @param [String] id
+    # @param [String] hqmf_id
     # @param [Array#Precondition] preconditions 
     # @param [String] title (optional)
-    def initialize(id, type, preconditions, title='')
+    def initialize(id, hqmf_id, type, preconditions, title='')
       @id = id
+      @hqmf_id = hqmf_id
       @preconditions = preconditions
       @type = type
       @title=title
@@ -25,13 +28,15 @@ module HQMF
       end if json['preconditions']
       type = json["type"]
       title = json['title']
+      hqmf_id = json['hqmf_id']
       
-      HQMF::PopulationCriteria.new(id, type, preconditions, title)
+      HQMF::PopulationCriteria.new(id, hqmf_id, type, preconditions, title)
     end
     
     def to_json
       x = nil
-      json = build_hash(self, [:conjunction?, :type, :title])
+      json = build_hash(self, [:conjunction?, :type, :title, :hqmf_id])
+      json[:stratification] = is_stratification ? is_stratification : false
       json[:preconditions] = x if x = json_array(@preconditions)
       {self.id.to_sym => json}
     end

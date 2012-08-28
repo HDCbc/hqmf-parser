@@ -4,6 +4,8 @@ module HQMF1
     
     include HQMF1::Utilities
     
+    attr_reader :hqmf_id, :hqmf_set_id, :hqmf_version_number
+    
     # Create a new HQMF1::Document instance by parsing the supplied contents
     # @param [String] hqmf_contents the contents of an HQMF v1.0 document
     def initialize(hqmf_contents)
@@ -31,7 +33,7 @@ module HQMF1
           
           @stratification.each do |stratification|
             new_population = HQMF1::PopulationCriteria.new(population.entry, population.doc)
-            new_population.id = "#{new_population.id}_#{@@ids.next}"
+            new_population.id = stratification.id
             new_population.is_stratification = true
             ids = stratification.preconditions.map(&:id)
             new_population.preconditions.delete_if {|precondition| ids.include? precondition.id}
@@ -44,6 +46,9 @@ module HQMF1
         
       end
       
+      @hqmf_set_id = @doc.at_xpath('//cda:setId/@root').value.upcase
+      @hqmf_id = @doc.at_xpath('//cda:id/@root').value.upcase
+      @hqmf_version_number = @doc.at_xpath('//cda:versionNumber/@value').value.to_i
       
     end
     
@@ -140,7 +145,7 @@ module HQMF1
     end
 
     def to_json
-      json = build_hash(self, [:title, :description])
+      json = build_hash(self, [:title, :description, :hqmf_id, :hqmf_set_id, :hqmf_version_number])
       
       json[:data_criteria] = {}
       @data_criteria.each do |criteria|

@@ -195,7 +195,8 @@ module HQMFModel
            [{:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest"}, 
            {:reference=>"LaboratoryTestPerformedGroupAStreptococcusTest"}],
           :conjunction_code=>"allTrue"},
-        ]}
+        ],
+        hqmf_id: '1E223193-25A4-4464-9D7E-89B5DCBFC513',stratification:false}
       
       diff = numerator.diff_hash(population_criteria,true)
       assert diff.empty?, "differences: #{diff.to_json}"
@@ -208,7 +209,8 @@ module HQMFModel
         title: 'Initial Patient Population',
         type: 'IPP',
         :preconditions=>[
-          {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate"}, {:reference=>"PatientCharacteristicBirthDate"}],:conjunction_code=>"allTrue"}]
+          {:preconditions=>[{:reference=>"PatientCharacteristicBirthDate"}, {:reference=>"PatientCharacteristicBirthDate"}],:conjunction_code=>"allTrue"}],
+          hqmf_id: '45A1DEFB-0271-4277-B84C-F6DED6B6FD8E',stratification:false
       }
       
       diff = ipp.diff_hash(population_criteria,true)
@@ -235,7 +237,8 @@ module HQMFModel
                 :conjunction_code=>"atLeastOneTrue"}],
              :conjunction_code=>"allTrue",
              :negation=>true}],
-          :conjunction_code=>"allTrue"}]}
+          :conjunction_code=>"allTrue"}],
+          hqmf_id: '66D82442-4198-44A1-A489-EE9F819F1636',stratification:false}
       
       diff = denom.diff_hash(population_criteria,true)
       assert diff.empty?, "differences: #{diff.to_json}"

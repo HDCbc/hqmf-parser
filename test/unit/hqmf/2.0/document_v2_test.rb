@@ -515,7 +515,7 @@ require_relative '../../../test_helper'
       
       population_criteria = logic[:IPP]
       
-      ipp = {conjunction?:true, type: 'IPP', title: 'Initial Patient Population', :preconditions=>[{:reference=>"ageBetween17and64"}]}
+      ipp = {conjunction?:true, type: 'IPP', title: 'Initial Patient Population', :preconditions=>[{:reference=>"ageBetween17and64"}], stratification: false, hqmf_id: 'IPP'}
       diff = ipp.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       
@@ -540,13 +540,14 @@ require_relative '../../../test_helper'
            {:reference=>"DiabetesMedSupplied"},
            {:reference=>"DiabetesMedOrdered"}],
            :conjunction_code=>"atLeastOneTrue"
-          }]
+          }],
+          stratification: false, hqmf_id: 'DENOM'
       }
       diff = denom.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       
       population_criteria = logic[:NUMER]
-      numer={conjunction?:true, type: 'NUMER', title:'Numerator', :preconditions=>[{:reference=>"HbA1C"}]}
+      numer={conjunction?:true, type: 'NUMER', title:'Numerator', :preconditions=>[{:reference=>"HbA1C"}], stratification: false, hqmf_id: 'NUMER'}
       diff = numer.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"
       
@@ -559,7 +560,9 @@ require_relative '../../../test_helper'
               {:reference=>"HasDiabetes"}],
             :conjunction_code=>"allTrue"},
            {:reference=>"HasSteroidInducedDiabetes"},
-           {:reference=>"HasGestationalDiabetes"}]}
+           {:reference=>"HasGestationalDiabetes"}],
+          stratification: false, hqmf_id: 'DENEXCEP'
+      }
            
       diff = denomexc.diff_hash(population_criteria)
       assert diff.empty?, "differences: #{diff.to_json}"

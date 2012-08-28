@@ -101,7 +101,9 @@ module HQMF2
       pcs = all_population_criteria.collect {|pc| pc.to_model}
       attrs = []
       source_data_criteria = []
-      HQMF::Document.new(id, title, description, pcs, dcs, source_data_criteria, attrs, measure_period.to_model, populations)
+      hqmf_version_number = nil
+      hqmf_set_id = nil
+      HQMF::Document.new(id, id, hqmf_set_id, hqmf_version_number, title, description, pcs, dcs, source_data_criteria, attrs, measure_period.to_model, populations)
     end
     
     private

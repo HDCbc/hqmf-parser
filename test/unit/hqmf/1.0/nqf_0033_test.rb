@@ -41,7 +41,7 @@ module HQMF1
       
       gender_female = hqmf.data_criteria(hqmf.all_data_criteria.map(&:id).grep(/PatientCharacteristicGenderAdministrativeGenderFemale/).first)
       gender_female.value.code.must_equal "F"
-      gender_female.value.system.must_equal "Gender"
+      gender_female.value.system.must_equal "HL7 (2.16.840.1.113883.5.1)"
       gender_female.value.type.must_equal "CD"
     end
       

@@ -111,7 +111,7 @@ module HQMF
       reference = population_criteria[:reference]
       title = population_criteria[:title]
       
-      criteria = HQMF::Converter::SimplePopulationCriteria.new(key, type, preconditions, title)
+      criteria = HQMF::Converter::SimplePopulationCriteria.new(key, id, type, preconditions, title)
       # mark the 2.0 simple population criteria as a stratification... this allows us to create the cartesian product for this in the populations
       criteria.is_stratification = population_criteria[:is_stratification]
       

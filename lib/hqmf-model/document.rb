@@ -6,10 +6,13 @@ module HQMF
 
     include HQMF::Conversion::Utilities
 
-    attr_reader :id, :title, :description, :measure_period, :attributes, :populations, :source_data_criteria
+    attr_reader :id, :title, :description, :measure_period, :attributes, :populations, :source_data_criteria, :hqmf_id, :hqmf_set_id, :hqmf_version_number
   
     # Create a new HQMF::Document which can be converted to JavaScript
     # @param [String] id
+    # @param [String] hqmf_id
+    # @param [String] hqmf_set_id
+    # @param [String] hqmf_version_number
     # @param [String] title
     # @param [String] description
     # @param [Array#PopulationCritera] population_criteria 
@@ -18,8 +21,11 @@ module HQMF
     # @param [Array#Attribute] attributes
     # @param [Array#Hash] populations
     # @param [Range] measure_period
-    def initialize(id, title, description, population_criteria, data_criteria, source_data_criteria, attributes, measure_period, populations=nil)
+    def initialize(id, hqmf_id, hqmf_set_id, hqmf_version_number, title, description, population_criteria, data_criteria, source_data_criteria, attributes, measure_period, populations=nil)
       @id = id
+      @hqmf_id = hqmf_id
+      @hqmf_set_id = hqmf_set_id
+      @hqmf_version_number = hqmf_version_number
       @title = title
       @description = description
       @population_criteria = population_criteria
@@ -33,6 +39,9 @@ module HQMF
     # Create a new HQMF::Document from a JSON hash keyed with symbols
     def self.from_json(json)
       id = json["id"]
+      hqmf_id = json["hqmf_id"]
+      hqmf_set_id = json["hqmf_set_id"]
+      hqmf_version_number = json["hqmf_version_number"]
       title = json["title"]
       description = json["description"]
       
@@ -56,11 +65,11 @@ module HQMF
       attributes = json["attributes"].map {|attribute| HQMF::Attribute.from_json(attribute)} if json["attributes"]
 
       measure_period = HQMF::Range.from_json(json["measure_period"]) if json["measure_period"]
-      HQMF::Document.new(id, title, description, population_criterias, data_criterias, source_data_criterias, attributes, measure_period,populations)
+      HQMF::Document.new(id, hqmf_id, hqmf_set_id, hqmf_version_number, title, description, population_criterias, data_criterias, source_data_criterias, attributes, measure_period,populations)
     end
     
     def to_json
-      json = build_hash(self, [:id, :title, :description])
+      json = build_hash(self, [:id, :hqmf_id, :hqmf_set_id, :hqmf_version_number, :title, :description])
 
       json[:population_criteria] = {}
       @population_criteria.each do |population|
