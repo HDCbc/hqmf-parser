@@ -1,4 +1,29 @@
 module HQMF
+
+  # Used to represent 'any value' in criteria that require a value be present but
+  # don't specify any restrictions on that value
+  class AnyValue
+    include HQMF::Conversion::Utilities
+    attr_reader :type
+    
+    def initialize(type='ANYNonNull')
+      @type = type 
+    end
+    
+    def derived?
+      false
+    end
+
+    def self.from_json(json)
+      type = json["type"] || 'ANYNonNull'
+      HQMF::AnyValue.new(type)
+    end
+    
+    def to_json
+      hash = build_hash(self, [:type])
+      hash
+    end    
+  end
   
   # Represents a bound within a HQMF pauseQuantity, has a value, a unit and an
   # inclusive/exclusive indicator

@@ -20,9 +20,9 @@ module HQMF2
       @derivation_operator = extract_derivation_operator
       @subset_operators = extract_subset_operators
       @children_criteria = extract_child_criteria
-      @id_xpath = './cda:observationCriteria/cda:id/cda:item/@extension'
-      @code_list_xpath = './cda:observationCriteria/cda:code'
-      @value_xpath = './cda:observationCriteria/cda:value'
+      @id_xpath = './*/cda:id/cda:item/@extension'
+      @code_list_xpath = './*/cda:code'
+      @value_xpath = './*/cda:value'
       
       # Try to determine what kind of data criteria we are dealing with
       # First we look for a template id and if we find one just use the definition
@@ -37,28 +37,20 @@ module HQMF2
     end
 
     def patch_xpaths_for_criteria_type  
-      # Patch xpaths when necessary, HQMF dta criteria are irregular in structure so
+      # Patch xpaths when necessary, HQMF data criteria are irregular in structure so
       # the same information is found in different places depending on the type of
       # criteria
       # Assumes @definition and @status are already set
       case @definition
       when 'diagnosis', 'diagnosis_family_history'
         @code_list_xpath = './cda:observationCriteria/cda:value'
-      when 'encounter'
-        @id_xpath = './cda:encounterCriteria/cda:id/cda:item/@extension'
-        @code_list_xpath = './cda:encounterCriteria/cda:code'
-      when 'procedure_result', 'laboratory_test', 'diagnostic_study_result', 'functional_status_result', 'intervention_result'
+      when 'risk_category_assessment', 'procedure_result', 'laboratory_test', 'diagnostic_study_result', 'functional_status_result', 'intervention_result'
         @value = extract_value
-      when 'procedure', 'risk_category_assessment', 'physical_exam', 'communication_from_patient_to_provider', 'communication_from_provider_to_provider', 'device', 'diagnostic_study', 'intervention'
-        @id_xpath = './cda:procedureCriteria/cda:id/cda:item/@extension'
-        @code_list_xpath = './cda:procedureCriteria/cda:code'
       when 'medication'
         case @status
         when 'dispensed', 'ordered'
-          @id_xpath = './cda:supplyCriteria/cda:id/cda:item/@extension'
           @code_list_xpath = './cda:supplyCriteria/cda:participation/cda:role/cda:code'
         else # active or administered
-          @id_xpath = './cda:substanceAdministrationCriteria/cda:id/cda:item/@extension'
           @code_list_xpath = './cda:substanceAdministrationCriteria/cda:participation/cda:role/cda:code'
         end
       when 'patient_characteristic', 'patient_characteristic_birthdate', 'patient_characteristic_clinical_trial_participant', 'patient_characteristic_expired', 'patient_characteristic_gender', 'patient_characteristic_age', 'patient_characteristic_languages', 'patient_characteristic_marital_status', 'patient_characteristic_race'
@@ -241,6 +233,8 @@ module HQMF2
             value = Range.new(value_def)
           when 'CD'
             value = Coded.new(value_def)
+          when 'ANY'
+            value = AnyValue.new()
           else
             raise "Unknown value type [#{value_type}]"
           end

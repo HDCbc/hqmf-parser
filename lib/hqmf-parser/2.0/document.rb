@@ -5,7 +5,7 @@ module HQMF2
     include HQMF2::Utilities
     NAMESPACES = {'cda' => 'urn:hl7-org:v3', 'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'}
 
-    attr_reader :measure_period, :id
+    attr_reader :measure_period, :id, :populations, :attributes
   
     # Create a new HQMF2::Document instance by parsing at file at the supplied path
     # @param [String] path the path to the HQMF document
@@ -16,9 +16,22 @@ module HQMF2
       if measure_period_def
         @measure_period = EffectiveTime.new(measure_period_def)
       end
+      
+      # Extract measure attributes
+      @attributes = @doc.xpath('/cda:QualityMeasureDocument/cda:subjectOf/cda:measureAttribute', NAMESPACES).collect do |attribute|
+        id = attribute.at_xpath('./cda:id/@extension', NAMESPACES).try(:value)
+        code = attribute.at_xpath('./cda:code/@code', NAMESPACES).try(:value)
+        name = attribute.at_xpath('./cda:code/cda:displayName/@value', NAMESPACES).try(:value)
+        value = attribute.at_xpath('./cda:value/@value', NAMESPACES).try(:value)
+        HQMF::Attribute.new(id, code, value, nil, name)
+      end
+      
+      # Extract the data criteria
       @data_criteria = @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:dataCriteriaSection/cda:entry', NAMESPACES).collect do |entry|
         DataCriteria.new(entry)
       end
+      
+      # Extract the population criteria and population collections
       @populations = []
       @population_criteria = []
       @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection', NAMESPACES).each_with_index do |population_def, population_index|
@@ -43,11 +56,6 @@ module HQMF2
         population['title'] = title_def ? title_def.value : "Population #{population_index}"
         @populations << population
       end
-    end
-    
-    # Get populations (i.e. submeasures) currently just return a static single population
-    def populations
-      @populations
     end
     
     # Get the title of the measure
@@ -99,11 +107,10 @@ module HQMF2
     def to_model
       dcs = all_data_criteria.collect {|dc| dc.to_model}
       pcs = all_population_criteria.collect {|pc| pc.to_model}
-      attrs = []
       source_data_criteria = []
       hqmf_version_number = nil
       hqmf_set_id = nil
-      HQMF::Document.new(id, id, hqmf_set_id, hqmf_version_number, title, description, pcs, dcs, source_data_criteria, attrs, measure_period.to_model, populations)
+      HQMF::Document.new(id, id, hqmf_set_id, hqmf_version_number, title, description, pcs, dcs, source_data_criteria, attributes, measure_period.to_model, populations)
     end
     
     private

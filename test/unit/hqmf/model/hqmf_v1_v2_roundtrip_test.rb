@@ -25,15 +25,24 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
     end
     v1_json['source_data_criteria'] = nil
     v1_json['measure_period']['width'] = nil
+    
+    # remove embedded whitespace formatting in attribute values
+    v1_json['attributes'].each do |attr|
+      if attr['value']
+        attr['value'].gsub!("\r\n", ' ')
+      end
+    end
 
     diff = v1_json.diff_hash(v2_json, true, true)
 
-    outfile = File.join(".","tmp","v1_v2_diffs.json")
-    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(JSON.parse(diff.to_json))) }
-    outfile = File.join(".","tmp","v1.json")
-    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v1_json)) }
-    outfile = File.join(".","tmp","v2.json")
-    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v2_json)) }
+#    outfile = File.join(".","tmp","v1_v2_diffs.json")
+#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(JSON.parse(diff.to_json))) }
+#    outfile = File.join(".","tmp","v1.json")
+#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v1_json)) }
+#    outfile = File.join(".","tmp","v2.json")
+#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v2_json)) }
+
+    assert diff.empty?, 'Differences in model after roundtrip to HQMF V2'
 
   end
   

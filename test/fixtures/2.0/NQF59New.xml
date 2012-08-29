@@ -28,6 +28,15 @@
       </value>
     </measurePeriod>
   </controlVariable>
+	<subjectOf>
+		<measureAttribute>
+			<id root="0" extension="COPYRIGHT"/>
+			<code code="COPY">
+				<displayName value="Copyright"/>
+			</code>
+			<value xsi:type="ED" value="Copyright Statement"/>
+		</measureAttribute>
+	</subjectOf>
   <component>
     <measureDescriptionSection>
       <code code="34089-3" codeSystem="2.16.840.1.113883.6.1"/>
@@ -777,6 +786,26 @@
             </supplyReference>
           </definition>
         </supplyCriteria>
+      </entry>
+      <entry typeCode="DRIV">
+        <observationCriteria moodCode="EVN" classCode="OBS">
+          <templateId>
+            <item root="2.16.840.1.113883.3.560.1.21" identifierName="risk category / assessment template"/>
+          </templateId>
+          <id>
+            <item root="2.16.840.1.113883.3.100.1" extension="RiskCategoryAssessment"/>
+          </id>
+          <code xsi:type="CD" valueSet="2.16.840.1.113883.3.526.03.1028">
+            <displayName value="Standardized Pain Assessment Tool"/>
+          </code>
+          <text value="Risk Category Assessment: Standardized Pain Assessment Tool"/>
+          <value xsi:type="ANY" nullFlavor="NI"/>
+          <definition>
+            <observationReference moodCode="EVN" classCode="OBS">
+              <id root="2.16.840.1.113883.3.100.1" extension="risk_category_assessment"/>
+            </observationReference>
+          </definition>
+        </observationCriteria>
       </entry>
     </dataCriteriaSection>
   </component>

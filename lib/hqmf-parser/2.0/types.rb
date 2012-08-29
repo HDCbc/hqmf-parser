@@ -1,4 +1,18 @@
 module HQMF2
+  # Used to represent 'any value' in criteria that require a value be present but
+  # don't specify any restrictions on that value
+  class AnyValue
+    attr_reader :type
+    
+    def initialize(type='ANYNonNull')
+      @type = type 
+    end
+    
+    def to_model
+      HQMF::AnyValue.new(@type)
+    end    
+  end
+  
   # Represents a bound within a HQMF pauseQuantity, has a value, a unit and an
   # inclusive/exclusive indicator
   class Value

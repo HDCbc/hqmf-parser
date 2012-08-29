@@ -18,7 +18,13 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal "Sample Quality Measure Document", @model.title.strip
     assert_equal "This is the measure description.", @model.description.strip
     data_criteria = @model.all_data_criteria
-    assert_equal 35, data_criteria.length
+    assert_equal 36, data_criteria.length
+
+    assert_equal 1, @model.attributes.length
+    assert_equal 'COPYRIGHT', @model.attributes[0].id
+    assert_equal 'COPY', @model.attributes[0].code
+    assert_equal 'Copyright', @model.attributes[0].name
+    assert_equal 'Copyright Statement', @model.attributes[0].value
 
     criteria = @model.data_criteria('DiabetesMedNotAdministeredForNoStatedReason')
     assert criteria.negation
@@ -30,7 +36,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
 
     criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
     assert_equal :characteristic, criteria.type
-    assert_equal 'Birthtime', criteria.title
+    assert_equal 'Birthdate', criteria.title
     assert_equal :birthtime, criteria.property
     assert_equal 1, criteria.temporal_references.length
     assert_equal 'SBS', criteria.temporal_references[0].type

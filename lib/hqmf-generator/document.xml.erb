@@ -24,6 +24,9 @@
       </value>
     </measurePeriod>
   </controlVariable>
+  <%- doc.attributes.each do |attribute| -%>
+  <%= xml_for_attribute(attribute) %>
+  <%- end -%>
   <component>
     <dataCriteriaSection>
       <code code="57025-9" codeSystem="2.16.840.1.113883.6.1"/>
