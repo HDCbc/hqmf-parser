@@ -5,13 +5,15 @@ module HQMF2
     include HQMF2::Utilities
     NAMESPACES = {'cda' => 'urn:hl7-org:v3', 'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'}
 
-    attr_reader :measure_period, :id, :populations, :attributes
-  
+    attr_reader :measure_period, :id, :hqmf_set_id, :hqmf_version_number, :populations, :attributes
+      
     # Create a new HQMF2::Document instance by parsing at file at the supplied path
     # @param [String] path the path to the HQMF document
     def initialize(hqmf_contents)
       @doc = @entry = Document.parse(hqmf_contents)
       @id = attr_val('cda:QualityMeasureDocument/cda:id/@extension')
+      @hqmf_set_id = attr_val('cda:QualityMeasureDocument/cda:setId/@extension')
+      @hqmf_version_number = attr_val('cda:QualityMeasureDocument/cda:versionNumber/@value').to_i
       measure_period_def = @doc.at_xpath('cda:QualityMeasureDocument/cda:controlVariable/cda:measurePeriod/cda:value', NAMESPACES)
       if measure_period_def
         @measure_period = EffectiveTime.new(measure_period_def)
@@ -34,6 +36,10 @@ module HQMF2
       # Extract the population criteria and population collections
       @populations = []
       @population_criteria = []
+      
+      population_counters = {}
+      ids_by_hqmf_id = {}
+      
       @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection', NAMESPACES).each_with_index do |population_def, population_index|
         population = {}
         {
@@ -44,8 +50,27 @@ module HQMF2
           'EXCL' => 'denominatorExclusionCriteria'
         }.each_pair do |criteria_id, criteria_element_name|
           criteria_def = population_def.at_xpath("cda:component[cda:#{criteria_element_name}]", NAMESPACES)
+          
           if criteria_def
+            
             criteria = PopulationCriteria.new(criteria_def, self)
+            
+            # this section constructs a human readable id.  The first IPP will be IPP, the second will be IPP_1, etc.  This allows the populations to be
+            # more readable.  The alternative would be to have the hqmf ids in the populations, which would work, but is difficult to read the populations.
+            if ids_by_hqmf_id[criteria.hqmf_id]
+              criteria.create_human_readable_id(ids_by_hqmf_id[criteria.hqmf_id])
+            else
+              if population_counters[criteria_id]
+                population_counters[criteria_id] += 1
+                criteria.create_human_readable_id("#{criteria_id}_#{population_counters[criteria_id]}")
+              else
+                population_counters[criteria_id] = 0
+                criteria.create_human_readable_id(criteria_id)
+              end
+              ids_by_hqmf_id[criteria.hqmf_id] = criteria.id
+            end
+            
+            
             @population_criteria << criteria
             population[criteria_id] = criteria.id
           end
@@ -108,8 +133,6 @@ module HQMF2
       dcs = all_data_criteria.collect {|dc| dc.to_model}
       pcs = all_population_criteria.collect {|pc| pc.to_model}
       source_data_criteria = []
-      hqmf_version_number = nil
-      hqmf_set_id = nil
       HQMF::Document.new(id, id, hqmf_set_id, hqmf_version_number, title, description, pcs, dcs, source_data_criteria, attributes, measure_period.to_model, populations)
     end
     

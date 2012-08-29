@@ -51,13 +51,16 @@ module HQMF
     # Get the conjunction code, e.g. allTrue, atLeastOneTrue
     # @return [String] conjunction code
     def conjunction_code
-      if (id.start_with? 'IPP' or id.start_with? 'DENOM' or id.start_with? 'NUMER')
+      
+      case @type
+      when 'IPP', 'DENOM', 'NUMER'
         HQMF::Precondition::ALL_TRUE
-      elsif (id.start_with? 'DENEXCEP' or id.start_with? 'EXCL')
+      when 'DENEXCEP', 'EXCL', 'DENEX', 'EXCEP'
         HQMF::Precondition::AT_LEAST_ONE_TRUE
       else
-        raise "Unknown population type [#{id}]"
+        raise "Unknown population type [#{@type}]"
       end
+      
     end
     
     # Can't have negation on population so this is the same as conjunction_code

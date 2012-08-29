@@ -1097,7 +1097,7 @@
       "patient_api_function":"",
       "standard_category":"",
       "qds_data_type":"",
-      "not_supported":true},
+      "not_supported":false},
   "transfer_to":{
       "title":"transfer, to",
       "category":"transfers",
@@ -1108,5 +1108,5 @@
       "patient_api_function":"",
       "standard_category":"",
       "qds_data_type":"",
-      "not_supported":true}
+      "not_supported":false}
 }

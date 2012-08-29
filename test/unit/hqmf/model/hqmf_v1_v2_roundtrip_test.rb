@@ -26,6 +26,12 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
     v1_json['source_data_criteria'] = nil
     v1_json['measure_period']['width'] = nil
     
+    # mark populations that are stratifications as non-stratifications.
+    # stratifications need to be handled specifically by HQMF 2.0
+    v1_json['population_criteria'].each do |key, value|
+      value['stratification'] = false
+    end
+    
     # remove embedded whitespace formatting in attribute values
     v1_json['attributes'].each do |attr|
       if attr['value']
@@ -41,6 +47,10 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
 #    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v1_json)) }
 #    outfile = File.join(".","tmp","v2.json")
 #    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v2_json)) }
+
+    assert diff.empty?, 'Differences in model after roundtrip to HQMF V2'
+
+     
 
     assert diff.empty?, 'Differences in model after roundtrip to HQMF V2'
 
