@@ -7,27 +7,48 @@ module HQMF
     XPRODUCT = 'XPRODUCT'
     UNION = 'UNION'
 
-    FIELDS = {'SEVERITY'=>{title:'Severity',coded_entry_method: :severity},
-             'ORDINAL'=>{title:'Ordinal',coded_entry_method: :ordinal},
-             'REASON'=>{title:'Reason',coded_entry_method: :reason},
-             'SOURCE'=>{title:'Source',coded_entry_method: :source},
-             'CUMULATIVE_MEDICATION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration},
-             'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location},
-             'FACILITY_LOCATION_ARRIVAL_DATETIME'=>{title:'Facility Location Arrival Date/Time',coded_entry_method: :facility_location},
-             'FACILITY_LOCATION_DEPARTURE_DATETIME'=>{title:'Facility Location Departure Date/Time',coded_entry_method: :facility_location},
-             'DISCHARGE_DATETIME'=>{title:'Discharge Date/Time',coded_entry_method: :discharge_datetime},
-             'DISCHARGE_STATUS'=>{title:'Discharge Status',coded_entry_method: :discharge_status},
-             'ADMISSION_DATETIME'=>{title:'Admission Date/Time',coded_entry_method: :admission_datetime},
-             'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay},
-             'DOSE'=>{title:'Dose',coded_entry_method: :dose},
-             'ROUTE'=>{title:'Route',coded_entry_method: :route},
-             'START_DATETIME'=>{title:'Start Date/Time',coded_entry_method: :start_datetime},
-             'FREQUENCY'=>{title:'Frequency',coded_entry_method: :frequency},
-             'ANATOMICAL_STRUCTURE'=>{title:'Anatomical Structure',coded_entry_method: :anatomical_structure},
-             'STOP_DATETIME'=>{title:'Stop Date/Time',coded_entry_method: :stop_datetime},
-             'INCISION_DATETIME'=>{title:'Incision Date/Time',coded_entry_method: :incision_datetime},
-             'REMOVAL_DATETIME'=>{title:'Removal Date/Time',coded_entry_method: :removal_datetime}
+    FIELDS = {'SEVERITY'=>{title:'Severity',coded_entry_method: :severity, code: 'SEV', codeSystem:'2.16.840.1.113883.5.4'},
+             'ORDINAL'=>{title:'Ordinal',coded_entry_method: :ordinal, code: '117363000', codeSystem:'2.16.840.1.113883.6.96'},
+             'REASON'=>{title:'Reason',coded_entry_method: :reason, code: '410666004', codeSystem:'2.16.840.1.113883.6.96'},
+             'SOURCE'=>{title:'Source',coded_entry_method: :source, code: '260753009', codeSystem:'2.16.840.1.113883.6.96'},
+             'CUMULATIVE_MEDICATION_DURATION'=>{title:'Cumulative Medication Duration',coded_entry_method: :cumulative_medication_duration, code: '363819003', codeSystem:'2.16.840.1.113883.6.96'},
+             'FACILITY_LOCATION'=>{title:'Facility Location',coded_entry_method: :facility_location, code: 'SDLOC'},
+             'FACILITY_LOCATION_ARRIVAL_DATETIME'=>{title:'Facility Location Arrival Date/Time',coded_entry_method: :facility_location_arrival, code: 'SDLOC_ARRIVAL'},
+             'FACILITY_LOCATION_DEPARTURE_DATETIME'=>{title:'Facility Location Departure Date/Time',coded_entry_method: :facility_location_departure, code: 'SDLOC_DEPARTURE'},
+             'DISCHARGE_DATETIME'=>{title:'Discharge Date/Time',coded_entry_method: :discharge_datetime, code: '442864001', codeSystem:'2.16.840.1.113883.6.96'},
+             'DISCHARGE_STATUS'=>{title:'Discharge Status',coded_entry_method: :discharge_status, code: '309039003', codeSystem:'2.16.840.1.113883.6.96'},
+             'ADMISSION_DATETIME'=>{title:'Admission Date/Time',coded_entry_method: :admission_datetime, code: '399423000', codeSystem:'2.16.840.1.113883.6.96'},
+             'LENGTH_OF_STAY'=>{title:'Length of Stay',coded_entry_method: :length_of_stay, code: '183797002', codeSystem:'2.16.840.1.113883.6.96'},
+             'DOSE'=>{title:'Dose',coded_entry_method: :dose, code: '398232005', codeSystem:'2.16.840.1.113883.6.96'},
+             'ROUTE'=>{title:'Route',coded_entry_method: :route, code: '263513008', codeSystem:'2.16.840.1.113883.6.96'},
+             'START_DATETIME'=>{title:'Start Date/Time',coded_entry_method: :start_datetime, code: '398201009', codeSystem:'2.16.840.1.113883.6.96'},
+             'FREQUENCY'=>{title:'Frequency',coded_entry_method: :frequency, code: '260864003', codeSystem:'2.16.840.1.113883.6.96'},
+             'ANATOMICAL_STRUCTURE'=>{title:'Anatomical Structure',coded_entry_method: :anatomical_structure, code: '91723000', codeSystem:'2.16.840.1.113883.6.96'},
+             'STOP_DATETIME'=>{title:'Stop Date/Time',coded_entry_method: :stop_datetime, code: '397898000', codeSystem:'2.16.840.1.113883.6.96'},
+             'INCISION_DATETIME'=>{title:'Incision Date/Time',coded_entry_method: :incision_datetime, code: '34896006', codeSystem:'2.16.840.1.113883.6.96'},
+             'REMOVAL_DATETIME'=>{title:'Removal Date/Time',coded_entry_method: :removal_datetime, code: '118292001 (qualified by 118575009)', codeSystem:'2.16.840.1.113883.6.96'}
              }
+             
+    VALUE_FIELDS = {'SEV'      => 'SEVERITY',
+                    '117363000' => 'ORDINAL',
+                    '410666004' => 'REASON',
+                    '260753009' => 'SOURCE',
+                    '363819003' => 'CUMULATIVE_MEDICATION_DURATION',
+                    'SDLOC'     => 'FACILITY_LOCATION',
+                    '442864001' => 'DISCHARGE_DATETIME',
+                    '309039003' => 'DISCHARGE_STATUS',
+                    '399423000' => 'ADMISSION_DATETIME',
+                    '183797002' => 'LENGTH_OF_STAY',
+                    '398232005' => 'DOSE',
+                    '263513008' => 'ROUTE',
+                    '398201009' => 'START_DATETIME',
+                    '260864003' =>'FREQUENCY',
+                    '91723000'  => 'ANATOMICAL_STRUCTURE',
+                    '397898000' => 'STOP_DATETIME',
+                    '34896006'  => 'INCISION_DATETIME',
+                    '118292001 (qualified by 118575009)' =>'REMOVAL_DATETIME'
+                   }
+    
 
     attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator , :specific_occurrence, :specific_occurrence_const, :source_data_criteria
     attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :definition, :inline_code_list, :negation_code_list_id, :negation, :display_name

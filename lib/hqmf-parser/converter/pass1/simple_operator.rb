@@ -8,25 +8,6 @@ module HQMF
       SUMMARY = 'SUMMARY'
       UNKNOWN = 'UNKNOWN'
       
-      VALUE_FIELDS = {'SEV'      => 'SEVERITY',
-                     '117363000' => 'ORDINAL',
-                     '410666004' => 'REASON',
-                     '260753009' => 'SOURCE',
-                     '363819003' => 'CUMULATIVE_MEDICATION_DURATION',
-                     'SDLOC'     => 'FACILITY_LOCATION',
-                     '442864001' => 'DISCHARGE_DATETIME',
-                     '309039003' => 'DISCHARGE_STATUS',
-                     '399423000' => 'ADMISSION_DATETIME',
-                     '183797002' => 'LENGTH_OF_STAY',
-                     '398232005' => 'DOSE',
-                     '263513008' => 'ROUTE',
-                     '398201009' => 'START_DATETIME',
-                     '260864003' =>'FREQUENCY',
-                     '91723000'  => 'ANATOMICAL_STRUCTURE',
-                     '397898000' => 'STOP_DATETIME',
-                     '34896006'  => 'INCISION_DATETIME',
-                     '118292001 (qualified by 118575009)' =>'REMOVAL_DATETIME'
-                     }
       VALUE_FIELD_TIMES = {
         'FACILITY_LOCATION_START' => 'FACILITY_LOCATION_ARRIVAL_DATETIME',
         'FACILITY_LOCATION_END' => 'FACILITY_LOCATION_DEPARTURE_DATETIME'
@@ -62,7 +43,7 @@ module HQMF
       end
       
       def field_value_key
-        key = VALUE_FIELDS[field_code]
+        key = HQMF::DataCriteria::VALUE_FIELDS[field_code]
         key = VALUE_FIELD_TIMES["#{key}_#{field_time.to_s.upcase}"] if (field_time) 
         raise "unsupported field value: #{field_code}, #{field}" unless key
         key
