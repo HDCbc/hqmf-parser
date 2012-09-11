@@ -18,7 +18,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal "Sample Quality Measure Document", @model.title.strip
     assert_equal "This is the measure description.", @model.description.strip
     data_criteria = @model.all_data_criteria
-    assert_equal 36, data_criteria.length
+    assert_equal 37, data_criteria.length
 
     assert_equal 1, @model.attributes.length
     assert_equal 'COPYRIGHT', @model.attributes[0].id
@@ -33,6 +33,14 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     criteria = @model.data_criteria('DiabetesMedNotAdministeredPatientAllergic')
     assert criteria.negation
     assert_equal '1.2.3.4', criteria.negation_code_list_id
+
+    criteria = @model.data_criteria('DummyAmbulatoryEncounterWithSource')
+    assert criteria.field_values.has_key?('SOURCE')
+    assert_equal HQMF::Coded, criteria.field_values['SOURCE'].class
+    assert_equal '2.16.840.1.113883.3.464.0003.95.02.0005', criteria.field_values['SOURCE'].code_list_id
+    assert criteria.field_values.has_key?('FACILITY_LOCATION')
+    assert_equal HQMF::Coded, criteria.field_values['FACILITY_LOCATION'].class
+    assert_equal '2.16.840.1.113883.3.464.0003.100.02.0003', criteria.field_values['FACILITY_LOCATION'].code_list_id
 
     criteria = @model.data_criteria('birthdateFiftyYearsBeforeMeasurementPeriod')
     assert_equal :characteristic, criteria.type

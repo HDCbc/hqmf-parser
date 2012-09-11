@@ -125,7 +125,7 @@ module HQMF2
     end
     
     def type
-      attr_val('./@xsi:type')
+      attr_val('./@xsi:type') || 'CD'
     end
     
     def system

@@ -7,6 +7,7 @@ module HQMF2
     attr_reader :property, :type, :status, :value, :effective_time, :section
     attr_reader :temporal_references, :subset_operators, :children_criteria 
     attr_reader :derivation_operator, :negation, :negation_code_list_id, :description
+    attr_reader :field_values
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -18,6 +19,7 @@ module HQMF2
       @effective_time = extract_effective_time
       @temporal_references = extract_temporal_references
       @derivation_operator = extract_derivation_operator
+      @field_values = extract_field_values
       @subset_operators = extract_subset_operators
       @children_criteria = extract_child_criteria
       @id_xpath = './*/cda:id/cda:item/@extension'
@@ -161,7 +163,10 @@ module HQMF2
       met = effective_time ? effective_time.to_model : nil
       mtr = temporal_references.collect {|ref| ref.to_model}
       mso = subset_operators.collect {|opr| opr.to_model}
-      field_values = nil
+      field_values = {}
+      @field_values.each_pair do |id, val|
+        field_values[id] = val.to_model
+      end
       
       HQMF::DataCriteria.new(id, title, nil, description, code_list_id, children_criteria, derivation_operator, @definition, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso, nil, nil)
     end
@@ -213,15 +218,38 @@ module HQMF2
       end
     end
     
+    def extract_field_values
+      fields = {}
+      # extract most fields which use the same structure
+      @entry.xpath('./*/cda:outboundRelationship[*/cda:code]', HQMF2::Document::NAMESPACES).each do |field|
+        code = HQMF2::Utilities.attr_val(field, './*/cda:code/@code')
+        code_id = HQMF::DataCriteria::VALUE_FIELDS[code]
+        value = DataCriteria.parse_value(field, './*/cda:value')
+        fields[code_id] = value
+      end
+      # special case for facility location which uses a very different structure
+      @entry.xpath('./*/cda:outboundRelationship[*/cda:participation]', HQMF2::Document::NAMESPACES).each do |field|
+        code = HQMF2::Utilities.attr_val(field, './*/cda:participation/cda:role/@classCode')
+        code_id = HQMF::DataCriteria::VALUE_FIELDS[code]
+        value = Coded.new(field.at_xpath('./*/cda:participation/cda:role/cda:code', HQMF2::Document::NAMESPACES))
+        fields[code_id] = value
+      end
+      fields
+    end
+    
     def extract_temporal_references
       @entry.xpath('./*/cda:temporallyRelatedInformation', HQMF2::Document::NAMESPACES).collect do |temporal_reference|
         TemporalReference.new(temporal_reference)
       end
     end
     
-    def extract_value
+    def extract_value()
+      DataCriteria.parse_value(@entry, @value_xpath)
+    end
+    
+    def self.parse_value(node, xpath)
       value = nil
-      value_def = @entry.at_xpath(@value_xpath, HQMF2::Document::NAMESPACES)
+      value_def = node.at_xpath(xpath, HQMF2::Document::NAMESPACES)
       if value_def
         value_type_def = value_def.at_xpath('@xsi:type', HQMF2::Document::NAMESPACES)
         if value_type_def

@@ -46,6 +46,18 @@ module HQMF2
         HQMF2::Generator.render_template('attribute', {'attribute' => attribute})
       end
       
+      def xml_for_fields(criteria)
+        fields = []
+        if criteria.field_values
+          criteria.field_values.each_pair do |key, value|
+            details = HQMF::DataCriteria::FIELDS[key]
+            details[:code_system_name] = HealthDataStandards::Util::CodeSystemHelper.code_system_for(details[:code_system])
+            fields << HQMF2::Generator.render_template('field', {'details' => details, 'value' => value})
+          end
+        end
+        fields.join
+      end
+      
       def xml_for_value(value, element_name='value', include_type=true)
         HQMF2::Generator.render_template('value', {'doc' => doc, 'value' => value, 'name' => element_name, 'include_type' => include_type})
       end
