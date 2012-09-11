@@ -33,8 +33,9 @@ module HQMF1
           
           @stratification.each do |stratification|
             new_population = HQMF1::PopulationCriteria.new(population.entry, population.doc)
-            new_population.id = stratification.id
-            new_population.is_stratification = true
+            new_population.hqmf_id = new_population.id
+            new_population.stratification_id = stratification.id
+            new_population.id = "#{new_population.id}_#{stratification.id}"
             ids = stratification.preconditions.map(&:id)
             new_population.preconditions.delete_if {|precondition| ids.include? precondition.id}
             new_population.preconditions.concat(stratification.preconditions)

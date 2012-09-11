@@ -28,8 +28,8 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
     
     # mark populations that are stratifications as non-stratifications.
     # stratifications need to be handled specifically by HQMF 2.0
-    v1_json['population_criteria'].each do |key, value|
-      value['stratification'] = false
+    v1_json['populations'].each do |population|
+      population['stratification'] = nil
     end
     
     # remove embedded whitespace formatting in attribute values

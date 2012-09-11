@@ -5,7 +5,7 @@ module HQMF1
     include HQMF1::Utilities
     
     attr_reader :preconditions, :entry, :doc
-    attr_accessor :id, :is_stratification
+    attr_accessor :id, :hqmf_id, :stratification_id
     
     # Create a new population criteria from the supplied HQMF entry
     # @param [Nokogiri::XML::Element] the HQMF entry
@@ -65,7 +65,8 @@ module HQMF1
       json[:id] = id
       json[:title] = title
       json[:code] = code
-      json[:is_stratification] = is_stratification if is_stratification
+      json[:hqmf_id] = hqmf_id if hqmf_id
+      json[:stratification_id] = stratification_id if stratification_id
       json[:reference] = reference
       
       {self.code => json}

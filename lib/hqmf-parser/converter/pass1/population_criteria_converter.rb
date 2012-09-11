@@ -50,12 +50,13 @@ module HQMF
               reference_id = @population_reference[key]
               reference = @population_criteria_by_id[reference_id] if reference_id
               if (reference)
-                value = nil if (sub[reference.type] != reference.id and !@population_criteria_by_key[sub[reference.type]].is_stratification)
+                criteria = @population_criteria_by_key[sub[reference.type]]
+                value['stratification'] = criteria.stratification_id if criteria.stratification_id
+                value = nil if (sub[reference.type] != reference.id and criteria.stratification_id.nil?)
               end
             end
           end
           keep << value if (value)
-          
         end
         
         keep.each_with_index do |sub, i|
@@ -106,14 +107,17 @@ module HQMF
       # @param [Array#Precondition] preconditions 
       
       preconditions = HQMF::PreconditionConverter.parse_preconditions(population_criteria[:preconditions],@data_criteria_converter) 
+      # TODO: NEED HQMF_ID to be correct for stratifications
+      # hqmf_id = population_criteria[:hqmf_id] || population_criteria[:id]
+      hqmf_id = population_criteria[:id]
       id = population_criteria[:id]
       type = population_criteria[:code]
       reference = population_criteria[:reference]
       title = population_criteria[:title]
       
-      criteria = HQMF::Converter::SimplePopulationCriteria.new(key, id, type, preconditions, title)
+      criteria = HQMF::Converter::SimplePopulationCriteria.new(key, hqmf_id, type, preconditions, title)
       # mark the 2.0 simple population criteria as a stratification... this allows us to create the cartesian product for this in the populations
-      criteria.is_stratification = population_criteria[:is_stratification]
+      criteria.stratification_id = population_criteria[:stratification_id]
       
       @population_criteria_by_id[id] = criteria
       @population_reference[key] = reference

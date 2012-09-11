@@ -6,7 +6,6 @@ module HQMF
     include HQMF::Conversion::Utilities
 
     attr_reader :preconditions, :id, :type, :title, :hqmf_id
-    attr_accessor :is_stratification
     
     # Create a new population criteria
     # @param [String] id
@@ -36,7 +35,6 @@ module HQMF
     def to_json
       x = nil
       json = build_hash(self, [:conjunction?, :type, :title, :hqmf_id])
-      json[:stratification] = is_stratification ? is_stratification : false
       json[:preconditions] = x if x = json_array(@preconditions)
       {self.id.to_sym => json}
     end
