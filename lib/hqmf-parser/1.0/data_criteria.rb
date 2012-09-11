@@ -79,11 +79,6 @@ module HQMF1
       end
       components.join '_'
     end
-
-    def specific_occurrence_const
-      components = description.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }
-      components.join '_'
-    end
     
     def to_json
       {
