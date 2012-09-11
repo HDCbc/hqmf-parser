@@ -153,7 +153,7 @@ require_relative '../../../test_helper'
   
     def test_data_criteria
       data_criteria = @doc.all_data_criteria
-      assert_equal 36, data_criteria.length
+      assert_equal 37, data_criteria.length
     
       criteria = @doc.data_criteria('EndDate')
       assert criteria.to_xml.include?('extension="EndDate"')
@@ -337,12 +337,20 @@ require_relative '../../../test_helper'
       assert_equal :risk_category_assessments, criteria.to_model.type
       assert_equal HQMF2::AnyValue, criteria.value.class      
 
+      criteria = @doc.data_criteria('DummyAmbulatoryEncounterWithSource')
+      assert criteria.field_values.has_key?('SOURCE')
+      assert_equal HQMF2::Coded, criteria.field_values['SOURCE'].class
+      assert_equal '2.16.840.1.113883.3.464.0003.95.02.0005', criteria.field_values['SOURCE'].code_list_id
+      assert criteria.field_values.has_key?('FACILITY_LOCATION')
+      assert_equal HQMF2::Coded, criteria.field_values['FACILITY_LOCATION'].class
+      assert_equal '2.16.840.1.113883.3.464.0003.100.02.0003', criteria.field_values['FACILITY_LOCATION'].code_list_id
+
       assert_nil @doc.data_criteria('foo')
     end
     
     def test_model_data_criteria
       data_criteria = @model.all_data_criteria
-      assert_equal 36, data_criteria.length
+      assert_equal 37, data_criteria.length
     
       criteria = @model.data_criteria('EndDate')
       assert_equal :variable, criteria.type
@@ -525,6 +533,14 @@ require_relative '../../../test_helper'
       criteria = @model.data_criteria('RiskCategoryAssessment')
       assert_equal :risk_category_assessments, criteria.type
       assert_equal HQMF::AnyValue, criteria.value.class      
+
+      criteria = @model.data_criteria('DummyAmbulatoryEncounterWithSource')
+      assert criteria.field_values.has_key?('SOURCE')
+      assert_equal HQMF::Coded, criteria.field_values['SOURCE'].class
+      assert_equal '2.16.840.1.113883.3.464.0003.95.02.0005', criteria.field_values['SOURCE'].code_list_id
+      assert criteria.field_values.has_key?('FACILITY_LOCATION')
+      assert_equal HQMF::Coded, criteria.field_values['FACILITY_LOCATION'].class
+      assert_equal '2.16.840.1.113883.3.464.0003.100.02.0003', criteria.field_values['FACILITY_LOCATION'].code_list_id
 
       assert_nil @model.data_criteria('foo')
     end
