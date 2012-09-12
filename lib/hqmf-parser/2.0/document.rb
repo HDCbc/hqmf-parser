@@ -5,7 +5,7 @@ module HQMF2
     include HQMF2::Utilities
     NAMESPACES = {'cda' => 'urn:hl7-org:v3', 'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'}
 
-    attr_reader :measure_period, :id, :hqmf_set_id, :hqmf_version_number, :populations, :attributes
+    attr_reader :measure_period, :id, :hqmf_set_id, :hqmf_version_number, :populations, :attributes, :source_data_criteria
       
     # Create a new HQMF2::Document instance by parsing at file at the supplied path
     # @param [String] path the path to the HQMF document
@@ -29,8 +29,15 @@ module HQMF2
       end
       
       # Extract the data criteria
-      @data_criteria = @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:dataCriteriaSection/cda:entry', NAMESPACES).collect do |entry|
-        DataCriteria.new(entry)
+      @data_criteria = []
+      @source_data_criteria = []
+      @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:dataCriteriaSection/cda:entry', NAMESPACES).each do |entry|
+        criteria = DataCriteria.new(entry)
+        if criteria.is_source_data_criteria
+          @source_data_criteria << criteria
+        else
+          @data_criteria << criteria
+        end
       end
       
       # Extract the population criteria and population collections
@@ -132,8 +139,8 @@ module HQMF2
     def to_model
       dcs = all_data_criteria.collect {|dc| dc.to_model}
       pcs = all_population_criteria.collect {|pc| pc.to_model}
-      source_data_criteria = []
-      HQMF::Document.new(id, id, hqmf_set_id, hqmf_version_number, title, description, pcs, dcs, source_data_criteria, attributes, measure_period.to_model, populations)
+      sdc = source_data_criteria.collect{|dc| dc.to_model}
+      HQMF::Document.new(id, id, hqmf_set_id, hqmf_version_number, title, description, pcs, dcs, sdc, attributes, measure_period.to_model, populations)
     end
     
     private

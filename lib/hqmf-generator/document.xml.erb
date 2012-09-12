@@ -33,7 +33,10 @@
       <title value="Data Criteria Section"/>
       <text>This section describes the data criteria.</text>
       <%- doc.all_data_criteria.each do |data_criteria| -%>
-      <%= xml_for_data_criteria(data_criteria) %>
+      <%= xml_for_data_criteria(data_criteria, false) %>
+      <%- end -%>
+      <%- doc.source_data_criteria.each do |data_criteria| -%>
+      <%= xml_for_data_criteria(data_criteria, true) %>
       <%- end -%>
     </dataCriteriaSection>
   </component>

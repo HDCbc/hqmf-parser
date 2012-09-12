@@ -7,7 +7,8 @@ module HQMF2
     attr_reader :property, :type, :status, :value, :effective_time, :section
     attr_reader :temporal_references, :subset_operators, :children_criteria 
     attr_reader :derivation_operator, :negation, :negation_code_list_id, :description
-    attr_reader :field_values
+    attr_reader :field_values, :source_data_criteria, :specific_occurrence_const
+    attr_reader :specific_occurrence, :is_source_data_criteria
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
@@ -16,6 +17,7 @@ module HQMF2
       @status = attr_val('./*/cda:statusCode/@code')
       @description = attr_val('./*/cda:text/@value')
       extract_negation()
+      extract_specific_or_source()
       @effective_time = extract_effective_time
       @temporal_references = extract_temporal_references
       @derivation_operator = extract_derivation_operator
@@ -102,8 +104,13 @@ module HQMF2
     end
     
     def extract_type_from_template_id
-      template_id = attr_val('./*/cda:templateId/cda:item/@root')
-      if template_id
+      template_ids = @entry.xpath('./*/cda:templateId/cda:item', HQMF2::Document::NAMESPACES).collect do |template_def|
+        HQMF2::Utilities.attr_val(template_def, '@root')
+      end
+      if template_ids.include?(HQMF::DataCriteria::SOURCE_DATA_CRITERIA_TEMPLATE_ID)
+        @is_source_data_criteria = true
+      end
+      template_ids.each do |template_id|
         defs = HQMF::DataCriteria.definition_for_template_id(template_id)
         if defs
           @definition = defs['definition']
@@ -168,7 +175,10 @@ module HQMF2
         field_values[id] = val.to_model
       end
       
-      HQMF::DataCriteria.new(id, title, nil, description, code_list_id, children_criteria, derivation_operator, @definition, status, mv, field_values, met, inline_code_list, @negation, @negation_code_list_id, mtr, mso, nil, nil)
+      HQMF::DataCriteria.new(id, title, nil, description, code_list_id, children_criteria, 
+        derivation_operator, @definition, status, mv, field_values, met, inline_code_list, 
+        @negation, @negation_code_list_id, mtr, mso, @specific_occurrence, 
+        @specific_occurrence_const, @source_data_criteria)
     end
     
     private
@@ -215,6 +225,18 @@ module HQMF2
     def extract_subset_operators
       all_subset_operators.select do |operator|
         operator.type != 'UNION' && operator.type != 'XPRODUCT'
+      end
+    end
+    
+    def extract_specific_or_source
+      specific_def = @entry.at_xpath('./*/cda:outboundRelationship[cda:subsetCode/@code="SPECIFIC"]', HQMF2::Document::NAMESPACES)
+      source_def = @entry.at_xpath('./*/cda:outboundRelationship[cda:subsetCode/@code="SOURCE"]', HQMF2::Document::NAMESPACES)
+      if specific_def
+        @source_data_criteria = HQMF2::Utilities.attr_val(specific_def, './cda:observationReference/cda:id/@extension')
+        @specific_occurrence_const = HQMF2::Utilities.attr_val(specific_def, './cda:localVariableName/@controlInformationRoot')
+        @specific_occurrence = HQMF2::Utilities.attr_val(specific_def, './cda:localVariableName/@controlInformationExtension')
+      elsif source_def
+        @source_data_criteria = HQMF2::Utilities.attr_val(source_def, './cda:observationReference/cda:id/@extension')
       end
     end
     

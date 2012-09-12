@@ -55,6 +55,11 @@ module HQMF2
             fields << HQMF2::Generator.render_template('field', {'details' => details, 'value' => value})
           end
         end
+        if criteria.specific_occurrence
+          fields << HQMF2::Generator.render_template('specific_occurrence', {'source_criteria_id' => criteria.source_data_criteria, 'type' => criteria.specific_occurrence_const, 'id' => criteria.specific_occurrence})
+        elsif criteria.source_data_criteria
+          fields << HQMF2::Generator.render_template('source', {'source_criteria_id' => criteria.source_data_criteria})
+        end
         fields.join
       end
       
@@ -90,11 +95,22 @@ module HQMF2
         xml
       end
       
-      def xml_for_template(data_criteria)
+      def xml_for_template(data_criteria, is_source_data_criteria)
         xml = ''
+        templates = []
+        # Add a template ID if one is defined for this data criteria
         template_id = HQMF::DataCriteria.template_id_for_definition(data_criteria.definition, data_criteria.status, data_criteria.negation)
         if template_id
-          xml = HQMF2::Generator.render_template('template_id', {'template_id' => template_id, 'title' => HQMF::DataCriteria.title_for_template_id(template_id)})
+          templates << {:id => template_id, :title => HQMF::DataCriteria.title_for_template_id(template_id)}
+        end
+        # Add our own template id if this is a source data criteria from HQMF V1. Source
+        # data criteria are the 'raw' HQMF V1 data criteria before any restrictions are applied
+        # they are only used for negating specific occurrences
+        if is_source_data_criteria
+          templates << {:id => HQMF::DataCriteria::SOURCE_DATA_CRITERIA_TEMPLATE_ID, :title => HQMF::DataCriteria::SOURCE_DATA_CRITERIA_TEMPLATE_TITLE}
+        end
+        if templates.length > 0
+          xml = HQMF2::Generator.render_template('template_id', {'templates' => templates})
         end
         xml
       end
@@ -121,8 +137,8 @@ module HQMF2
         HQMF2::Generator.render_template('precondition', {'doc' => doc, 'precondition' => precondition})
       end
       
-      def xml_for_data_criteria(data_criteria)
-        HQMF2::Generator.render_template(data_criteria_template_name(data_criteria), {'doc' => doc, 'criteria' => data_criteria})
+      def xml_for_data_criteria(data_criteria, is_source_data_criteria)
+        HQMF2::Generator.render_template(data_criteria_template_name(data_criteria), {'doc' => doc, 'criteria' => data_criteria, 'is_source_data_criteria' => is_source_data_criteria})
       end
       
       def xml_for_population_criteria(population, criteria_id)

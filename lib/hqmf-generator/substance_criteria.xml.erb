@@ -1,6 +1,6 @@
       <entry typeCode="DRIV">
         <substanceAdministrationCriteria moodCode="EVN" classCode="SBADM"<%= " actionNegationInd='true'" if criteria.negation %>>
-          <%= xml_for_template(criteria) %>
+          <%= xml_for_template(criteria, is_source_data_criteria) %>
           <id>
             <item root="2.16.840.1.113883.3.100.1" extension="<%= criteria.id %>"/>
           </id>

@@ -427,6 +427,13 @@
               </participation>
             </encounterCriteria>
           </outboundRelationship>
+          <outboundRelationship typeCode="SUBJ">
+            <localVariableName controlInformationRoot="ENCOUNTER_AMBULATORY" controlInformationExtension="A"/>
+            <subsetCode code="SPECIFIC"/>
+            <observationReference classCode="OBS" moodCode="EVN">
+              <id root="0" extension="AmbulatoryEncounter"/>
+            </observationReference>
+          </outboundRelationship>
         </encounterCriteria>
       </entry>
       <entry typeCode="DRIV">

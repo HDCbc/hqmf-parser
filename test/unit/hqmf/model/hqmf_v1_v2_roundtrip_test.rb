@@ -16,14 +16,7 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
     v1_json = JSON.parse(@v1_model.to_json.to_json)
     v2_json = JSON.parse(@v2_model.to_json.to_json)
 
-    # remove any source_data_criteria or specific_occurrence_const from v1 tree since
-    # we don't support these in v2_model
-    v1_json['data_criteria'].each_pair do |key, criteria|
-      criteria['source_data_criteria'] = key
-      criteria['specific_occurrence_const'] = nil
-      criteria['specific_occurrence'] = nil
-    end
-    v1_json['source_data_criteria'] = nil
+    # remove any source_data_criteria
     v1_json['measure_period']['width'] = nil
     
     # mark populations that are stratifications as non-stratifications.
@@ -41,16 +34,12 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
 
     diff = v1_json.diff_hash(v2_json, true, true)
 
-#    outfile = File.join(".","tmp","v1_v2_diffs.json")
-#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(JSON.parse(diff.to_json))) }
-#    outfile = File.join(".","tmp","v1.json")
-#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v1_json)) }
-#    outfile = File.join(".","tmp","v2.json")
-#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v2_json)) }
-
-    assert diff.empty?, 'Differences in model after roundtrip to HQMF V2'
-
-     
+   outfile = File.join(".","tmp","v1_v2_diffs.json")
+   File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(JSON.parse(diff.to_json))) }
+   outfile = File.join(".","tmp","v1.json")
+   File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v1_json)) }
+   outfile = File.join(".","tmp","v2.json")
+   File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v2_json)) }
 
     assert diff.empty?, 'Differences in model after roundtrip to HQMF V2'
 

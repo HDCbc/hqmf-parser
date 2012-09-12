@@ -344,6 +344,9 @@ require_relative '../../../test_helper'
       assert criteria.field_values.has_key?('FACILITY_LOCATION')
       assert_equal HQMF2::Coded, criteria.field_values['FACILITY_LOCATION'].class
       assert_equal '2.16.840.1.113883.3.464.0003.100.02.0003', criteria.field_values['FACILITY_LOCATION'].code_list_id
+      assert_equal 'AmbulatoryEncounter', criteria.source_data_criteria
+      assert_equal 'ENCOUNTER_AMBULATORY', criteria.specific_occurrence_const
+      assert_equal 'A', criteria.specific_occurrence
 
       assert_nil @doc.data_criteria('foo')
     end
@@ -541,6 +544,9 @@ require_relative '../../../test_helper'
       assert criteria.field_values.has_key?('FACILITY_LOCATION')
       assert_equal HQMF::Coded, criteria.field_values['FACILITY_LOCATION'].class
       assert_equal '2.16.840.1.113883.3.464.0003.100.02.0003', criteria.field_values['FACILITY_LOCATION'].code_list_id
+      assert_equal 'AmbulatoryEncounter', criteria.source_data_criteria
+      assert_equal 'ENCOUNTER_AMBULATORY', criteria.specific_occurrence_const
+      assert_equal 'A', criteria.specific_occurrence
 
       assert_nil @model.data_criteria('foo')
     end

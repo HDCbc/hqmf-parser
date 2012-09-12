@@ -4,6 +4,9 @@ module HQMF
 
     include HQMF::Conversion::Utilities
 
+    SOURCE_DATA_CRITERIA_TEMPLATE_ID = '2.16.840.1.113883.3.100.1.1'
+    SOURCE_DATA_CRITERIA_TEMPLATE_TITLE = 'Source data criteria'
+    
     XPRODUCT = 'XPRODUCT'
     UNION = 'UNION'
 
@@ -99,7 +102,7 @@ module HQMF
       @subset_operators = subset_operators
       @specific_occurrence = specific_occurrence
       @specific_occurrence_const = specific_occurrence_const
-      @source_data_criteria = source_data_criteria || id
+      @source_data_criteria = source_data_criteria
     end
     
     # create a new data criteria given a category and sub_category.  A sub category can either be a status or a sub category
