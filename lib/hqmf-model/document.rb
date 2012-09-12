@@ -4,6 +4,9 @@ module HQMF
     
     MEASURE_PERIOD_ID = "MeasurePeriod"
 
+    STRATIFIED_POPULATION_TEMPLATE_ID = '2.16.840.1.113883.3.100.1.2'
+    STRATIFIED_POPULATION_TEMPLATE_TITLE = 'Stratified'
+
     include HQMF::Conversion::Utilities
 
     attr_reader :id, :title, :description, :measure_period, :attributes, :populations, :source_data_criteria, :hqmf_id, :hqmf_set_id, :hqmf_version_number

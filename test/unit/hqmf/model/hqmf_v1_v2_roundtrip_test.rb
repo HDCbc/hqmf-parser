@@ -16,14 +16,8 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
     v1_json = JSON.parse(@v1_model.to_json.to_json)
     v2_json = JSON.parse(@v2_model.to_json.to_json)
 
-    # remove any source_data_criteria
+    # remove measure period width
     v1_json['measure_period']['width'] = nil
-    
-    # mark populations that are stratifications as non-stratifications.
-    # stratifications need to be handled specifically by HQMF 2.0
-    v1_json['populations'].each do |population|
-      population['stratification'] = nil
-    end
     
     # remove embedded whitespace formatting in attribute values
     v1_json['attributes'].each do |attr|
@@ -34,12 +28,12 @@ class HQMFV1V2RoundtripTest < Test::Unit::TestCase
 
     diff = v1_json.diff_hash(v2_json, true, true)
 
-#    outfile = File.join(".","tmp","v1_v2_diffs.json")
-#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(JSON.parse(diff.to_json))) }
-#    outfile = File.join(".","tmp","v1.json")
-#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v1_json)) }
-#    outfile = File.join(".","tmp","v2.json")
-#    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v2_json)) }
+    outfile = File.join(".","tmp","v1_v2_diffs.json")
+    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(JSON.parse(diff.to_json))) }
+    outfile = File.join(".","tmp","v1.json")
+    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v1_json)) }
+    outfile = File.join(".","tmp","v2.json")
+    File.open(outfile, 'w') {|f| f.write(JSON.pretty_generate(v2_json)) }
 
     assert diff.empty?, 'Differences in model after roundtrip to HQMF V2'
 

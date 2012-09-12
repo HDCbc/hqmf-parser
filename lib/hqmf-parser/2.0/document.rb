@@ -82,6 +82,8 @@ module HQMF2
             population[criteria_id] = criteria.id
           end
         end
+        stratifier_id_def = population_def.at_xpath('cda:templateId/cda:item[@root="'+HQMF::Document::STRATIFIED_POPULATION_TEMPLATE_ID+'"]/@controlInformationRoot', NAMESPACES)
+        population['stratification'] = stratifier_id_def.value if stratifier_id_def
         id_def = population_def.at_xpath('cda:id/@extension', NAMESPACES)
         population['id'] = id_def ? id_def.value : "Population#{population_index}"
         title_def = population_def.at_xpath('cda:title/@value', NAMESPACES)
