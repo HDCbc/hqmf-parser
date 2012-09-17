@@ -49,6 +49,10 @@ module HQMF2
       
       @doc.xpath('cda:QualityMeasureDocument/cda:component/cda:populationCriteriaSection', NAMESPACES).each_with_index do |population_def, population_index|
         population = {}
+
+        stratifier_id_def = population_def.at_xpath('cda:templateId/cda:item[@root="'+HQMF::Document::STRATIFIED_POPULATION_TEMPLATE_ID+'"]/@controlInformationRoot', NAMESPACES)
+        population['stratification'] = stratifier_id_def.value if stratifier_id_def
+
         {
           'IPP' => 'patientPopulationCriteria',
           'DENOM' => 'denominatorCriteria',
@@ -59,31 +63,38 @@ module HQMF2
           criteria_def = population_def.at_xpath("cda:component[cda:#{criteria_element_name}]", NAMESPACES)
           
           if criteria_def
-            
+
             criteria = PopulationCriteria.new(criteria_def, self)
             
-            # this section constructs a human readable id.  The first IPP will be IPP, the second will be IPP_1, etc.  This allows the populations to be
-            # more readable.  The alternative would be to have the hqmf ids in the populations, which would work, but is difficult to read the populations.
-            if ids_by_hqmf_id[criteria.hqmf_id]
-              criteria.create_human_readable_id(ids_by_hqmf_id[criteria.hqmf_id])
-            else
-              if population_counters[criteria_id]
-                population_counters[criteria_id] += 1
-                criteria.create_human_readable_id("#{criteria_id}_#{population_counters[criteria_id]}")
+            # check to see if we have an identical population criteria.
+            # this can happen since the hqmf 2.0 will export a DENOM, NUMER, etc for each population, even if identical.
+            # if we have identical, just re-use it rather than creating DENOM_1, NUMER_1, etc.
+            identical = @population_criteria.select {|pc| pc.to_model.base_json.to_json == criteria.to_model.base_json.to_json}
+            
+            if (identical.empty?)
+              # this section constructs a human readable id.  The first IPP will be IPP, the second will be IPP_1, etc.  This allows the populations to be
+              # more readable.  The alternative would be to have the hqmf ids in the populations, which would work, but is difficult to read the populations.
+              if ids_by_hqmf_id["#{criteria.hqmf_id}-#{population['stratification']}"]
+                criteria.create_human_readable_id(ids_by_hqmf_id[criteria.hqmf_id])
               else
-                population_counters[criteria_id] = 0
-                criteria.create_human_readable_id(criteria_id)
+                if population_counters[criteria_id]
+                  population_counters[criteria_id] += 1
+                  criteria.create_human_readable_id("#{criteria_id}_#{population_counters[criteria_id]}")
+                else
+                  population_counters[criteria_id] = 0
+                  criteria.create_human_readable_id(criteria_id)
+                end
+                ids_by_hqmf_id["#{criteria.hqmf_id}-#{population['stratification']}"] = criteria.id
               end
-              ids_by_hqmf_id[criteria.hqmf_id] = criteria.id
+            
+            
+              @population_criteria << criteria
+              population[criteria_id] = criteria.id
+            else
+              population[criteria_id] = identical.first.id
             end
-            
-            
-            @population_criteria << criteria
-            population[criteria_id] = criteria.id
           end
         end
-        stratifier_id_def = population_def.at_xpath('cda:templateId/cda:item[@root="'+HQMF::Document::STRATIFIED_POPULATION_TEMPLATE_ID+'"]/@controlInformationRoot', NAMESPACES)
-        population['stratification'] = stratifier_id_def.value if stratifier_id_def
         id_def = population_def.at_xpath('cda:id/@extension', NAMESPACES)
         population['id'] = id_def ? id_def.value : "Population#{population_index}"
         title_def = population_def.at_xpath('cda:title/@value', NAMESPACES)

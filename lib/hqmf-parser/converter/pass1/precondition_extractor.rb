@@ -13,8 +13,6 @@ module HQMF
   class PreconditionExtractor
    
    
-    # TODO: This should probably NOT be done.  We are pulling restriction preconditions directly into the tree
-    # instead, we should push these down to the data criteria under temporal restrictions, or however else they are handled
     def self.extract_preconditions_from_restrictions(restrictions,data_criteria_converter)
       return [] unless restrictions
       preconditions = []
