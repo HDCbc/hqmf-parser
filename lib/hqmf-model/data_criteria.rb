@@ -102,7 +102,7 @@ module HQMF
       @subset_operators = subset_operators
       @specific_occurrence = specific_occurrence
       @specific_occurrence_const = specific_occurrence_const
-      @source_data_criteria = source_data_criteria
+      @source_data_criteria = source_data_criteria || id
     end
     
     # create a new data criteria given a category and sub_category.  A sub category can either be a status or a sub category
