@@ -32,6 +32,7 @@ module HQMF1
         when /^MAX(.*)$/
           "MAX"
         when /^DATEDIFF(.*)$/
+          "DATEDIFF"
         else
           raise "unknown expression type: #{@text}"
       end
