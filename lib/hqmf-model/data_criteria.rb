@@ -312,7 +312,6 @@ module HQMF
         when 'ANYNonNull'
           value = HQMF::AnyValue.from_json(json)
         else
-          binding.pry
           raise "Unknown value type [#{type}]"
         end
       value
