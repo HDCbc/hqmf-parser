@@ -303,7 +303,7 @@ module HQMF
       value = nil
       type = json["type"]
       case type
-        when 'TS' || 'PQ'
+        when 'TS', 'PQ'
           value = HQMF::Value.from_json(json)
         when 'IVL_PQ'
           value = HQMF::Range.from_json(json)
@@ -312,6 +312,7 @@ module HQMF
         when 'ANYNonNull'
           value = HQMF::AnyValue.from_json(json)
         else
+          binding.pry
           raise "Unknown value type [#{type}]"
         end
       value
