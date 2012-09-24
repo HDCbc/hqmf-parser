@@ -302,7 +302,7 @@ module HQMF
       value = nil
       type = json["type"]
       case type
-        when 'TS'
+        when 'TS', 'PQ'
           value = HQMF::Value.from_json(json)
         when 'IVL_PQ'
           value = HQMF::Range.from_json(json)
