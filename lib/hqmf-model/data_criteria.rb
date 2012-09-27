@@ -277,8 +277,7 @@ module HQMF
     private
     
     def self.read_template_id_map
-      template_id_file = File.expand_path('../data_criteria_template_id_map.json', __FILE__)
-      JSON.parse(File.read(template_id_file))
+      HealthDataStandards::Util::QRDATemplateHelper.template_id_map
     end
 
     def normalize_status(definition, status)
