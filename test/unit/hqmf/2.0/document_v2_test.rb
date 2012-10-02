@@ -95,8 +95,8 @@ require_relative '../../../test_helper'
       assert_equal 'NUMER_1', @doc.populations[1]['NUMER']
       assert_equal 'DENEXCEP', @doc.populations[0]['DENEXCEP']
       assert_equal 'DENEXCEP_1', @doc.populations[1]['DENEXCEP']
-      assert_equal nil, @doc.populations[0]['EXCL']
-      assert_equal nil, @doc.populations[1]['EXCL']
+      assert_equal nil, @doc.populations[0]['DENEX']
+      assert_equal nil, @doc.populations[1]['DENEX']
     end
   
     def test_model_population_criteria
@@ -147,8 +147,8 @@ require_relative '../../../test_helper'
       assert_equal 'NUMER_1', @model.populations[1]['NUMER']
       assert_equal 'DENEXCEP', @model.populations[0]['DENEXCEP']
       assert_equal 'DENEXCEP_1', @model.populations[1]['DENEXCEP']
-      assert_equal nil, @model.populations[0]['EXCL']
-      assert_equal nil, @model.populations[1]['EXCL']
+      assert_equal nil, @model.populations[0]['DENEX']
+      assert_equal nil, @model.populations[1]['DENEX']
     end
   
     def test_data_criteria

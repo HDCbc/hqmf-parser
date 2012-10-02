@@ -53,7 +53,7 @@ module HQMF
       case @type
       when 'IPP', 'DENOM', 'NUMER'
         HQMF::Precondition::ALL_TRUE
-      when 'DENEXCEP', 'EXCL', 'DENEX', 'EXCEP'
+      when 'DENEXCEP', 'DENEX', 'EXCEP'
         HQMF::Precondition::AT_LEAST_ONE_TRUE
       else
         raise "Unknown population type [#{@type}]"

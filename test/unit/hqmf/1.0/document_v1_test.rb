@@ -44,7 +44,7 @@ module HQMF1
       assert_equal 4, all_population_criteria.length
     
       codes = all_population_criteria.collect {|p| p.code}
-      %w(IPP DENOM NUMER EXCL).each do |c|
+      %w(IPP DENOM NUMER DENEX).each do |c|
         assert codes.include?(c)
       end
     
@@ -84,7 +84,7 @@ module HQMF1
       assert_equal 'OR', num.preconditions[0].preconditions[1].conjunction
       assert_equal '482902EC-E214-4FB4-8C5A-85A41250573C', num.preconditions[0].preconditions[1].comparison.data_criteria_id
     
-      excl = @doc.population_criteria_for_code('EXCL')
+      excl = @doc.population_criteria_for_code('DENEX')
       assert_equal 0, excl.preconditions.length
     end
   
