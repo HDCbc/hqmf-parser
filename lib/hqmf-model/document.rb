@@ -35,7 +35,7 @@ module HQMF
       @data_criteria = data_criteria
       @source_data_criteria = source_data_criteria
       @attributes = attributes
-      @populations = populations || [{'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'EXCL'=>'EXCL', 'DENEXCEP'=>'DENEXCEP'}]
+      @populations = populations || [{'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'DENEXCEP'=>'DENEXCEP', 'DENEX'=>'DENEX'}]
       @measure_period = measure_period
     end
     

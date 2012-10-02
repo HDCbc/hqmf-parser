@@ -280,7 +280,7 @@ module HQMF2
           'numerator'
         when 'DENEXCEP'
           'denominatorException'
-        when 'EXCL'
+        when 'DENEX'
           'denominatorExclusion'
         else
           raise "Unknown population criteria type #{population_criteria_code}"

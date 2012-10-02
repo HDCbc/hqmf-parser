@@ -24,13 +24,13 @@ module HQMF1
     end
     
     # Get the code for the population criteria
-    # @return [String] the code (e.g. IPP, DEMON, NUMER, EXCL)
+    # @return [String] the code (e.g. IPP, DEMON, NUMER, DENEX, DENEXCEP)
     def code
       value = attr_val('cda:observation/cda:value/@code')
       # exclusion population criteria has id of DENOM with actionNegationInd of true
       # special case this to simply handling
       if attr_val('cda:observation/@actionNegationInd')=='true'
-        value = 'EXCL'
+        value = 'DENEX'
       end
       # replace measure population with NUMER.  MSRPOPL is used in continuous variable calculations.
       value = 'NUMER' if value == 'MSRPOPL'
