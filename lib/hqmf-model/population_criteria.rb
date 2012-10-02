@@ -33,12 +33,15 @@ module HQMF
     end
     
     def to_json
+      {self.id.to_sym => base_json}
+    end
+    
+    def base_json
       x = nil
       json = build_hash(self, [:conjunction?, :type, :title, :hqmf_id])
       json[:preconditions] = x if x = json_array(@preconditions)
-      {self.id.to_sym => json}
+      json
     end
-    
     
     # Return true of this precondition represents a conjunction with nested preconditions
     # or false of this precondition is a reference to a data criteria
@@ -70,7 +73,7 @@ module HQMF
       data_criteria_ids = []
       @preconditions.each do |precondition|
         data_criteria_ids.concat(precondition.referenced_data_criteria)
-      end
+      end if @preconditions
       data_criteria_ids
     end
     

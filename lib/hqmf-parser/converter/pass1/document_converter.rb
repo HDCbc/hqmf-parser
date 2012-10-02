@@ -84,7 +84,7 @@ module HQMF
           
           if (data_criteria.property == :gender)
             key = value_set.keys[0]
-            data_criteria.value = HQMF::Coded.new('CD','HL7 (2.16.840.1.113883.5.1)',value_set[key].first)
+            data_criteria.value = HQMF::Coded.new('CD','Administrative Sex',value_set[key].first)
           else
             data_criteria.inline_code_list = value_set
           end

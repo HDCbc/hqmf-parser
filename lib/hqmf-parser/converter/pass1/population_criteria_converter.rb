@@ -107,9 +107,7 @@ module HQMF
       # @param [Array#Precondition] preconditions 
       
       preconditions = HQMF::PreconditionConverter.parse_preconditions(population_criteria[:preconditions],@data_criteria_converter) 
-      # TODO: NEED HQMF_ID to be correct for stratifications
-      # hqmf_id = population_criteria[:hqmf_id] || population_criteria[:id]
-      hqmf_id = population_criteria[:id]
+      hqmf_id = population_criteria[:hqmf_id] || population_criteria[:id]
       id = population_criteria[:id]
       type = population_criteria[:code]
       reference = population_criteria[:reference]

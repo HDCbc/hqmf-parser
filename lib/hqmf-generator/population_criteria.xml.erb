@@ -8,7 +8,7 @@
             <displayName value="<%= population_criteria.title %>"/>
           </code>
           <isCriterionInd value="true"/>
-          <%- if population_criteria.preconditions.length > 0 -%>
+          <%- if population_criteria.preconditions.present? && population_criteria.preconditions.length > 0 -%>
             <%- population_criteria.preconditions.each do |precondition| -%>
           <%= xml_for_precondition(precondition) %>
             <%- end -%>

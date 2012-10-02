@@ -29,7 +29,7 @@ module HQMF
              'ANATOMICAL_STRUCTURE'=>{title:'Anatomical Structure',coded_entry_method: :anatomical_structure, code: '91723000', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1000.2'},
              'STOP_DATETIME'=>{title:'Stop Date/Time',coded_entry_method: :stop_datetime, code: '397898000', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1026.1'},
              'INCISION_DATETIME'=>{title:'Incision Date/Time',coded_entry_method: :incision_datetime, code: '34896006', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1007.1'},
-             'REMOVAL_DATETIME'=>{title:'Removal Date/Time',coded_entry_method: :removal_datetime, code: '118292001 (qualified by 118575009)', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1032.1'}
+             'REMOVAL_DATETIME'=>{title:'Removal Date/Time',coded_entry_method: :removal_datetime, code: '118292001', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1032.1'}
              }
              
     VALUE_FIELDS = {'SEV'      => 'SEVERITY',
@@ -49,7 +49,7 @@ module HQMF
                     '91723000'  => 'ANATOMICAL_STRUCTURE',
                     '397898000' => 'STOP_DATETIME',
                     '34896006'  => 'INCISION_DATETIME',
-                    '118292001 (qualified by 118575009)' =>'REMOVAL_DATETIME'
+                    '118292001' =>'REMOVAL_DATETIME'
                    }
     
 
@@ -102,7 +102,7 @@ module HQMF
       @subset_operators = subset_operators
       @specific_occurrence = specific_occurrence
       @specific_occurrence_const = specific_occurrence_const
-      @source_data_criteria = source_data_criteria
+      @source_data_criteria = source_data_criteria || id
     end
     
     # create a new data criteria given a category and sub_category.  A sub category can either be a status or a sub category
@@ -277,8 +277,7 @@ module HQMF
     private
     
     def self.read_template_id_map
-      template_id_file = File.expand_path('../data_criteria_template_id_map.json', __FILE__)
-      JSON.parse(File.read(template_id_file))
+      HealthDataStandards::Util::QRDATemplateHelper.template_id_map
     end
 
     def normalize_status(definition, status)
@@ -303,7 +302,7 @@ module HQMF
       value = nil
       type = json["type"]
       case type
-        when 'TS'
+        when 'TS', 'PQ'
           value = HQMF::Value.from_json(json)
         when 'IVL_PQ'
           value = HQMF::Range.from_json(json)
