@@ -272,15 +272,15 @@ module HQMF2
       
       def population_element_prefix(population_criteria_code)
         case population_criteria_code
-        when 'IPP'
+        when HQMF::PopulationCriteria::IPP
           'patientPopulation'
-        when 'DENOM'
+        when HQMF::PopulationCriteria::DENOM
           'denominator'
-        when 'NUMER'
+        when HQMF::PopulationCriteria::NUMER
           'numerator'
-        when 'DENEXCEP'
+        when HQMF::PopulationCriteria::EXCEP
           'denominatorException'
-        when 'DENEX'
+        when HQMF::PopulationCriteria::DENEX
           'denominatorExclusion'
         else
           raise "Unknown population criteria type #{population_criteria_code}"

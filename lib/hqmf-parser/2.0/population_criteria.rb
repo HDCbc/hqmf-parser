@@ -34,9 +34,9 @@ module HQMF2
     # @return [String] conjunction code
     def conjunction_code
       case @type
-      when 'IPP', 'DENOM', 'NUMER'
+      when HQMF::PopulationCriteria::IPP, HQMF::PopulationCriteria::DENOM, HQMF::PopulationCriteria::NUMER
         HQMF::Precondition::ALL_TRUE
-      when 'DENEXCEP', 'DENEX', 'EXCEP'
+      when HQMF::PopulationCriteria::EXCEP, HQMF::PopulationCriteria::DENEX
         HQMF::Precondition::AT_LEAST_ONE_TRUE
       else
         raise "Unknown population type [#{@type}]"

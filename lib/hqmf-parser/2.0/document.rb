@@ -54,11 +54,11 @@ module HQMF2
         population['stratification'] = stratifier_id_def.value if stratifier_id_def
 
         {
-          'IPP' => 'patientPopulationCriteria',
-          'DENOM' => 'denominatorCriteria',
-          'NUMER' => 'numeratorCriteria',
-          'DENEXCEP' => 'denominatorExceptionCriteria',
-          'DENEX' => 'denominatorExclusionCriteria'
+          HQMF::PopulationCriteria::IPP => 'patientPopulationCriteria',
+          HQMF::PopulationCriteria::DENOM => 'denominatorCriteria',
+          HQMF::PopulationCriteria::NUMER => 'numeratorCriteria',
+          HQMF::PopulationCriteria::EXCEP => 'denominatorExceptionCriteria',
+          HQMF::PopulationCriteria::DENEX => 'denominatorExclusionCriteria'
         }.each_pair do |criteria_id, criteria_element_name|
           criteria_def = population_def.at_xpath("cda:component[cda:#{criteria_element_name}]", NAMESPACES)
           

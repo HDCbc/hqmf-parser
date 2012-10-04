@@ -158,7 +158,7 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal 8, all_population_criteria.length
   
     codes = all_population_criteria.collect {|p| p.id}
-    %w(IPP DENOM NUMER DENEXCEP).each do |c|
+    %w(IPP DENOM NUMER EXCEP).each do |c|
       assert codes.include?(c)
     end
 
@@ -185,10 +185,10 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal false, num.preconditions[0].conjunction?
     assert_equal 'HbA1C', num.preconditions[0].reference.id
 
-    ipp = @model.population_criteria('DENEXCEP')
-    assert ipp.conjunction?
-    assert_equal 'atLeastOneTrue', ipp.conjunction_code
-    assert_equal 3, ipp.preconditions.length
+    exc = @model.population_criteria('EXCEP')
+    assert exc.conjunction?
+    assert_equal 'atLeastOneTrue', exc.conjunction_code
+    assert_equal 3, exc.preconditions.length
 
     assert_equal 2, @model.populations.length
     assert_equal 'Population1', @model.populations[0]['id']
@@ -199,8 +199,8 @@ class HQMFGeneratorTest < Test::Unit::TestCase
     assert_equal 'DENOM_1', @model.populations[1]['DENOM']
     assert_equal 'NUMER', @model.populations[0]['NUMER']
     assert_equal 'NUMER_1', @model.populations[1]['NUMER']
-    assert_equal 'DENEXCEP', @model.populations[0]['DENEXCEP']
-    assert_equal 'DENEXCEP_1', @model.populations[1]['DENEXCEP']
+    assert_equal 'EXCEP', @model.populations[0]['EXCEP']
+    assert_equal 'EXCEP_1', @model.populations[1]['EXCEP']
     assert_equal nil, @model.populations[0]['DENEX']
     assert_equal nil, @model.populations[1]['DENEX']
   end
