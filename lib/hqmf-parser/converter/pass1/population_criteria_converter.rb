@@ -22,29 +22,36 @@ module HQMF
     
     def build_sub_measures()
       @sub_measures = []
-      ipps = @population_criteria_by_id.select {|key, value| value.type == 'IPP'}
-      denoms = @population_criteria_by_id.select {|key, value| value.type == 'DENOM'}
-      nums = @population_criteria_by_id.select {|key, value| value.type == 'NUMER'}
-      excls = @population_criteria_by_id.select {|key, value| value.type == 'DENEX'}
-      denexcs = @population_criteria_by_id.select {|key, value| value.type == 'DENEXCEP'}
+      ipps = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::IPP}
+      denoms = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::DENOM}
+      nums = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::NUMER}
+      excls = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::DENEX}
+      denexcs = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::EXCEP}
       
       if (ipps.size<=1 and denoms.size<=1 and nums.size<=1 and excls.size<=1 and denexcs.size<=1 )
-        @sub_measures << {'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'DENEXCEP'=>'DENEXCEP', 'DENEX'=>'DENEX'}
+        @sub_measures << 
+          {
+            HQMF::PopulationCriteria::IPP => HQMF::PopulationCriteria::IPP,
+            HQMF::PopulationCriteria::DENOM => HQMF::PopulationCriteria::DENOM,
+            HQMF::PopulationCriteria::NUMER => HQMF::PopulationCriteria::NUMER,
+            HQMF::PopulationCriteria::EXCEP => HQMF::PopulationCriteria::EXCEP,
+            HQMF::PopulationCriteria::DENEX => HQMF::PopulationCriteria::DENEX
+          }
       else
 
         nums.each do |num_id, num|
-          @sub_measures << {'NUMER' => num.id}
+          @sub_measures << {HQMF::PopulationCriteria::NUMER => num.id}
         end
-        apply_to_submeasures(@sub_measures, 'DENOM', denoms.values)
-        apply_to_submeasures(@sub_measures, 'IPP', ipps.values)
-        apply_to_submeasures(@sub_measures, 'DENEX', excls.values)
-        apply_to_submeasures(@sub_measures, 'DENEXCEP', denexcs.values)
+        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENOM, denoms.values)
+        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::IPP, ipps.values)
+        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENEX, excls.values)
+        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::EXCEP, denexcs.values)
         
         keep = []
         @sub_measures.each do |sub|
           
           value = sub
-          ['IPP','DENOM','NUMER','DENEX','DENEXCEP'].each do |type|
+          HQMF::PopulationCriteria::ALL_POPULATION_CODES.each do |type|
             key = sub[type]
             if (key)
               reference_id = @population_reference[key]
@@ -75,7 +82,7 @@ module HQMF
         values.each do |value|
           if (sub[type] and sub[type] != value.id)
             tmp = {}
-            ['IPP','DENOM','NUMER','DENEX','DENEXCEP'].each do |key|
+            HQMF::PopulationCriteria::ALL_POPULATION_CODES.each do |key|
               tmp[key] = sub[key] if sub[key]
             end
             sub = tmp

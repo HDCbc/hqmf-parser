@@ -52,7 +52,7 @@ require_relative '../../../test_helper'
       assert_equal 8, all_population_criteria.length
     
       codes = all_population_criteria.collect {|p| p.id}
-      %w(IPP DENOM NUMER DENEXCEP).each do |c|
+      %w(IPP DENOM NUMER EXCEP).each do |c|
         assert codes.include?(c)
       end
 
@@ -79,10 +79,10 @@ require_relative '../../../test_helper'
       assert_equal false, num.preconditions[0].conjunction?
       assert_equal 'HbA1C', num.preconditions[0].reference.id
 
-      ipp = @doc.population_criteria('DENEXCEP')
-      assert ipp.conjunction?
-      assert_equal 'atLeastOneTrue', ipp.conjunction_code
-      assert_equal 3, ipp.preconditions.length
+      exc = @doc.population_criteria('EXCEP')
+      assert exc.conjunction?
+      assert_equal 'atLeastOneTrue', exc.conjunction_code
+      assert_equal 3, exc.preconditions.length
       
       assert_equal 2, @doc.populations.length
       assert_equal 'Population1', @doc.populations[0]['id']
@@ -93,8 +93,8 @@ require_relative '../../../test_helper'
       assert_equal 'DENOM_1', @doc.populations[1]['DENOM']
       assert_equal 'NUMER', @doc.populations[0]['NUMER']
       assert_equal 'NUMER_1', @doc.populations[1]['NUMER']
-      assert_equal 'DENEXCEP', @doc.populations[0]['DENEXCEP']
-      assert_equal 'DENEXCEP_1', @doc.populations[1]['DENEXCEP']
+      assert_equal 'EXCEP', @doc.populations[0]['EXCEP']
+      assert_equal 'EXCEP_1', @doc.populations[1]['EXCEP']
       assert_equal nil, @doc.populations[0]['DENEX']
       assert_equal nil, @doc.populations[1]['DENEX']
     end
@@ -104,7 +104,7 @@ require_relative '../../../test_helper'
       assert_equal 8, all_population_criteria.length
     
       codes = all_population_criteria.collect {|p| p.id}
-      %w(IPP DENOM NUMER DENEXCEP).each do |c|
+      %w(IPP DENOM NUMER EXCEP).each do |c|
         assert codes.include?(c)
       end
 
@@ -131,10 +131,10 @@ require_relative '../../../test_helper'
       assert_equal false, num.preconditions[0].conjunction?
       assert_equal 'HbA1C', num.preconditions[0].reference.id
 
-      ipp = @model.population_criteria('DENEXCEP')
-      assert ipp.conjunction?
-      assert_equal 'atLeastOneTrue', ipp.conjunction_code
-      assert_equal 3, ipp.preconditions.length
+      exc = @model.population_criteria('EXCEP')
+      assert exc.conjunction?
+      assert_equal 'atLeastOneTrue', exc.conjunction_code
+      assert_equal 3, exc.preconditions.length
 
       assert_equal 2, @model.populations.length
       assert_equal 'Population1', @model.populations[0]['id']
@@ -145,8 +145,8 @@ require_relative '../../../test_helper'
       assert_equal 'DENOM_1', @model.populations[1]['DENOM']
       assert_equal 'NUMER', @model.populations[0]['NUMER']
       assert_equal 'NUMER_1', @model.populations[1]['NUMER']
-      assert_equal 'DENEXCEP', @model.populations[0]['DENEXCEP']
-      assert_equal 'DENEXCEP_1', @model.populations[1]['DENEXCEP']
+      assert_equal 'EXCEP', @model.populations[0]['EXCEP']
+      assert_equal 'EXCEP_1', @model.populations[1]['EXCEP']
       assert_equal nil, @model.populations[0]['DENEX']
       assert_equal nil, @model.populations[1]['DENEX']
     end
@@ -598,8 +598,8 @@ require_relative '../../../test_helper'
       assert diff.empty?, "differences: #{diff.to_json}"
       
       
-      population_criteria = logic[:DENEXCEP]
-      denomexc = {conjunction?:true, type: 'DENEXCEP', title:'Denominator exception', 
+      population_criteria = logic[:EXCEP]
+      denomexc = {conjunction?:true, type: 'EXCEP', title:'Denominator exception', 
          :preconditions=>
           [{:preconditions=>
              [{:reference=>"HasPolycysticOvaries"},
@@ -607,7 +607,7 @@ require_relative '../../../test_helper'
             :conjunction_code=>"allTrue"},
            {:reference=>"HasSteroidInducedDiabetes"},
            {:reference=>"HasGestationalDiabetes"}],
-          hqmf_id: 'DENEXCEP'
+          hqmf_id: 'EXCEP'
       }
            
       diff = denomexc.diff_hash(population_criteria)

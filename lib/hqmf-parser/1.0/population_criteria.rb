@@ -24,16 +24,18 @@ module HQMF1
     end
     
     # Get the code for the population criteria
-    # @return [String] the code (e.g. IPP, DEMON, NUMER, DENEX, DENEXCEP)
+    # @return [String] the code (e.g. IPP, DEMON, NUMER, DENEX, EXCEP)
     def code
       value = attr_val('cda:observation/cda:value/@code')
       # exclusion population criteria has id of DENOM with actionNegationInd of true
       # special case this to simply handling
       if attr_val('cda:observation/@actionNegationInd')=='true'
-        value = 'DENEX'
+        value = HQMF::PopulationCriteria::DENEX
       end
       # replace measure population with NUMER.  MSRPOPL is used in continuous variable calculations.
-      value = 'NUMER' if value == 'MSRPOPL'
+      value = HQMF::PopulationCriteria::NUMER if value == 'MSRPOPL'
+      # replace DENEXCEP with EXCEP.  DENEXCEP is used by the MAT instead of EXCEP as required by HQMF V2 and QRDA.
+      value = HQMF::PopulationCriteria::EXCEP if value == 'DENEXCEP'
       value.upcase
     end
     

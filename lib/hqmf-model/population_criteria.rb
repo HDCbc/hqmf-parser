@@ -7,6 +7,14 @@ module HQMF
 
     attr_reader :preconditions, :id, :type, :title, :hqmf_id
     
+    IPP = 'IPP'
+    DENOM = 'DENOM'
+    NUMER = 'NUMER'
+    EXCEP = 'EXCEP'
+    DENEX = 'DENEX'
+    
+    ALL_POPULATION_CODES = [IPP, DENOM, NUMER, EXCEP, DENEX]
+    
     # Create a new population criteria
     # @param [String] id
     # @param [String] hqmf_id
@@ -54,9 +62,9 @@ module HQMF
     def conjunction_code
       
       case @type
-      when 'IPP', 'DENOM', 'NUMER'
+      when IPP, DENOM, NUMER
         HQMF::Precondition::ALL_TRUE
-      when 'DENEXCEP', 'DENEX', 'EXCEP'
+      when EXCEP, DENEX, EXCEP
         HQMF::Precondition::AT_LEAST_ONE_TRUE
       else
         raise "Unknown population type [#{@type}]"

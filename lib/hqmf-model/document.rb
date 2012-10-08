@@ -35,7 +35,15 @@ module HQMF
       @data_criteria = data_criteria
       @source_data_criteria = source_data_criteria
       @attributes = attributes
-      @populations = populations || [{'IPP'=>'IPP', 'DENOM'=>'DENOM', 'NUMER'=>'NUMER', 'DENEXCEP'=>'DENEXCEP', 'DENEX'=>'DENEX'}]
+      @populations = populations || [
+        {
+          HQMF::PopulationCriteria::IPP => HQMF::PopulationCriteria::IPP,
+          HQMF::PopulationCriteria::DENOM => HQMF::PopulationCriteria::DENOM,
+          HQMF::PopulationCriteria::NUMER => HQMF::PopulationCriteria::NUMER,
+          HQMF::PopulationCriteria::EXCEP => HQMF::PopulationCriteria::EXCEP,
+          HQMF::PopulationCriteria::DENEX => HQMF::PopulationCriteria::DENEX
+        }
+      ]
       @measure_period = measure_period
     end
     
