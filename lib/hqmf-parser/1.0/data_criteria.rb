@@ -82,8 +82,6 @@ module HQMF1
     
     def to_json
       json = build_hash(self, [:id,:title,:code_list_id,:derived_from,:description, :definition, :status, :negation, :specific_occurrence,:specific_occurrence_const])
-      json[:description] = "#{definition.titleize}, #{status.titleize}: #{description}" if (description.downcase.match /#{definition.titleize.downcase}/).nil? and (description.downcase.match /#{status.titleize.downcase}/).nil?
-      
       {
         self.const_name => json
       }
