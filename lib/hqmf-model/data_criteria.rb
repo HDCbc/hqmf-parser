@@ -277,7 +277,7 @@ module HQMF
     private
     
     def self.read_template_id_map
-      HealthDataStandards::Util::QRDATemplateHelper.template_id_map
+      HealthDataStandards::Util::HQMFTemplateHelper.template_id_map
     end
 
     def normalize_status(definition, status)
