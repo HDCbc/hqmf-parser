@@ -81,10 +81,9 @@ module HQMF1
     end
     
     def to_json
+      json = build_hash(self, [:id,:title,:code_list_id,:derived_from,:description, :definition, :status, :negation, :specific_occurrence,:specific_occurrence_const])
       {
-        self.const_name => build_hash(
-          self, 
-          [:id,:title,:description,:code_list_id,:derived_from,:definition, :status, :negation, :specific_occurrence,:specific_occurrence_const])
+        self.const_name => json
       }
     end
     

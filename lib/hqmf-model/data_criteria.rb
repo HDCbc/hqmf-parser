@@ -53,7 +53,7 @@ module HQMF
                    }
     
 
-    attr_reader :title,:description,:code_list_id, :children_criteria, :derivation_operator , :specific_occurrence, :specific_occurrence_const, :source_data_criteria
+    attr_reader :title, :description, :code_list_id, :children_criteria, :derivation_operator , :specific_occurrence, :specific_occurrence_const, :source_data_criteria
     attr_accessor :id, :value, :field_values, :effective_time, :status, :temporal_references, :subset_operators, :definition, :inline_code_list, :negation_code_list_id, :negation, :display_name
   
     # Create a new data criteria instance
