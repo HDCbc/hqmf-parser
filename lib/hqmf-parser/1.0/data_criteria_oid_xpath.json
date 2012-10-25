@@ -28,6 +28,7 @@
   "diagnostic_study_adverse_event":{"oid_xpath":"cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"},
   "diagnostic_study_intolerance":{"oid_xpath":"cda:act/cda:sourceOf/cda:observation/cda:sourceOf/cda:procedure/cda:code/@code"},
   "diagnostic_study_ordered":{"oid_xpath":"cda:act/cda:sourceOf/cda:procedure/cda:code/@code"},
+  "medication_discharge":{"oid_xpath":"cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"},
   "medication_dispensed":{"oid_xpath":"cda:act/cda:sourceOf/cda:supply/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"},
   "medication_ordered":{"oid_xpath":"cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"},
   "medication_active":{"oid_xpath":"cda:act/cda:sourceOf/cda:substanceAdministration/cda:participant/cda:roleParticipant/cda:playingMaterial/cda:code/@code"},
