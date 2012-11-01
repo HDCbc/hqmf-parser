@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email = "talk@projectpophealth.org"
   s.homepage = "http://github.com/pophealth/hqmf-parser"
   s.authors = ["Adam Goldstein", "Andre Quina", "Marc Hadley"]
-  s.version = '1.0.1'
+  s.version = '1.0.2'
   
   s.add_dependency 'rubyzip'
   s.add_dependency 'spreadsheet', '0.6.8'
