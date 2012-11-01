@@ -14,6 +14,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'google-spreadsheet-ruby', '0.1.8'
   s.add_dependency 'roo', '1.10.1'
 
-  s.files = Dir.glob('lib/**/*.rb') + Dir.glob('lib/**/*.rake') + Dir.glob('lib/**/*.json') + ["Gemfile", "README.md", "Rakefile", "VERSION"]
+  s.files = Dir.glob('lib/**/*.rb') + Dir.glob('lib/**/*.rake') + Dir.glob('lib/**/*.json') + Dir.glob('lib/**/*.erb') + ["Gemfile", "README.md", "Rakefile", "VERSION"]
 
 end
