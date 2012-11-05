@@ -22,10 +22,6 @@ module HQMF
     # the restrictions added may be different for the numerator, denominator, different IPP_1, IPP_2, etc.
     def duplicate_data_criteria(data_criteria, parent_id)
       
-      # if this is a specific occurrence, then we do not want to duplicate it.
-      # we may need to duplicate it for a population however.
-      # return data_criteria if (specific_occurrences[data_criteria.id]) 
-      
       if (data_criteria.is_a? HQMF::Converter::SimpleDataCriteria and data_criteria.precondition_id == parent_id)
         new_data_criteria = data_criteria
       else
@@ -175,6 +171,12 @@ module HQMF
       negation_code_list_id = criteria[:negation_code_list_id]
       specific_occurrence = criteria[:specific_occurrence]
       specific_occurrence_const = criteria[:specific_occurrence_const]
+      
+      # specific occurrences do not properly set the description, so we want to add the definition and status
+      if (specific_occurrence)
+        _status = ", #{status.titleize}" if status
+        description = "#{definition.titleize}#{_status}: #{description}" 
+      end
       
       value = nil # value is filled out by backfill_patient_characteristics for things like gender and by REFR restrictions
       effective_time = nil # filled out by temporal reference code
