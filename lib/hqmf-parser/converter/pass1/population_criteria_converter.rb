@@ -25,6 +25,7 @@ module HQMF
       ipps = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::IPP}
       denoms = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::DENOM}
       nums = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::NUMER}
+      msrpopls = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::MSRPOPL}
       excls = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::DENEX}
       denexcs = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::EXCEP}
       
@@ -41,6 +42,9 @@ module HQMF
 
         nums.each do |num_id, num|
           @sub_measures << {HQMF::PopulationCriteria::NUMER => num.id}
+        end
+        msrpopls.each do |popl_id, popl|
+          @sub_measures << {HQMF::PopulationCriteria::MSRPOPL => popl.id}
         end
         apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENOM, denoms.values)
         apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::IPP, ipps.values)

@@ -33,7 +33,7 @@ module HQMF1
         value = HQMF::PopulationCriteria::DENEX
       end
       # replace measure population with NUMER.  MSRPOPL is used in continuous variable calculations.
-      value = HQMF::PopulationCriteria::NUMER if value == 'MSRPOPL'
+      # value = HQMF::PopulationCriteria::NUMER if value == 'MSRPOPL'
       # replace DENEXCEP with EXCEP.  DENEXCEP is used by the MAT instead of EXCEP as required by HQMF V2 and QRDA.
       value = HQMF::PopulationCriteria::EXCEP if value == 'DENEXCEP'
       value.upcase

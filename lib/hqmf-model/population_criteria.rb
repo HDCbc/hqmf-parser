@@ -12,8 +12,9 @@ module HQMF
     NUMER = 'NUMER'
     EXCEP = 'EXCEP'
     DENEX = 'DENEX'
+    MSRPOPL = 'MSRPOPL'
     
-    ALL_POPULATION_CODES = [IPP, DENOM, NUMER, EXCEP, DENEX]
+    ALL_POPULATION_CODES = [IPP, DENOM, NUMER, EXCEP, DENEX, MSRPOPL]
     
     # Create a new population criteria
     # @param [String] id
