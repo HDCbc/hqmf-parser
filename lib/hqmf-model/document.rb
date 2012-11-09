@@ -40,7 +40,7 @@ module HQMF
           HQMF::PopulationCriteria::IPP => HQMF::PopulationCriteria::IPP,
           HQMF::PopulationCriteria::DENOM => HQMF::PopulationCriteria::DENOM,
           HQMF::PopulationCriteria::NUMER => HQMF::PopulationCriteria::NUMER,
-          HQMF::PopulationCriteria::EXCEP => HQMF::PopulationCriteria::EXCEP,
+          HQMF::PopulationCriteria::DENEXCEP => HQMF::PopulationCriteria::DENEXCEP,
           HQMF::PopulationCriteria::DENEX => HQMF::PopulationCriteria::DENEX
         }
       ]

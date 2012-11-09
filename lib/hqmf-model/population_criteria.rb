@@ -10,11 +10,11 @@ module HQMF
     IPP = 'IPP'
     DENOM = 'DENOM'
     NUMER = 'NUMER'
-    EXCEP = 'EXCEP'
+    DENEXCEP = 'DENEXCEP'
     DENEX = 'DENEX'
     MSRPOPL = 'MSRPOPL'
     
-    ALL_POPULATION_CODES = [IPP, DENOM, NUMER, EXCEP, DENEX, MSRPOPL]
+    ALL_POPULATION_CODES = [IPP, DENOM, NUMER, DENEXCEP, DENEX, MSRPOPL]
     
     # Create a new population criteria
     # @param [String] id
@@ -65,7 +65,7 @@ module HQMF
       case @type
       when IPP, DENOM, NUMER
         HQMF::Precondition::ALL_TRUE
-      when EXCEP, DENEX, EXCEP
+      when DENEXCEP, DENEX
         HQMF::Precondition::AT_LEAST_ONE_TRUE
       else
         raise "Unknown population type [#{@type}]"
