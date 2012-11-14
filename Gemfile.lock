@@ -1,3 +1,16 @@
+GIT
+  remote: http://github.com/projectcypress/health-data-standards.git
+  revision: 6824819ce49136e65564c83a6df88724081b195b
+  branch: develop
+  specs:
+    health-data-standards (2.1.1)
+      builder (~> 3.0.0)
+      erubis (~> 2.7.0)
+      mongoid (~> 3.0.6)
+      nokogiri (~> 1.5.5)
+      rest-client (~> 1.6.7)
+      uuid (~> 2.3.5)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -28,13 +41,6 @@ GEM
       oauth (>= 0.3.6)
       oauth2 (>= 0.5.0)
     hashie (1.2.0)
-    health-data-standards (2.1.2)
-      builder (~> 3.0.0)
-      erubis (~> 2.7.0)
-      mongoid (~> 3.0.6)
-      nokogiri (~> 1.5.5)
-      rest-client (~> 1.6.7)
-      uuid (~> 2.3.5)
     httpauth (0.1)
     i18n (0.6.1)
     log4r (1.1.10)
@@ -99,7 +105,7 @@ DEPENDENCIES
   bson_ext
   cover_me (~> 1.2.0)
   google-spreadsheet-ruby (= 0.1.8)
-  health-data-standards (~> 2.1.2)
+  health-data-standards!
   minitest
   nokogiri
   pry

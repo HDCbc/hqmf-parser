@@ -6,8 +6,8 @@ gem 'pry-nav'
 gem 'nokogiri'
 gem 'rubyzip'
 
-#gem "health-data-standards", :git => 'http://github.com/projectcypress/health-data-standards.git', :branch => 'develop'
-gem "health-data-standards", '~> 2.1.2'
+gem "health-data-standards", :git => 'http://github.com/projectcypress/health-data-standards.git', :branch => 'develop'
+#gem "health-data-standards", '2.1.2'
 gem "bson_ext"
 
 # below are gems required for excel spreadsheet processing

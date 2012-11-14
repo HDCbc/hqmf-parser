@@ -169,7 +169,7 @@ module HQMF
         
       oid_fields = document.all_data_criteria.select {|dc| dc.field_values != nil}
       if oid_fields.size > 0
-        referenced_oids = (oid_fields.map{|dc| dc.field_values.map {|key,field| puts "field: #{key} is nil" unless field; field.code_list_id if field != nil and field.type == 'CD'}}).flatten.compact.uniq
+        referenced_oids = (oid_fields.map{|dc| dc.field_values.map {|key,field| puts "field: #{key} is nil" unless field || key.match(/DATETIME/); field.code_list_id if field != nil and field.type == 'CD'}}).flatten.compact.uniq
         referenced_oids.each do |oid|
           value_set = codes[oid]
           puts "\tFIELDS (#{document.id},#{document.title}): referenced OID could not be found #{oid}" unless value_set

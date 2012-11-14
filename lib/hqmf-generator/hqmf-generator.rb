@@ -278,7 +278,7 @@ module HQMF2
           'denominator'
         when HQMF::PopulationCriteria::NUMER
           'numerator'
-        when HQMF::PopulationCriteria::EXCEP
+        when HQMF::PopulationCriteria::DENEXCEP
           'denominatorException'
         when HQMF::PopulationCriteria::DENEX
           'denominatorExclusion'

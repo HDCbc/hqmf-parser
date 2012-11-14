@@ -11,10 +11,10 @@ module HQMFModel
       'IPP'=>'allTrue',
       'DENOM'=>'allTrue',
       'NUMER'=>'allTrue',
-      'EXCEP'=>'atLeastOneTrue'
+      'DENEXCEP'=>'atLeastOneTrue'
     }
     
-    ['IPP','DENOM','NUMER','EXCEP'].each do |id|
+    ['IPP','DENOM','NUMER','DENEXCEP'].each do |id|
       HQMF::PopulationCriteria.new(id, id, id, []).conjunction_code.must_equal expected[id]
     end
     

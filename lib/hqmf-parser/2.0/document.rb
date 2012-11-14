@@ -57,7 +57,7 @@ module HQMF2
           HQMF::PopulationCriteria::IPP => 'patientPopulationCriteria',
           HQMF::PopulationCriteria::DENOM => 'denominatorCriteria',
           HQMF::PopulationCriteria::NUMER => 'numeratorCriteria',
-          HQMF::PopulationCriteria::EXCEP => 'denominatorExceptionCriteria',
+          HQMF::PopulationCriteria::DENEXCEP => 'denominatorExceptionCriteria',
           HQMF::PopulationCriteria::DENEX => 'denominatorExclusionCriteria'
         }.each_pair do |criteria_id, criteria_element_name|
           criteria_def = population_def.at_xpath("cda:component[cda:#{criteria_element_name}]", NAMESPACES)
