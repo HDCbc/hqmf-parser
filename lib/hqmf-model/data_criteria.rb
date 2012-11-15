@@ -141,6 +141,7 @@ module HQMF
 
     # Create a new data criteria instance from a JSON hash keyed with symbols
     def self.from_json(id, json)
+    
       title = json["title"] if json["title"]
       display_name = json["display_name"] if json["display_name"]
       description = json["description"] if json["description"]
@@ -298,7 +299,8 @@ module HQMF
     end
 
     def self.convert_value(json)
-      return nil unless json
+      # null check is a hack for right now to deal with criteria that are not currenty properly parsed
+      return nil if json.nil? || json == "null"
       value = nil
       type = json["type"]
       case type
@@ -311,6 +313,7 @@ module HQMF
         when 'ANYNonNull'
           value = HQMF::AnyValue.from_json(json)
         else
+         
           raise "Unknown value type [#{type}]"
         end
       value
