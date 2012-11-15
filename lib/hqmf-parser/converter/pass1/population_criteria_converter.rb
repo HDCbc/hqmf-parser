@@ -48,10 +48,12 @@ module HQMF
         end
         apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENOM, denoms.values)
         apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::IPP, ipps.values)
-        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENEX, excls.values)
-        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENEXCEP, denexcs.values)
+        
+        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENEX, excls.values, HQMF::PopulationCriteria::IPP,  get_unmatched_population_keys(ipps, excls))
+        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENEXCEP, denexcs.values, HQMF::PopulationCriteria::DENOM,  get_unmatched_population_keys(denoms, denexcs))
         
         keep = []
+        
         @sub_measures.each do |sub|
           
           value = sub
@@ -80,19 +82,37 @@ module HQMF
       end
     end
     
-    def apply_to_submeasures(subs, type, values)
+    # source are things like exceptions or exclusions, target are IPP, or denom
+    # we want to find any denoms or IPPs that do not have exceptions or exclusions
+    def get_unmatched_population_keys(target, source)
+      return [] if target.length == source.length
+      all_target_keys = target.values.map(&:id)
+      with_ref_keys = source.values.map(&:id).map {|key| @population_criteria_by_id[@population_reference[key]].id if @population_criteria_by_id[@population_reference[key]]}
+      # if we have a population without a reference, we cannot trust the results.
+      return [] if with_ref_keys.include? nil
+      all_target_keys - with_ref_keys
+    end
+    
+    # create a copy of each submeasre adding on the new values of the given type
+    # skip the unpaired values.  Unpaired values are denominators without exclusions or populations without exceptions
+    def apply_to_submeasures(subs, type, values, unpaired_type=nil, unpaired_keys=[])
       new_subs = []
       subs.each do |sub|
-        values.each do |value|
-          if (sub[type] and sub[type] != value.id)
-            tmp = {}
-            HQMF::PopulationCriteria::ALL_POPULATION_CODES.each do |key|
-              tmp[key] = sub[key] if sub[key]
+        # this unless prevents us from forcing an exclusion or excepion onto a measure that has a submeasure without 
+        # an exclusion or exception, but other populations with an exclusion or excepion.
+        unless unpaired_keys.include? sub[unpaired_type]
+          # duplicate each new value if it is set, otherwise set this key on each submeasure.
+          values.each do |value|
+            if (sub[type] and sub[type] != value.id)
+              tmp = {}
+              HQMF::PopulationCriteria::ALL_POPULATION_CODES.each do |key|
+                tmp[key] = sub[key] if sub[key]
+              end
+              sub = tmp
+              new_subs << sub
             end
-            sub = tmp
-            new_subs << sub
+            sub[type] = value.id
           end
-          sub[type] = value.id
         end
       end
       subs.concat(new_subs)
