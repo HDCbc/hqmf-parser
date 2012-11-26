@@ -33,6 +33,12 @@ module HQMF1
           "MAX"
         when /^DATEDIFF(.*)$/
           "DATEDIFF"
+        when /^TIMEDIFF(.*)$/
+          "TIMEDIFF"
+        when /^MEDIAN(.*)$/
+          "MEDIAN"
+        when /^AVG(.*)$/
+          "MEAN"
         else
           raise "unknown expression type: #{@text}"
       end

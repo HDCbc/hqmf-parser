@@ -4,7 +4,7 @@ module HQMF1
   
     include HQMF1::Utilities
     
-    attr_reader :range, :comparison, :restrictions, :subset, :preconditions
+    attr_reader :range, :comparison, :restrictions, :subset, :preconditions, :expression
     attr_accessor :from_parent
     
     def initialize(entry, parent, doc)
@@ -28,7 +28,9 @@ module HQMF1
         @subset = local_subset
       end
       
-      #@subset = attr_val('./cda:subsetCode/@code')
+      if @entry.at_xpath('./*/cda:derivationExpr')
+        @expression = Expression.new(@entry) 
+      end
       
       comparison_def = @entry.at_xpath('./*/cda:sourceOf[@typeCode="COMP"]')
       if comparison_def
@@ -150,6 +152,7 @@ module HQMF1
       json[:comparison] = comparison.to_json if comparison
       json[:restrictions] = json_array(self.restrictions)
       json[:preconditions] = json_array(self.preconditions)
+      json[:expression] = self.expression.to_json if self.expression
       json
     end
 

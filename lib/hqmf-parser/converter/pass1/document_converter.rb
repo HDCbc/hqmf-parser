@@ -98,8 +98,8 @@ module HQMF
                 data_criteria.definition = 'patient_characteristic_birthdate'
               end
               # this is looking for a gender characteristic that is set as a generic characteristic
-              gender_key = (value_set.keys.select {|set| set.start_with? 'HL7'}).first
-              if (gender_key and ['M','F'].include? value_set[gender_key].first) 
+              gender_key = (value_set.keys.select {|set| set == "Administrative Sex"}).first
+              if (gender_key and ['M','F'].include? value_set[gender_key].first)
                 data_criteria.definition = 'patient_characteristic_gender'
                 data_criteria.value = HQMF::Coded.new('CD','Gender',value_set[gender_key].first)
               end

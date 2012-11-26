@@ -22,6 +22,10 @@ module HQMF1
       @population_criteria = @doc.xpath('//cda:section[cda:code/@code="57026-7"]/cda:entry').collect do |attr|
         PopulationCriteria.new(attr, self)
       end
+      observations = @doc.xpath('//cda:section[cda:code/@code="57027-5"]/cda:entry').collect do |attr|
+        Observation.new(attr, self)
+      end
+      @population_criteria.concat(observations)
 
       @stratification = @doc.xpath('//cda:section[cda:code/@code="69669-0"]/cda:entry').collect do |attr|
         PopulationCriteria.new(attr, self)

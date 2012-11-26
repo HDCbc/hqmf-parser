@@ -257,7 +257,7 @@ module HQMF
   class SubsetOperator
     include HQMF::Conversion::Utilities
     
-    TYPES = ['COUNT', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH', 'RECENT', 'LAST', 'MIN', 'MAX', 'DATEDIFF']
+    TYPES = ['COUNT', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH', 'RECENT', 'LAST', 'MIN', 'MAX', 'DATEDIFF', 'TIMEDIFF', 'MEDIAN', 'MEAN']
     
     attr_accessor :type, :value
     # @param [String] type

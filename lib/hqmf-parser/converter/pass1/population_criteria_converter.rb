@@ -26,18 +26,22 @@ module HQMF
       denoms = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::DENOM}
       nums = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::NUMER}
       msrpopls = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::MSRPOPL}
+      observs = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::OBSERV}
       excls = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::DENEX}
       denexcs = @population_criteria_by_id.select {|key, value| value.type == HQMF::PopulationCriteria::DENEXCEP}
       
-      if (ipps.size<=1 and denoms.size<=1 and nums.size<=1 and excls.size<=1 and denexcs.size<=1 )
-        @sub_measures << 
-          {
-            HQMF::PopulationCriteria::IPP => HQMF::PopulationCriteria::IPP,
-            HQMF::PopulationCriteria::DENOM => HQMF::PopulationCriteria::DENOM,
-            HQMF::PopulationCriteria::NUMER => HQMF::PopulationCriteria::NUMER,
-            HQMF::PopulationCriteria::DENEXCEP => HQMF::PopulationCriteria::DENEXCEP,
-            HQMF::PopulationCriteria::DENEX => HQMF::PopulationCriteria::DENEX
-          }
+      if (ipps.size<=1 and denoms.size<=1 and nums.size<=1 and excls.size<=1 and denexcs.size<=1 and msrpopls.size<=1 and observs.size<=1 )
+        sub_measure = {}
+          
+        sub_measure[HQMF::PopulationCriteria::IPP] = HQMF::PopulationCriteria::IPP if ipps.size > 0
+        sub_measure[HQMF::PopulationCriteria::DENOM] = HQMF::PopulationCriteria::DENOM if denoms.size > 0
+        sub_measure[HQMF::PopulationCriteria::NUMER] = HQMF::PopulationCriteria::NUMER if nums.size > 0
+        sub_measure[HQMF::PopulationCriteria::DENEXCEP] = HQMF::PopulationCriteria::DENEXCEP if denexcs.size > 0
+        sub_measure[HQMF::PopulationCriteria::DENEX] = HQMF::PopulationCriteria::DENEX if excls.size > 0
+        sub_measure[HQMF::PopulationCriteria::MSRPOPL] = HQMF::PopulationCriteria::MSRPOPL if msrpopls.size > 0
+        sub_measure[HQMF::PopulationCriteria::OBSERV] = HQMF::PopulationCriteria::OBSERV if observs.size > 0
+          
+        @sub_measures << sub_measure
       else
 
         nums.each do |num_id, num|
@@ -51,6 +55,8 @@ module HQMF
         
         apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENEX, excls.values, HQMF::PopulationCriteria::IPP,  get_unmatched_population_keys(ipps, excls))
         apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::DENEXCEP, denexcs.values, HQMF::PopulationCriteria::DENOM,  get_unmatched_population_keys(denoms, denexcs))
+
+        apply_to_submeasures(@sub_measures, HQMF::PopulationCriteria::OBSERV, observs.values)
         
         keep = []
         

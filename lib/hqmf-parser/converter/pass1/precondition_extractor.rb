@@ -28,8 +28,12 @@ module HQMF
     #   restriction.comparison
     #   restriction.restriction
     def self.extract_preconditions_from_restriction(restriction,data_criteria_converter)
-      
-      target_id = data_criteria_converter.v1_data_criteria_by_id[restriction[:target_id]].id if restriction[:target_id]
+      target_id=nil
+      if restriction[:target_id] and data_criteria_converter.v1_data_criteria_by_id[restriction[:target_id]]
+        target_id = data_criteria_converter.v1_data_criteria_by_id[restriction[:target_id]].id
+      elsif restriction[:target_id]
+        puts "\tPrecondition Data Criteria MISSING: #{restriction[:target_id]}"
+      end
       type = restriction[:type]
       if (restriction[:negation]) 
         inverted = HQMF::TemporalReference::INVERSION[type] 
@@ -79,11 +83,37 @@ module HQMF
       
       # check restrictions
       restrictions = extract_preconditions_from_restrictions(restriction[:restrictions], data_criteria_converter) if restriction[:restrictions]
-      HQMF::PreconditionConverter.apply_restrictions_to_comparisons(children, restrictions) unless restrictions.nil? or restrictions.empty?
+      if (children)
+        HQMF::PreconditionConverter.apply_restrictions_to_comparisons(children, restrictions) unless restrictions.nil? or restrictions.empty?
+      end
+      
       
       container = nil
+      # check if there is an expression on the restriction
+      if (restriction[:expression])
+        # this is for things like TIMEDIFF
+        type = restriction[:expression][:type]
+        exp_operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(type), type, HQMF::Converter::SimpleOperator.parse_value(restriction[:expression][:value]))
+        preconditions = []
+        
+        driv_preconditions = []
+        restrictions.each {|element| driv_preconditions << element if element.is_a? HQMF::Converter::SimpleRestriction and element.operator.type == 'DRIV'}
+        
+        if driv_preconditions and !driv_preconditions.empty?
+          preconditions = driv_preconditions.map(&:preconditions).flatten
+        end
+      
+        reference = nil
+        conjunction_code = nil
+        
+        comparison_precondition = HQMF::Converter::SimplePrecondition.new(nil,[HQMF::Converter::SimpleRestriction.new(exp_operator, nil, preconditions)],reference,conjunction_code, false)
+        comparison_precondition.klass = HQMF::Converter::SimplePrecondition::COMPARISON
+
+        comparison_precondition.subset_comparison = true
+        container = HQMF::Converter::SimpleRestriction.new(operator, nil, [comparison_precondition])
+      
       # check if there is a subset on the restriction
-      if restriction[:subset]
+      elsif restriction[:subset]
         # if we have a subset, we want to create a Comparison Precondition for the subset and have it be the child of the operator on the restriction.
         # the reason for this is that we want the order of operations to be SBS the FIRST of a data criteria, rather than FIRST of SBS of a data criteria
         
@@ -91,7 +121,6 @@ module HQMF
         subset_operator = HQMF::Converter::SimpleOperator.new(HQMF::Converter::SimpleOperator.find_category(subset_type), subset_type, nil)
         
         reference = nil
-#        conjunction_code = "operator"
         conjunction_code = nil
         
         restriction = HQMF::Converter::SimpleRestriction.new(subset_operator, target_id)
