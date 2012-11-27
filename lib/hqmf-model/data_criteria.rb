@@ -301,8 +301,6 @@ module HQMF
     end
 
     def self.convert_value(json)
-      # null check is a hack for right now to deal with criteria that are not currenty properly parsed
-      return nil if json.nil? || json == "null"
       value = nil
       type = json["type"]
       case type
