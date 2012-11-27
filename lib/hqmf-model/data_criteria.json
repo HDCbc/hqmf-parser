@@ -1105,7 +1105,7 @@
       "status":"",
       "sub_category":"from",
       "hard_status":false,
-      "patient_api_function":"",
+      "patient_api_function":"encounters",
       "standard_category":"",
       "qds_data_type":"",
       "not_supported":false},
@@ -1116,7 +1116,7 @@
       "status":"",
       "sub_category":"to",
       "hard_status":false,
-      "patient_api_function":"",
+      "patient_api_function":"encounters",
       "standard_category":"",
       "qds_data_type":"",
       "not_supported":false}

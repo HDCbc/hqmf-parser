@@ -189,6 +189,14 @@ module HQMF
       inline_code_list = nil # inline code list is only used in HQMF V2, so we can just pass in nil
       display_name=nil
       
+      # transfers should be modeled as a field.  The code_list_id of the transfer data criteria is cleared and the oid is added to a transfer field
+      # The definition of the data criteria is still transfer, but it is marked as an encounter using the patient api funciton.
+      if ['transfer_to', 'transfer_from'].include? definition
+        field_values ||= {}
+        field_values[definition.upcase] = HQMF::Coded.for_code_list(code_list_id, title)
+        code_list_id = nil
+      end
+      
       HQMF::DataCriteria.new(id, title, display_name, description, code_list_id, children_criteria, derivation_operator, definition, status, 
                              value, field_values, effective_time, inline_code_list, negation, negation_code_list_id, temporal_references, subset_operators,specific_occurrence,specific_occurrence_const)
  
