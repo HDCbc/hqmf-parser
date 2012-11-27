@@ -6,7 +6,7 @@ module HQMF
     
     def self.parse(hqmf_contents, version, codes = nil)
       
-      
+      HQMF::Counter.instance.reset()
       case version
         when HQMF_VERSION_1
           puts("\tCodes not passed in, cannot backfill properties like gender") unless codes

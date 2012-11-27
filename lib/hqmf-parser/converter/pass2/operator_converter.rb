@@ -37,7 +37,7 @@ module HQMF
           parent_id = "GROUP"
           if restriction.generated_data_criteria.nil?
             # we pass in restriction.preconditions here rather than children_criteria because we need to be able to create grouping data criteria for and and or preconditions in a tree
-            group_criteria = data_criteria_converter.create_group_data_criteria(restriction.preconditions, "#{type}_CHILDREN", value, parent_id, @@ids.next, "grouping", "temporal")
+            group_criteria = data_criteria_converter.create_group_data_criteria(restriction.preconditions, "#{type}_CHILDREN", value, parent_id, HQMF::Counter.instance.next, "grouping", "temporal")
             # save the generated grouping criteria so that we can reference it from other locations
             restriction.generated_data_criteria = group_criteria
           else
@@ -75,7 +75,7 @@ module HQMF
           
           if restriction.generated_data_criteria.nil?
             # we pass in restriction.preconditions here rather than children_criteria because we need to be able to create grouping data criteria for and and or preconditions in a tree
-            data_criteria = data_criteria_converter.create_group_data_criteria(restriction.preconditions, type, value, parent_id, @@ids.next, "grouping", "summary")
+            data_criteria = data_criteria_converter.create_group_data_criteria(restriction.preconditions, type, value, parent_id, HQMF::Counter.instance.next, "grouping", "summary")
             # save the generated grouping criteria so that we can reference it from other locations
             restriction.generated_data_criteria = data_criteria
           else
@@ -97,9 +97,6 @@ module HQMF
       
       restriction.converted=true
     end
-    
-    @@ids = HQMF::Counter.new
-
     
   end  
 end

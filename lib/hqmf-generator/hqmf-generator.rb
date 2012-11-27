@@ -4,7 +4,7 @@ module HQMF2
     def self.render_template(name, params)
       template_path = File.expand_path(File.join('..', "#{name}.xml.erb"), __FILE__)
       template_str = File.read(template_path)
-      template = ERB.new(template_str, nil, '-', "_templ#{TemplateCounter.instance.next}")
+      template = ERB.new(template_str, nil, '-', "_templ#{HQMF::Counter.instance.next}")
       context = ErbContext.new(params)
       template.result(context.get_binding)        
     end
@@ -288,10 +288,5 @@ module HQMF2
       end
     end
     
-    # Singleton to keep a count of template identifiers
-    class TemplateCounter < HQMF::Counter
-      include Singleton
-    end
-
   end
 end

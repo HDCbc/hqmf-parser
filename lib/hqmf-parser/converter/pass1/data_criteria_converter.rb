@@ -53,7 +53,7 @@ module HQMF
       # make sure nobody else is going to delete the criteria we've grouped
       criteria_ids.each {|target| validate_not_deleted(target)}
 
-      id = "#{parent_id}_#{section}_#{@@ids.next}"
+      id = "#{parent_id}_#{section}_#{HQMF::Counter.instance.next}"
       title = "#{id}"
       description = ""
       definition = 'derived'
@@ -246,8 +246,6 @@ module HQMF
     def self.convert_key(key)
       key.to_s.downcase.gsub('_', ' ').split(' ').map {|w| w.capitalize }.join('')
     end 
-    
-    @@ids = HQMF::Counter.new
     
   end
 end

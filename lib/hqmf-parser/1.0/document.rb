@@ -157,7 +157,7 @@ module HQMF1
         criteria_json = criteria.to_json
         # check if the key already exists... if it does redefine the key
         if (json[:data_criteria][criteria_json.keys.first])
-          criteria_json = {"#{criteria_json.keys.first}_#{@@ids.next}" => criteria_json.values.first}
+          criteria_json = {"#{criteria_json.keys.first}_#{HQMF::Counter.instance.next}" => criteria_json.values.first}
         end
         json[:data_criteria].merge! criteria_json
       end
@@ -196,8 +196,6 @@ module HQMF1
     def find(collection, attribute, value)
       collection.find {|e| e.send(attribute)==value}
     end
-    
-    @@ids = HQMF::Counter.new
     
   end
 end

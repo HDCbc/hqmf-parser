@@ -11,7 +11,7 @@ module HQMF
 
       def initialize(id, preconditions,reference,conjunction_code,negation)
         super(id, preconditions,reference,conjunction_code,negation)
-        @id = @@ids.next if (@id.nil?)
+        @id = HQMF::Counter.instance.next if (@id.nil?)
         @klass = PRECONDITION
       end
       
@@ -44,9 +44,6 @@ module HQMF
         preconditions.delete_if {|precondition| precondition.restriction? and precondition.converted}
       end
       
-      # Simple class to issue monotonically increasing integer identifiers
-      @@ids = HQMF::Counter.new
-    
     end
   end
   

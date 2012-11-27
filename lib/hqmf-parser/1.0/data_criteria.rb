@@ -21,8 +21,8 @@ module HQMF1
       if derived_entry
         derived = derived_entry.at_xpath('cda:act/cda:id/@root') || derived_entry.at_xpath('cda:observation/cda:id/@root')
         @derived_from = derived.value
-        @@occurrences[@derived_from] ||= HQMF::Counter.new
-        @occurrence_key = @@occurrences[@derived_from].next
+        @@occurrences[@derived_from] ||= HQMF::InstanceCounter.new
+        @occurrence_key = @@occurrences[@derived_from].next-1
         @specific_occurrence = "#{('A'..'ZZ').to_a[@occurrence_key]}"
       end
       
@@ -74,7 +74,7 @@ module HQMF1
     def const_name
       components = title.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }
       if @derived_from
-        components << @@id.next
+        components << HQMF::Counter.instance.next
         @specific_occurrence_const = (description.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }).join '_'
       end
       components.join '_'
@@ -87,7 +87,6 @@ module HQMF1
       }
     end
     
-    @@id = HQMF::Counter.new
     @@occurrences = {}
 
   end
