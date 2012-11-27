@@ -21,7 +21,7 @@ module HQMF1
       if derived_entry
         derived = derived_entry.at_xpath('cda:act/cda:id/@root') || derived_entry.at_xpath('cda:observation/cda:id/@root')
         @derived_from = derived.value
-        @@occurrences[@derived_from] ||= Counter.new
+        @@occurrences[@derived_from] ||= HQMF::Counter.new
         @occurrence_key = @@occurrences[@derived_from].next
         @specific_occurrence = "#{('A'..'ZZ').to_a[@occurrence_key]}"
       end
@@ -87,17 +87,7 @@ module HQMF1
       }
     end
     
-    # Simple class to issue monotonically increasing integer identifiers
-    class Counter
-      def initialize
-        @count = -1
-      end
-
-      def next
-        @count+=1
-      end
-    end
-    @@id = Counter.new
+    @@id = HQMF::Counter.new
     @@occurrences = {}
 
   end

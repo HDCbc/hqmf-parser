@@ -6,6 +6,7 @@ require 'ostruct'
 require 'health-data-standards'
 
 # require_relative
+require_relative 'util/counter.rb'
 require_relative 'hqmf-model/utilities.rb'
 
 require_relative 'hqmf-parser/1.0/utilities'

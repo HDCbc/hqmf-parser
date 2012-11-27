@@ -45,16 +45,7 @@ module HQMF
       end
       
       # Simple class to issue monotonically increasing integer identifiers
-      class Counter
-        def initialize
-          @count = 0
-        end
-
-        def next
-          @count+=1
-        end
-      end
-      @@ids = Counter.new
+      @@ids = HQMF::Counter.new
     
     end
   end
