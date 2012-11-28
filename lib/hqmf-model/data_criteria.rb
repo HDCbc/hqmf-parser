@@ -178,7 +178,7 @@ module HQMF
       json = build_hash(self, [:title,:display_name,:description,:standard_category,:qds_data_type,:code_list_id,:children_criteria, :derivation_operator, :property, :type, :definition, :status, :hard_status, :negation, :negation_code_list_id,:specific_occurrence,:specific_occurrence_const,:source_data_criteria])
       json[:children_criteria] = @children_criteria unless @children_criteria.nil? || @children_criteria.empty?
       json[:value] = ((@value.is_a? String) ? @value : @value.to_json) if @value
-      json[:field_values] = @field_values.inject({}) {|memo,(k,v)| memo[k] = v.to_json; memo} if @field_values
+      json[:field_values] = @field_values.inject({}) {|memo,(k,v)| memo[k] = (!v.nil? ? v.to_json : nil); memo} if @field_values
       json[:effective_time] = @effective_time.to_json if @effective_time
       json[:inline_code_list] = @inline_code_list if @inline_code_list
       json[:temporal_references] = x if x = json_array(@temporal_references)
@@ -301,7 +301,7 @@ module HQMF
     end
 
     def self.convert_value(json)
-      value = nil
+      return nil unless json
       type = json["type"]
       case type
         when 'TS', 'PQ'
@@ -313,7 +313,6 @@ module HQMF
         when 'ANYNonNull'
           value = HQMF::AnyValue.from_json(json)
         else
-         
           raise "Unknown value type [#{type}]"
         end
       value
