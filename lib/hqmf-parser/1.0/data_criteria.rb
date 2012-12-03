@@ -8,7 +8,7 @@ module HQMF1
   
     # Create a new instance based on the supplied HQMF entry
     # @param [Nokogiri::XML::Element] entry the parsed HQMF entry
-    def initialize(entry)
+    def initialize(entry, occurrence_counters)
       @entry = entry
       
       template_map = HQMF::DataCriteria.get_template_id_map()
@@ -21,8 +21,8 @@ module HQMF1
       if derived_entry
         derived = derived_entry.at_xpath('cda:act/cda:id/@root') || derived_entry.at_xpath('cda:observation/cda:id/@root')
         @derived_from = derived.value
-        @@occurrences[@derived_from] ||= HQMF::InstanceCounter.new
-        @occurrence_key = @@occurrences[@derived_from].next-1
+        occurrence_counters[@derived_from] ||= HQMF::InstanceCounter.new
+        @occurrence_key = occurrence_counters[@derived_from].next-1
         @specific_occurrence = "#{('A'..'ZZ').to_a[@occurrence_key]}"
       end
       
@@ -87,7 +87,6 @@ module HQMF1
       }
     end
     
-    @@occurrences = {}
 
   end
   

@@ -9,9 +9,11 @@ module HQMF1
     # Create a new HQMF1::Document instance by parsing the supplied contents
     # @param [String] hqmf_contents the contents of an HQMF v1.0 document
     def initialize(hqmf_contents)
+      
       @doc = Document.parse(hqmf_contents)
+      occurrence_counters = {}
       @data_criteria = @doc.xpath('//cda:section[cda:code/@code="57025-9"]/cda:entry').collect do |entry|
-        DataCriteria.new(entry)
+        DataCriteria.new(entry, occurrence_counters)
       end
       
       backfill_derived_code_lists
