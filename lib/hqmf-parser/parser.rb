@@ -15,8 +15,21 @@ module HQMF
           HQMF2::Document.new(hqmf_contents).to_model
         else
           raise "Unsupported HQMF version specified: #{version}"
-        end
       end
+    end
     
+    def self.parse_id(hqmf_contents, version)
+      case version
+        when HQMF_VERSION_1
+          doc = HQMF1::Document.parse(hqmf_contents)
+          doc.at_xpath('//cda:id/@root').value.upcase
+        when HQMF_VERSION_2
+          doc = HQMF2::Document.parse(hqmf_contents)
+          doc.at_xpath('cda:QualityMeasureDocument/cda:id/@extension', HQMF2::Document::NAMESPACES).value.upcase
+        else
+          raise "Unsupported HQMF version specified: #{version}"
+      end
+    end
   end
+  
 end
