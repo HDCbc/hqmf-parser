@@ -238,6 +238,26 @@ module HQMF
       end
       referenced
     end
+    
+    def all_code_set_oids
+      
+      # root oid
+      referenced_oids = [code_list_id]
+      
+      # value oid
+      referenced_oids << value.code_list_id if value != nil and value.type == 'CD'
+      
+      # negation oid
+      referenced_oids << negation_code_list_id if negation_code_list_id != nil
+      
+      # field oids
+      if field_values != nil
+        referenced_oids.concat (field_values.map {|key,field| field.code_list_id if field != nil and field.type == 'CD'})
+      end
+      
+      referenced_oids
+      
+    end
 
     def self.get_settings_for_definition(definition, status)
       settings_file = File.expand_path('../data_criteria.json', __FILE__)

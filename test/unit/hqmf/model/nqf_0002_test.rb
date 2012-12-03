@@ -351,5 +351,12 @@ module HQMFModel
       matches
     end
     
+    
+    def test_all_code_set_oids
+      hqmf = HQMF::Parser.parse(@hqmf_contents, HQMF::Parser::HQMF_VERSION_1, nil)
+      oids = hqmf.all_code_set_oids
+      oids.length.must_equal 5
+    end
+    
   end
 end

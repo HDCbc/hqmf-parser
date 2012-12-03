@@ -127,6 +127,10 @@ module HQMF
       @data_criteria
     end
     
+    def all_code_set_oids
+      (@data_criteria.map {|d| d.all_code_set_oids }).flatten.compact.uniq
+    end
+    
     # Get the source data criteria that are specific occurrences
     # @return [Array] an array of HQMF::DataCriteria describing the data elements used by the measure that are specific occurrences
     def specific_occurrence_source_data_criteria
