@@ -24,12 +24,12 @@ module HQMF
              'LENGTH_OF_STAY' => {title:'Length of Stay', coded_entry_method: :length_of_stay, code: '183797002', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1029.3'},
              'DOSE' => {title:'Dose', coded_entry_method: :dose, code: '398232005', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1004.1'},
              'ROUTE' => {title:'Route', coded_entry_method: :route, code: '263513008', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1020.2'},
-             'START_DATETIME' => {title:'Start Date/Time', coded_entry_method: :start_time, code: '398201009', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1027.1', timestamp: true},
+             'START_DATETIME' => {title:'Start Date/Time', coded_entry_method: :start_date, code: '398201009', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1027.1', timestamp: true},
              'FREQUENCY' => {title:'Frequency', coded_entry_method: :frequency, code: '260864003', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1006.1'},
              'ANATOMICAL_STRUCTURE' => {title:'Anatomical Structure', coded_entry_method: :anatomical_structure, code: '91723000', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1000.2'},
-             'STOP_DATETIME' => {title:'Stop Date/Time', coded_entry_method: :stop_datetime, code: '397898000', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1026.1', timestamp: true},
-             'INCISION_DATETIME' => {title:'Incision Date/Time', coded_entry_method: :incision_datetime, code: '34896006', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1007.1', timestamp: true},
-             'REMOVAL_DATETIME' => {title:'Removal Date/Time', coded_entry_method: :end_time, code: '118292001', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1032.1', timestamp: true},
+             'STOP_DATETIME' => {title:'Stop Date/Time', coded_entry_method: :end_date, code: '397898000', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1026.1', timestamp: true},
+             'INCISION_DATETIME' => {title:'Incision Date/Time', coded_entry_method: :incision_time, code: '34896006', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1007.1', timestamp: true},
+             'REMOVAL_DATETIME' => {title:'Removal Date/Time', coded_entry_method: :removal_time, code: '118292001', code_system:'2.16.840.1.113883.6.96', template_id: '2.16.840.1.113883.3.560.1.1032.1', timestamp: true},
              'TRANSFER_TO' => {title:'Transfer To', coded_entry_method: :transfer_to, code: 'TRANSFER_TO', template_id: '2.16.840.1.113883.3.560.1.72'},
              'TRANSFER_FROM' => {title:'Transfer From', coded_entry_method: :transfer_from, code: 'TRANSFER_FROM', template_id: '2.16.840.1.113883.3.560.1.71'}
              }
