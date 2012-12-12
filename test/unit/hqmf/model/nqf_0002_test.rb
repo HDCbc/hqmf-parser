@@ -235,7 +235,7 @@ module HQMFModel
                   {:reference=>"MedicationOrderPharyngitisAntibiotics"},
                   {:reference=>"MedicationActivePharyngitisAntibiotics"}],
                 :conjunction_code=>"atLeastOneTrue"}],
-             :conjunction_code=>"allTrue",
+             :conjunction_code=>"atLeastOneTrue",
              :negation=>true}],
           :conjunction_code=>"allTrue"}],
           hqmf_id: '66D82442-4198-44A1-A489-EE9F819F1636'}
