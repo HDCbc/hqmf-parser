@@ -14,6 +14,12 @@ module HQMF
       ALL_TRUE => AT_LEAST_ONE_FALSE,
       AT_LEAST_ONE_FALSE => ALL_TRUE
     }
+    INVERSIONS = {
+      AT_LEAST_ONE_TRUE => ALL_TRUE,
+      ALL_FALSE => AT_LEAST_ONE_FALSE,
+      ALL_TRUE => AT_LEAST_ONE_TRUE,
+      AT_LEAST_ONE_FALSE => ALL_FALSE
+    }
     
     attr_reader :id, :preconditions, :reference, :conjunction_code
     attr_accessor :negation

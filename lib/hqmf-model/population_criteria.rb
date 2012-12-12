@@ -64,7 +64,7 @@ module HQMF
     def conjunction_code
       
       case @type
-      when IPP, DENOM, NUMER
+      when IPP, DENOM, NUMER, MSRPOPL
         HQMF::Precondition::ALL_TRUE
       when DENEXCEP, DENEX
         HQMF::Precondition::AT_LEAST_ONE_TRUE

@@ -134,9 +134,15 @@ module HQMF
         end
         
         if (!sub_conditions.empty?)
-          # if we have negated conditions, add them to a new precondition of the same conjunction that is negated
+          # if we have negated conditions, add them to a new precondition with an inverted conjunction on a negated precondition
+          # the reason we invert the conjunction is because we are turning 
+          # AND: NOT X
+          # AND: NOT Y
+          # into 
+          # NOT: X OR Y
           if (!negated_conditions.empty?)
-            sub_conditions << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true)
+            inverted_conjunction_code = HQMF::Precondition::INVERSIONS[conjunction_code]
+            sub_conditions << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,inverted_conjunction_code, true)
           end
           joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, false)
         elsif (!negated_conditions.empty?)
