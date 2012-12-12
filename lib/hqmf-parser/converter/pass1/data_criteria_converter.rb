@@ -170,12 +170,13 @@ module HQMF
       negation = criteria[:negation]
       negation_code_list_id = criteria[:negation_code_list_id]
       specific_occurrence = criteria[:specific_occurrence]
-      specific_occurrence_const = criteria[:specific_occurrence_const]
+      specific_occurrence_const = nil
       
       # specific occurrences do not properly set the description, so we want to add the definition and status
       if (specific_occurrence)
-        _status = ", #{status.titleize}" if status
-        description = "#{definition.titleize}#{_status}: #{description}" 
+        statusText = ", #{status.titleize}" if status
+        description = "#{definition.titleize}#{statusText}: #{description}" 
+        specific_occurrence_const = (description.gsub(/\W/,' ').split.collect {|word| word.strip.upcase }).join '_'
       end
       
       value = nil # value is filled out by backfill_patient_characteristics for things like gender and by REFR restrictions
