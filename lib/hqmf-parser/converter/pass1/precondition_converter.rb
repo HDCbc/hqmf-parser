@@ -140,13 +140,16 @@ module HQMF
           # AND: NOT Y
           # into 
           # NOT: X OR Y
+          # (i.e, demorgan's law)
           if (!negated_conditions.empty?)
             inverted_conjunction_code = HQMF::Precondition::INVERSIONS[conjunction_code]
             sub_conditions << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,inverted_conjunction_code, true)
           end
           joined << HQMF::Converter::SimplePrecondition.new(nil,sub_conditions,nil,conjunction_code, false)
         elsif (!negated_conditions.empty?)
-          joined << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,conjunction_code, true)
+          # invert conjunction based on demorgan's law
+          inverted_conjunction_code = HQMF::Precondition::INVERSIONS[conjunction_code]
+          joined << HQMF::Converter::SimplePrecondition.new(nil,negated_conditions,nil,inverted_conjunction_code, true)
         end
         
       end
