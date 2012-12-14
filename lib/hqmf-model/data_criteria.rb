@@ -321,7 +321,7 @@ module HQMF
     end
 
     def self.convert_value(json)
-      return nil unless json
+      return nil unless json.present?
       type = json["type"]
       case type
         when 'TS', 'PQ'
