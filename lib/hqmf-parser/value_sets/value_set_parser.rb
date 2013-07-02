@@ -2,7 +2,7 @@ require 'zip/zipfilesystem'
 require 'spreadsheet'
 require 'google_spreadsheet'
 require 'roo'
-require 'iconv'
+#require 'iconv'
 
 module HQMF
   module ValueSet
