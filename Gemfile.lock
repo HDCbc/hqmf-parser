@@ -37,7 +37,7 @@ GEM
       rest-client (~> 1.6.7)
       uuid (~> 2.3.5)
     httpauth (0.1)
-    i18n (0.6.1)
+    i18n (0.6.4)
     log4r (1.1.10)
     macaddr (1.6.1)
       systemu (~> 2.5.0)
@@ -87,8 +87,8 @@ GEM
       log4r
     turn (0.9.5)
       ansi
-    tzinfo (0.3.35)
-    uuid (2.3.6)
+    tzinfo (0.3.37)
+    uuid (2.3.7)
       macaddr (~> 1.0)
     yamler (0.1.0)
 
