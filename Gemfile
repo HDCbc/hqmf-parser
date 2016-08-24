@@ -4,7 +4,7 @@ gem 'rake'
 gem 'pry'
 gem 'pry-nav'
 gem 'nokogiri'
-gem 'rubyzip', '>= 1.0.0'
+gem 'rubyzip', '0.9.9'
 gem 'zip-zip'
 
 gem 'health-data-standards', :git => 'https://github.com/scoophealth/health-data-standards.git', :branch => 'scoop-develop'
